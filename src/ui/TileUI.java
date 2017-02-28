@@ -67,7 +67,7 @@ public class TileUI extends JLabel {
 
     }
 
-    // Rafraîchissement du composant
+    // Rafraichissement du composant
     public void update() {
         final Tile elt = this.model.getTile(this.row, this.column);
         final Tool selectedTool = this.model.getSelectedTool();

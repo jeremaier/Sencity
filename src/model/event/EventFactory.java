@@ -26,7 +26,6 @@ package model.event;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +46,6 @@ public class EventFactory {
         NOTHING;
     }
 
-    @SuppressWarnings("serial")
     /**
      * Probabilities bound to a specific event. The sum of all probabilities
      * must be equal to 100
