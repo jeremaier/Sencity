@@ -100,5 +100,4 @@ public class DifficultyLevel {
     public String toString() {
         return String.format(DifficultyLevel.TO_STRING_TEMPLATE, this.initialCurrency);
     }
-
 }

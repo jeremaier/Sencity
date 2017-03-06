@@ -106,12 +106,12 @@ public final class SimCityUI extends JFrame {
         // Création du monde
         GameBoard monde = new GameBoard(hauteur, largeur, texts);
 
-        // Création de la vue du monde, placée au centre de la fenÃªtre
+        // Création de la vue du monde, placée au centre de la fenêtre
         GameBoardView vm = new GameBoardView(monde);
         monde.addObserver(vm);
         this.add(vm, BorderLayout.CENTER);
 
-        // Création de la palette des éléments de jeu, placée Ã  gauche
+        // Création de la palette des éléments de jeu, placée à gauche
         ToolsView ve = new ToolsView(monde);
         monde.addObserver(ve);
         this.add(ve, BorderLayout.WEST);

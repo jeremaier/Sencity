@@ -89,11 +89,9 @@ public final class ResidentialZoneDelimiterTool extends Tool {
 		return new ResidentialTile();
 	}
 
-
-// Debugging
+	// Debugging
 	@Override
 	public String toString () {
 		return getClass().getSimpleName();
 	}
-
 }
