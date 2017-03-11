@@ -42,9 +42,8 @@ import model.tiles.Evolvable;
 import model.tiles.GrassTile;
 import model.tiles.Tile;
 import model.tools.BulldozerTool;
-// Add when implemented
-//import model.tools.CommercialZoneDelimiterTool;
-//import model.tools.IndustrialZoneDelimiterTool;
+import model.tools.CommercialZoneDelimiterTool;
+import model.tools.IndustrialZoneDelimiterTool;
 import model.tools.PowerPlantConstructionTool;
 import model.tools.ResidentialZoneDelimiterTool;
 import model.tools.Tool;
@@ -138,9 +137,8 @@ public class GameBoard extends Observable {
         this.tools.add(new BulldozerTool());
         this.tools.add(new PowerPlantConstructionTool());
         this.tools.add(new ResidentialZoneDelimiterTool());
-// Add when implemented
-//        this.tools.add(new IndustrialZoneDelimiterTool());
-//        this.tools.add(new CommercialZoneDelimiterTool());
+        this.tools.add(new IndustrialZoneDelimiterTool());
+        this.tools.add(new CommercialZoneDelimiterTool());
 
         this.selectedTool = this.tools.get(GameBoard.DEFAULT_SELECTED_TOOL);
 

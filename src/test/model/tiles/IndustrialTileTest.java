@@ -1,4 +1,5 @@
 package test.model.tiles;
+import org.junit.Assert;
 import org.junit.Test;
 import model.*;
 import model.tiles.*;
@@ -40,7 +41,7 @@ public class IndustrialTileTest {
 	@Test
 	public void testIsDestroyed() {
 		IndustrialTile it = new IndustrialTile();
-		CityResources resources = new CityResourcse(100,100,100);
+		CityResources resources = new CityResources(100,100,100);
 		it.disassemble(resources);
 		Assert.assertEquals(true, it.isDestroyed());		
 	}
