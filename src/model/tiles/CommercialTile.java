@@ -52,6 +52,11 @@ public class CommercialTile extends BuildableTile {
      * Default value of {@link CommercialTile#getNeededInhabitants()}
      */
     public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 30;
+    
+    /**
+     * Default value of {@link CommercialTile#getProductsCapacity()}
+     */
+    private final static int DEFAULT_PRODUCTS_CAPACITY = 10;
 
 
     // Implementation
@@ -70,21 +75,42 @@ public class CommercialTile extends BuildableTile {
      * {@link #getMaxNeededInhabitants()}
      */
     private final int maxNeededInhabitants;
+    
+    /**
+     * {@link #getProductsCapacity()}
+     */
+	private final int productsCapacity;
 
     // Creation
-    /**
-     * Create with default settings.
+	/**
+     * @param capacity
+     *            - {@link #getProductsCapacity()}
      */
-    public CommercialTile() {
+    public CommercialTile(int capacity) {
         super(CommercialTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
 
+        this.productsCapacity = capacity;
         this.maxNeededEnergy = CommercialTile.DEFAULT_MAX_NEEDED_ENERGY;
         this.maxNeededProducts = CommercialTile.DEFAULT_MAX_NEEDED_PRODUCTS;
         this.maxNeededInhabitants= CommercialTile.DEFAULT_MAX_NEEDED_INHABITANTS;
 
     }
+    
+    /**
+     * Create with default settings.
+     */
+    public CommercialTile() {
+        this(CommercialTile.DEFAULT_PRODUCTS_CAPACITY);
+    }
 
     // Access
+    
+    /**
+     * @return Maximum products capacity.
+     */
+    public final int getProductionCapacity() {
+        return this.productsCapacity;
+    }
 
     /**
      * @return Maximum number of energy units to consume. This maximum is
@@ -113,6 +139,7 @@ public class CommercialTile extends BuildableTile {
     @Override
     public int hashCode() {
         int result = super.hashCode();
+        result = result * 17 + this.productsCapacity;
         result = result * 17 + this.maxNeededEnergy;
         result = result * 17 + this.maxNeededProducts;
         result = result * 17 + this.maxNeededInhabitants;
@@ -133,7 +160,8 @@ public class CommercialTile extends BuildableTile {
         return this == o || super.equals(o) 
                 && o.maxNeededEnergy == this.maxNeededEnergy
                 && o.maxNeededProducts == this.maxNeededProducts
-                && o.maxNeededInhabitants == this.maxNeededInhabitants;
+                && o.maxNeededInhabitants == this.maxNeededInhabitants
+                && o.productsCapacity == this.productsCapacity;
     }
 
     @Override
@@ -145,6 +173,8 @@ public class CommercialTile extends BuildableTile {
     @Override
     public void disassemble(CityResources res) {
         if (this.state == ConstructionState.BUILT) {
+        	
+        	res.decreaseProductsCapacity(this.productsCapacity);
             super.disassemble(res);
         }
     }
@@ -153,6 +183,8 @@ public class CommercialTile extends BuildableTile {
     public void evolve(CityResources res) {
         super.evolve(res);
         if (this.state == ConstructionState.BUILT) {
+        	
+        	res.increaseProductsCapacity(this.productsCapacity);
             this.update(res);
         }
     }
@@ -160,18 +192,36 @@ public class CommercialTile extends BuildableTile {
     @Override
     public void update(CityResources res) {
         if (this.state == ConstructionState.BUILT) {
-
-            final int neededEnergy = Math.max(1,this.maxNeededEnergy / 100); // Integer
+        	
+        	final int products = this.getProducts(res);
+            final int busyPercentage = products * 100 / this.productsCapacity; // Integer
+                                                                               // division
+            final int neededEnergy = Math.max(1, busyPercentage * this.maxNeededEnergy / 100); // Integer
                                                                                                // division
 
             if (res.getUnconsumedEnergy() >= neededEnergy) {
+            	
                 res.consumeEnergy(neededEnergy);
                 this.isEnergyMissing = false;
+                
+                //Price of one product 
+                final int Price = 1;
+                
+                final int TotalPrice = res.getProductsCount()*Price;
+                res.creditWithTaxes(TotalPrice);
 
             } else {
                 final int consumedEnergy = res.getUnconsumedEnergy();
                 res.consumeEnergy(consumedEnergy);
                 this.isEnergyMissing = true;
+                
+                // More energy units are missing, more products lost
+                final int missingEnergyPercentage = 100 - consumedEnergy * 100 / neededEnergy; // Integer
+                																			   // division
+                final int lostProducts = Math.min(this.productsCapacity, missingEnergyPercentage * products / 100); // Integer
+                																									   // division
+
+				res.consumeProducts(lostProducts);
 
             }
         }
@@ -187,13 +237,13 @@ public class CommercialTile extends BuildableTile {
      *         = 100 (including X) and the population is Z = 20, then the
      *         residence has (X / Y) * Z = 10 inhabitants.
      */
-    private int getInhabitants(CityResources res) {
-        assert res.getPopulationCapacity() != 0;
+    private int getProducts(CityResources res) {
+        assert res.getProductsCapacity() != 0;
 
-        final int caapcityPercentage = this.inhabitantsCapacity * 100 / res.getPopulationCapacity(); // Integer
-                                                                                                     // division
-        return res.getPopulation() * caapcityPercentage / 100; // Integer
-                                                               // division
+        final int capacityPercentage = this.productsCapacity * 100 / res.getProductsCapacity(); // Integer
+                                                                                                // division
+        return res.getProductsCount() * capacityPercentage / 100; // Integer
+        														  // division
     }
 
 }
