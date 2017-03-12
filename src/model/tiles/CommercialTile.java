@@ -160,34 +160,19 @@ public class CommercialTile extends BuildableTile {
     @Override
     public void update(CityResources res) {
         if (this.state == ConstructionState.BUILT) {
-            final int inhabitants = this.getInhabitants(res);
 
-            final int busyPercentage = inhabitants * 100 / this.inhabitantsCapacity; // Integer
-                                                                                     // division
-            final int neededEnergy = Math.max(1, busyPercentage * this.maxNeededEnergy / 100); // Integer
+            final int neededEnergy = Math.max(1,this.maxNeededEnergy / 100); // Integer
                                                                                                // division
 
             if (res.getUnconsumedEnergy() >= neededEnergy) {
                 res.consumeEnergy(neededEnergy);
                 this.isEnergyMissing = false;
 
-                // Less space is available, less newcomers join
-                final int vacantPercentage = 100 - busyPercentage;
-                final int newcomers = vacantPercentage * this.maxJoiningInhabitants / 100;
-
-                res.increasePopulation(newcomers);
             } else {
                 final int consumedEnergy = res.getUnconsumedEnergy();
                 res.consumeEnergy(consumedEnergy);
                 this.isEnergyMissing = true;
 
-                // More energy units are missing, more inhabitants leave
-                final int missingEnergyPercentage = 100 - consumedEnergy * 100 / neededEnergy; // Integer
-                                                                                               // division
-                final int leavingInhabitants = Math.min(this.maxLeavingInhabitants, missingEnergyPercentage * inhabitants / 100); // Integer
-                                                                                                                                  // division
-
-                res.decreasePopulation(leavingInhabitants);
             }
         }
     }
