@@ -41,6 +41,11 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
      * {@link #isEnergyMissing()}
      */
     protected boolean isEnergyMissing;
+    
+    /**
+     * {@link #isPopulationMissing()}
+     */
+    protected boolean isPopulationMissing;
 
     /**
      * {@link #getState()}
@@ -60,6 +65,7 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
         this.evolutionEnergyConsumption = evolutionEnergyConsumption;
         this.state = ConstructionState.UNDER_CONSTRUCTION;
         this.isEnergyMissing = false;
+        this.isPopulationMissing = false;
     }
 
     // Access
@@ -105,6 +111,13 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
      */
     public final boolean isEnergyMissing() {
         return this.isEnergyMissing;
+    }
+    
+    /**
+     * @return Is population missing in order to evolve or to update?
+     */
+    public final boolean isPopulationMissing() {
+        return this.isPopulationMissing;
     }
 
     // Change

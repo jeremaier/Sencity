@@ -79,6 +79,11 @@ public class IconFactory {
      * Id if {@link BuildableTile#isEnergyMissing()} is enabled.
      */
     public final static String MISSING_ENERGY_POSTID = "missing-energy";
+    
+    /**
+     * Id if {@link BuildableTile#isPopulationMissing()} is enabled.
+     */
+    public final static String MISSING_POPULATION_POSTID = "missing-population";
 
     // Implementation
     private final String pathTemplate;
@@ -184,7 +189,12 @@ public class IconFactory {
                     energyPostId = "";
                 }
 
-                return id + statePostId + energyPostId;
+                final String populationPostId;
+                if (t.isPopulationMissing())
+                	populationPostId = '-' + IconFactory.MISSING_POPULATION_POSTID;
+                else populationPostId = "";
+
+                return id + statePostId + energyPostId + statePostId + populationPostId;
             } else {
                 return id;
             }
