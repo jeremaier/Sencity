@@ -56,7 +56,7 @@ public class CommercialTile extends BuildableTile {
     /**
      * Default value of {@link CommercialTile#getProductsCapacity()}
      */
-    private final static int DEFAULT_PRODUCTS_CAPACITY = 10;
+    public final static int DEFAULT_PRODUCTS_CAPACITY = 10;
 
 
     // Implementation

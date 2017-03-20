@@ -41,12 +41,12 @@ public class IndustrialTile extends BuildableTile {
     /**
      * Default value of {@link IndustrialTile#getProduction}
      */
-    private final static int DEFAULT_PRODUCTS_CAPACITY = 10;
+    public final static int DEFAULT_PRODUCTS_CAPACITY = 10;
 
     /**
      * Default value of {@link IndustrialTile#maxJoiningInhabitants}
      */
-    private final static int DEFAULT_MAX_PRODUCTION = 15;
+    public final static int DEFAULT_MAX_PRODUCTION = 15;
 
     /**
      * Default value of {@link IndustrialTile#getNeededEnergy()}
@@ -105,6 +105,13 @@ public class IndustrialTile extends BuildableTile {
      */
     public final int getProductionCapacity() {
         return this.productsCapacity;
+    }
+    
+    /**
+     * @return Maximum number of production per round.
+     */
+    public final int getMaxProduction() {
+        return this.maxProduction;
     }
 
     /**

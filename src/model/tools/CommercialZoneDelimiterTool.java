@@ -25,8 +25,8 @@
 package model.tools;
 
 import model.CityResources;
+import model.tiles.CommercialTile;
 import model.tiles.GrassTile;
-import model.tiles.IndustrialTile;
 import model.tiles.Tile;
 
 public final class CommercialZoneDelimiterTool extends Tool {
