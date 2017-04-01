@@ -43,8 +43,10 @@ public class EventFactory {
      * Default Constructor.
      */
     private static enum eventType {
-        NOTHING;
-    }
+        NOTHING,
+        CRIMINAL_INDUSTRY,
+        CRIMINAL_COMMERCE
+        }
 
     /**
      * Probabilities bound to a specific event. The sum of all probabilities
@@ -57,7 +59,9 @@ public class EventFactory {
         private static final long serialVersionUID = -6805412774816642699L;
 
         {
-            this.put(eventType.NOTHING, 100);
+            this.put(eventType.NOTHING, 40);
+            this.put(eventType.CRIMINAL_INDUSTRY, 30);
+            this.put(eventType.CRIMINAL_INDUSTRY, 30);
         }
     });
 
@@ -83,6 +87,12 @@ public class EventFactory {
         eventType type = EventFactory.probalisticEventsList.get(index);
         Event result;
         switch (type) {
+        	case CRIMINAL_INDUSTRY:
+        		result = new Criminal_IndustryEvent();
+        		break;
+        	case CRIMINAL_COMMERCE:
+        		result = new Criminal_CommerceEvent();
+        		break;
             case NOTHING:
                 result = new NothingEvent();
                 break;
