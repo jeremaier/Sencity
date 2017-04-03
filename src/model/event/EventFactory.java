@@ -45,7 +45,9 @@ public class EventFactory {
     private static enum eventType {
         NOTHING,
         CRIMINAL_INDUSTRY,
-        CRIMINAL_COMMERCE
+        CRIMINAL_COMMERCE,
+        DISEASE,
+        FESTIVAL;
         }
 
     /**
@@ -59,9 +61,11 @@ public class EventFactory {
         private static final long serialVersionUID = -6805412774816642699L;
 
         {
-            this.put(eventType.NOTHING, 40);
+            this.put(eventType.NOTHING, 20);
             this.put(eventType.CRIMINAL_INDUSTRY, 30);
             this.put(eventType.CRIMINAL_INDUSTRY, 30);
+            this.put(eventType.DISEASE, 10);
+            this.put(eventType.FESTIVAL, 10);
         }
     });
 
@@ -87,6 +91,12 @@ public class EventFactory {
         eventType type = EventFactory.probalisticEventsList.get(index);
         Event result;
         switch (type) {
+        	case FESTIVAL:
+        		result = new FestivalEvent();
+        		break;
+        	case DISEASE:
+        		result = new DiseaseEvent();
+        		break;
         	case CRIMINAL_INDUSTRY:
         		result = new Criminal_IndustryEvent();
         		break;
