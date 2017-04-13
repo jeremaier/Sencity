@@ -52,11 +52,16 @@ public class HarborTile extends TransportTile {
      * Default value of {@link TransportTile#getProductsCapacity()}
      */
     protected final static int DEFAULT_PRODUCTS_CAPACITY = 10;
+    
+    /**
+     * This building is already build?
+     */
+    public static boolean alreadyBuild = false;
 
 	public HarborTile(int capacity) {
 		super(DEFAULT_PRODUCTS_PRICE);
 		
-		CityResources.setBuildHarbor(true);
+		HarborTile.alreadyBuild = true;
 		this.productsCapacity = capacity;
         this.maxNeededEnergy = HarborTile.DEFAULT_MAX_NEEDED_ENERGY;
         this.maxNeededProducts = HarborTile.DEFAULT_MAX_NEEDED_PRODUCTS;
@@ -77,7 +82,7 @@ public class HarborTile extends TransportTile {
         if (!this.isDestroyed) {
         	res.decreaseProductsCapacity(this.productsCapacity);
             this.isDestroyed = true;
-            CityResources.setBuildHarbor(false);
+            HarborTile.alreadyBuild = false;
         }
     }
 }

@@ -80,7 +80,7 @@ public abstract class Tool {
 	 */
 	protected abstract Tile innerEffect (Tile aTarget, CityResources r);
 
-	public boolean isAleadyBuild(CityResources r) {
+	public boolean isAleadyBuild() {
 		return false;
 	}
 }

@@ -27,23 +27,76 @@ package model.tiles;
 import model.CityResources;
 
 public class StadiumTile extends Tile implements Destroyable {
+    // Constants
+    /**
+     * Default value of {@link #getProductsPrice()}
+     */
+    public final static int DEFAULT_NEEDED_ENERGY = 100;
+    
+    /**
+     * Default value of {@link #getProductsPrice()}
+     */
+    public final static int DEFAULT_INCOME = 1000;
+    
+    /**
+     * {@link #getMaxNeededEnergy()}
+     */
+    private final int neededEnergy;
+    
 	/**
      * Evolution state
      */
     protected boolean isDestroyed;
+    
+    /**
+     * {@link #isEnergyMissing()}
+     */
+    protected boolean isEnergyMissing;
+    
+	/**
+    * {@link #getProductsPrice()}
+    */
+    private final int income;
+   
+    /**
+     * This building is already build?
+     */
+    public static boolean alreadyBuild = false;
 
 	public StadiumTile() {
-		CityResources.setBuildHarbor(true);
-		this.productsCapacity = capacity;
-        this.maxNeededEnergy = StadiumTile.DEFAULT_MAX_NEEDED_ENERGY;
+		StadiumTile.alreadyBuild = true;
+        this.neededEnergy = StadiumTile.DEFAULT_NEEDED_ENERGY;
+        this.income = DEFAULT_INCOME;
+        this.isEnergyMissing = false;
 	}
+	
+	// Access
+    /**
+     * @return Energy units to consume by default.
+     */
+	public int getNeededEnergy() {
+		return neededEnergy;
+	}
+	
+    /**
+     * @return Income per round.
+     */
+    public final int getIncome() {
+        return this.income;
+    }
+	
+    /**
+     * @return Is energy missing in order to evolve or to update?
+     */
+    public final boolean isEnergyMissing() {
+        return this.isEnergyMissing;
+    }
     
     @Override
     public void disassemble(CityResources res) {
         if (!this.isDestroyed) {
-
         	this.isDestroyed = true;
-            CityResources.setBuildHarbor(false);
+        	StadiumTile.alreadyBuild = false;
         }
     }
 
@@ -55,7 +108,8 @@ public class StadiumTile extends Tile implements Destroyable {
     @Override
     public int hashCode() {
         int result = 1;
-        result = result * 17 + this.maxNeededEnergy;
+        result = result * 17 + this.neededEnergy;
+        result = result * 17 + this.income;
         result = result * 17 + Boolean.hashCode(this.isDestroyed);
         result = result * 17 + Boolean.hashCode(this.isEnergyMissing);
         return result;
@@ -71,16 +125,30 @@ public class StadiumTile extends Tile implements Destroyable {
      * @param o
      * @return Is {@value o} equals to this?
      */
-    public boolean equals(TransportTile o) {
+    public boolean equals(StadiumTile o) {
         return this == o || super.equals(o)
-                && o.maxNeededEnergy == this.maxNeededEnergy
+                && o.neededEnergy == this.neededEnergy
+                && o.income == this.income
                 && o.isDestroyed == this.isDestroyed
                 && o.isEnergyMissing == this.isEnergyMissing;
     }
 
-
 	@Override
 	public void update(CityResources res) {
-		
+        if (!this.isDestroyed) {
+            int vacantPercentage = 100;
+            int energyAvailable = this.neededEnergy;
+            
+            if(res.getUnconsumedEnergy() >= this.neededEnergy) {
+                this.isEnergyMissing = false;
+            } else {
+            	energyAvailable = res.getUnconsumedEnergy();
+                vacantPercentage -= energyAvailable / this.neededEnergy * 100;
+            	this.isEnergyMissing = true;
+            }
+            
+            res.consumeEnergy(energyAvailable);
+            res.creditWithTaxes(vacantPercentage * this.income / 100);
+        }
 	}
 }

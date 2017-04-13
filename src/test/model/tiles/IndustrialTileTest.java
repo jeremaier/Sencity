@@ -11,7 +11,7 @@ public class IndustrialTileTest {
 	public void testInit() {
 		IndustrialTile it = new IndustrialTile();
 		Assert.assertEquals(IndustrialTile.DEFAULT_MAX_NEEDED_ENERGY, it.getMaxNeededEnergy());
-		Assert.assertEquals(IndustrialTile.DEFAULT_MAX_WORKING_POPULATION, it.getMaxWorkingInhabitants());
+		Assert.assertEquals(IndustrialTile.DEFAULT_MAX_NEEDED_INHABITANTS, it.getMaxWorkingInhabitants());
 		Assert.assertEquals(IndustrialTile.DEFAULT_MAX_PRODUCTION, it.getMaxProduction());
 		Assert.assertEquals(IndustrialTile.DEFAULT_PRODUCTS_CAPACITY, it.getProductionCapacity());
 		it = new IndustrialTile(10);

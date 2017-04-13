@@ -52,11 +52,16 @@ public class AirportTile extends TransportTile {
      * Default value of {@link TransportTile#getProductsCapacity()}
      */
     protected final static int DEFAULT_PRODUCTS_CAPACITY = 10;
+    
+    /**
+     * This building is already build?
+     */
+    public static boolean alreadyBuild = false;
 
     public AirportTile(int capacity) {
 		super(DEFAULT_PRODUCTS_PRICE);
 		
-		CityResources.setBuildAirport(true);
+		AirportTile.alreadyBuild = true;
 		this.productsCapacity = capacity;
         this.maxNeededEnergy = HarborTile.DEFAULT_MAX_NEEDED_ENERGY;
         this.maxNeededProducts = HarborTile.DEFAULT_MAX_NEEDED_PRODUCTS;
@@ -77,7 +82,7 @@ public class AirportTile extends TransportTile {
         if (!this.isDestroyed) {
         	res.decreaseProductsCapacity(this.productsCapacity);
             this.isDestroyed = true;
-            CityResources.setBuildAirport(false);
+            AirportTile.alreadyBuild = false;
         }
     }
 }

@@ -51,21 +51,15 @@ public class PowerPlantTile extends BuildableTile {
      */
     protected final int productionCapacity;
 
-    /**
-     * Evolution state
-     */
-    protected boolean isDestroyed;
-
     // Creation
     /**
      * @param productionCapacity
      *            - {@link #getProductionCapacity()}
      */
     public PowerPlantTile(int productionCapacity) {
-        super();
+        super(0);
         this.productionCapacity = productionCapacity;
         this.production = 0;
-        this.isDestroyed = false;
     }
 
     /**
@@ -92,10 +86,9 @@ public class PowerPlantTile extends BuildableTile {
 
     @Override
     public int hashCode() {
-        int result = 1;
+        int result = super.hashCode();
         result = result * 17 + this.production;
         result = result * 17 + this.productionCapacity;
-        result = result * 17 + Boolean.hashCode(this.isDestroyed);
         return result;
     }
 
@@ -110,26 +103,35 @@ public class PowerPlantTile extends BuildableTile {
      * @return Is {@value o} equals to this?
      */
     public boolean equals(PowerPlantTile o) {
-        return this == o || o.production == this.production && o.productionCapacity == this.productionCapacity && o.isDestroyed == this.isDestroyed;
+        return this == o || o.production == this.production
+        		&& o.productionCapacity == this.productionCapacity;
     }
 
     @Override
     public boolean isDestroyed() {
-        return this.isDestroyed;
+        return this.state == ConstructionState.DESTROYED;
     }
 
     // Change
     @Override
     public void disassemble(CityResources res) {
-        if (!this.isDestroyed) {
+        if (this.state == ConstructionState.BUILT) {
             res.decreaseEnergyProduction(this.productionCapacity);
-            this.isDestroyed = true;
+            super.disassemble(res);
         }
     }
 
     @Override
+    public void evolve(CityResources res) {
+        super.evolve(res);
+        if (this.state == ConstructionState.BUILT) {
+            this.update(res);
+        }
+    }
+    
+    @Override
     public void update(CityResources res) {
-        if (!this.isDestroyed) {
+        if (this.state == ConstructionState.BUILT) {
             // Double production
             final int extraProduction = Math.min(PowerPlantTile.EXTRA_ENERGY_PRODUCTION, this.productionCapacity - this.production);
 

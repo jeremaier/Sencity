@@ -28,5 +28,5 @@ package model.tiles;
  * Possible state of a {@link BuildableTile}.
  */
 public enum ConstructionState {
-    UNDER_CONSTRUCTION, BUILT, DESTROYED
+    UNDER_CONSTRUCTION, BUILT, BUILTLVL2, BUILTLVL3, DESTROYED
 }

@@ -58,8 +58,8 @@ public final class HarborZoneDelimiterTool extends Tool {
 	}
 	
 	@Override
-	public boolean isAleadyBuild(CityResources r) {
-		return r.isBuildHarbor();
+	public boolean isAleadyBuild() {
+		return HarborTile.alreadyBuild;
 	}
 
 	// Access

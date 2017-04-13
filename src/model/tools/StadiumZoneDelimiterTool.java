@@ -57,8 +57,8 @@ public final class StadiumZoneDelimiterTool extends Tool {
 	}
 	
 	@Override
-	public boolean isAleadyBuild(CityResources r) {
-		return r.isBuildStadium();
+	public boolean isAleadyBuild() {
+		return StadiumTile.alreadyBuild;
 	}
 
 	// Access

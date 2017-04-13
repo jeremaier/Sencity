@@ -58,8 +58,8 @@ public final class AirportZoneDelimiterTool extends Tool {
 	}
 	
 	@Override
-	public boolean isAleadyBuild(CityResources r) {
-		return r.isBuildAirport();
+	public boolean isAleadyBuild() {
+		return AirportTile.alreadyBuild;
 	}
 
 	// Access

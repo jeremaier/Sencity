@@ -86,21 +86,6 @@ public class CityResources {
     private int productsCapacity;
     
     /**
-     * {@link #isBuildAirport() #setBuildAirport()}
-     */
-    private static boolean buildAirport = false;
-    
-    /**
-     * {@link #isBuildHarbor() #setBuildHarbor()}
-     */
-    private static boolean buildHarbor = false;
-    
-    /**
-     * {@link #isBuildStadium() #setBuildStadium()}
-     */
-    private static boolean buildStadium = false;
-    
-    /**
      * {@link #increaseSatisfaction() #decreaseSatisfaction()}
      */
     private int satisfaction = 100;
@@ -437,51 +422,6 @@ public class CityResources {
         this.unworkingPopulation = this.population;
         this.unconsumedEnergy = this.energyProduction;
     }
-
-    /**
-     * An airport is build or not.
-     */
-	public boolean isBuildAirport() {
-		return buildAirport;
-	}
-	
-    /**
-     * An harbor is build or not.
-     */
-	public boolean isBuildHarbor() {
-		return buildHarbor;
-	}
-
-    /**
-     * A stadium is build or not.
-     */
-	public boolean isBuildStadium() {
-		return buildStadium;
-	}
-
-	/**
-	 * Airport is built or destroyed
-	 * @param buildAirport
-	 */
-	public static void setBuildAirport(boolean buildAirport) {
-		CityResources.buildAirport = buildAirport;
-	}
-
-	/**
-	 * Harbor is built or destroyed
-	 * @param buildHarbor
-	 */
-	public static void setBuildHarbor(boolean buildHarbor) {
-		CityResources.buildHarbor = buildHarbor;
-	}
-
-	/**
-	 * Stadium is built or destroyed
-	 * @param buildStadium
-	 */
-	public static void setBuildStadium(boolean buildStadium) {
-		CityResources.buildStadium = buildStadium;
-	}
 	
     /**
      * @return Actual satisfaction of the population.

@@ -96,8 +96,8 @@ public class CommercialTile extends BuildableTile {
      */
     public CommercialTile(int capacity) {
         super(CommercialTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
-        this.productsPrice = CommercialTile.DEFAULT_PRODUCTS_PRICE;
         this.productsCapacity = capacity;
+        this.productsPrice = CommercialTile.DEFAULT_PRODUCTS_PRICE;
         this.maxNeededEnergy = CommercialTile.DEFAULT_MAX_NEEDED_ENERGY;
         this.maxNeededProducts = CommercialTile.DEFAULT_MAX_NEEDED_PRODUCTS;
         this.maxNeededInhabitants = CommercialTile.DEFAULT_MAX_NEEDED_INHABITANTS;
@@ -190,7 +190,6 @@ public class CommercialTile extends BuildableTile {
     @Override
     public void disassemble(CityResources res) {
         if (this.state == ConstructionState.BUILT) {
-        	
         	res.decreaseProductsCapacity(this.productsCapacity);
             super.disassemble(res);
         }
@@ -239,7 +238,8 @@ public class CommercialTile extends BuildableTile {
                 final int energyPercentage = consumedEnergy / this.maxNeededEnergy;
                 final int workersPercentage = workingPopulation / this.maxNeededInhabitants;
                 
-                vacantPercentage -= busyPercentage * energyPercentage * workersPercentage;
+                //////////////////////Mauvais calcul
+                vacantPercentage -= busyPercentage / 100 * energyPercentage * workersPercentage;
             }
             
             res.consumeEnergy(neededEnergy);
