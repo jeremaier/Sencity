@@ -29,7 +29,7 @@ import model.CityResources;
 /**
  * Enable to sell more expensive products
  */
-public class TransportTile extends Tile implements Destroyable {
+public abstract class TransportTile extends Tile implements Destroyable {
     // Implementation
 
     /**
@@ -66,14 +66,19 @@ public class TransportTile extends Tile implements Destroyable {
      * {@link #isPopulationMissing()}
      */
     protected boolean isPopulationMissing;
+	
+	/**
+    * {@link #getProductsPrice()}
+    */
+    private final int productsPrice;
 
     // Creation
 	/**
      * @param capacity
      *            - {@link #getProductsCapacity()}
      */
-    public TransportTile(int capacity) {
-        this.productsCapacity = capacity;
+    public TransportTile(int productsPrice) {
+    	this.productsPrice = productsPrice;
         this.isEnergyMissing = false;
         this.isPopulationMissing = false;
         this.isDestroyed = false;
@@ -124,15 +129,25 @@ public class TransportTile extends Tile implements Destroyable {
     public final boolean isPopulationMissing() {
         return this.isPopulationMissing;
     }
+    
+    /**
+     * @return Price of a single product
+     */
+    public final int getProductsPrice() {
+        return this.productsPrice;
+    }
 
     @Override
     public int hashCode() {
         int result = 1;
+        result = result * 17 + this.productsPrice;
         result = result * 17 + this.productsCapacity;
         result = result * 17 + this.maxNeededEnergy;
         result = result * 17 + this.maxNeededProducts;
         result = result * 17 + this.maxNeededInhabitants;
         result = result * 17 + Boolean.hashCode(this.isDestroyed);
+        result = result * 17 + Boolean.hashCode(this.isEnergyMissing);
+        result = result * 17 + Boolean.hashCode(this.isPopulationMissing);
         return result;
     }
 
@@ -147,10 +162,14 @@ public class TransportTile extends Tile implements Destroyable {
      * @return Is {@value o} equals to this?
      */
     public boolean equals(TransportTile o) {
-        return this == o || super.equals(o) 
-                && o.maxNeededEnergy == this.maxNeededEnergy && o.maxNeededProducts == this.maxNeededProducts
-                && o.maxNeededInhabitants == this.maxNeededInhabitants && o.productsCapacity == this.productsCapacity
-                && o.isDestroyed == this.isDestroyed && o.isEnergyMissing == this.isEnergyMissing
+        return this == o || super.equals(o)
+        		&& o.productsPrice == this.productsPrice
+                && o.maxNeededEnergy == this.maxNeededEnergy
+                && o.maxNeededProducts == this.maxNeededProducts
+                && o.maxNeededInhabitants == this.maxNeededInhabitants
+                && o.productsCapacity == this.productsCapacity
+                && o.isDestroyed == this.isDestroyed
+                && o.isEnergyMissing == this.isEnergyMissing
                 && o.isPopulationMissing == this.isPopulationMissing;
     }
 
@@ -159,55 +178,53 @@ public class TransportTile extends Tile implements Destroyable {
         return this.isDestroyed;
     }
 
-    // Change
+    public abstract void disassemble(CityResources res);
+    
     @Override
-    public void disassemble(CityResources res) {
+    public void update(CityResources res) {
         if (!this.isDestroyed) {
-        	res.decreaseProductsCapacity(this.productsCapacity);
-            this.isDestroyed = true;
-        }
-    }
+            final int busyPercentage = this.getProducts(res) * 100 / this.productsCapacity;
+            final int neededEnergy = Math.max(10, busyPercentage * this.maxNeededEnergy / 100);
+            final int neededUnworkingPopulation = busyPercentage * this.maxNeededInhabitants / 100;
+            final boolean enoughEnergy = res.getUnconsumedEnergy() >= neededEnergy;
+            final boolean enoughPopulation = res.getUnworkingPopulation() >= neededUnworkingPopulation;
+            int vacantPercentage = 100;
+            int totalPrice = res.getProductsCount() * productsPrice;
+            
+            if(enoughEnergy && enoughPopulation) {
+                this.isPopulationMissing = false;
+                this.isEnergyMissing = false;
+                vacantPercentage -= busyPercentage;
+            } else {
+            	int consumedEnergy = neededEnergy;
+            	int workingPopulation = neededUnworkingPopulation;
+            		
+	            if(!enoughEnergy) {
+	                consumedEnergy = res.getUnconsumedEnergy();
+	            	this.isEnergyMissing = true;
+	            } else this.isEnergyMissing = false;
+	            
+	            if(!enoughPopulation) {
+	                workingPopulation = res.getUnworkingPopulation();
+	            	this.isPopulationMissing = true;
+	            } else this.isPopulationMissing = false;
+	            
+	            final int missingEnergyPercentage = 100 - consumedEnergy * 100 / neededEnergy;
+                final int missingPopulationPercentage = 100 - workingPopulation * 100 / neededUnworkingPopulation;
 
-	@Override
-	public void update(CityResources res) {
-        final int products = this.getProducts(res);
-        final int busyPercentage = products * 100 / this.productsCapacity;
-        final int neededEnergy = Math.max(10, busyPercentage * this.maxNeededEnergy / 100);
-        final int neededUnworkingPopulation = busyPercentage * this.maxWorkingInhabitants / 100;
-        final boolean enoughEnergy = res.getUnconsumedEnergy() >= neededEnergy;
-        final boolean enoughPopulation = res.getUnworkingPopulation() >= neededUnworkingPopulation;
-        int vacantPercentage = 0;
-        
-        if(enoughEnergy && enoughPopulation) {
+                vacantPercentage = missingEnergyPercentage * missingPopulationPercentage;
+            }
+            
             res.consumeEnergy(neededEnergy);
             res.hireWorkers(neededUnworkingPopulation);
-            this.isEnergyMissing = false;
-            this.isPopulationMissing = false;
-
-            vacantPercentage = 100 - busyPercentage;
-        } else if(!enoughEnergy || !enoughPopulation) {
-        	int consumedEnergy = neededEnergy;
-        	int workingPopulation = neededUnworkingPopulation;
-        		
-            if(!enoughEnergy) {
-                consumedEnergy = res.getUnconsumedEnergy();
-                res.consumeEnergy(consumedEnergy);
-            	this.isEnergyMissing = true;
-            	res.hireWorkers(neededUnworkingPopulation);
-            }
-            
-            if(!enoughPopulation) {
-                workingPopulation = res.getUnworkingPopulation();
-                res.hireWorkers(workingPopulation);
-            	this.isPopulationMissing = true;
-            	res.consumeEnergy(neededEnergy);
-            }
-            
-            final int missingEnergyPercentage = 100 - consumedEnergy * 100 / neededEnergy;
-            final int missingPopulationPercentage = 100 - workingPopulation * 100 / neededUnworkingPopulation;
-            vacantPercentage = missingEnergyPercentage * missingPopulationPercentage;
+            res.creditWithTaxes(vacantPercentage * totalPrice / 100);
+            res.consumeProducts(vacantPercentage * productsCapacity / 100);
         }
-        
-        res.storeProducts(vacantPercentage * this.maxProduction / 100);
-	}
+    }
+    
+    private int getProducts(CityResources res) {
+        assert res.getProductsCapacity() != 0;
+
+        return res.getProductsCount() * this.productsCapacity / res.getProductsCapacity();
+    }
 }

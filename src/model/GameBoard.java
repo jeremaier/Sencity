@@ -41,11 +41,15 @@ import model.event.EventFactory;
 import model.tiles.Evolvable;
 import model.tiles.GrassTile;
 import model.tiles.Tile;
+import model.tiles.WaterTile;
+import model.tools.AirportZoneDelimiterTool;
 import model.tools.BulldozerTool;
 import model.tools.CommercialZoneDelimiterTool;
+import model.tools.HarborZoneDelimiterTool;
 import model.tools.IndustrialZoneDelimiterTool;
 import model.tools.PowerPlantConstructionTool;
 import model.tools.ResidentialZoneDelimiterTool;
+import model.tools.StadiumZoneDelimiterTool;
 import model.tools.Tool;
 
 public class GameBoard extends Observable {
@@ -139,6 +143,9 @@ public class GameBoard extends Observable {
         this.tools.add(new ResidentialZoneDelimiterTool());
         this.tools.add(new IndustrialZoneDelimiterTool());
         this.tools.add(new CommercialZoneDelimiterTool());
+        this.tools.add(new AirportZoneDelimiterTool());
+        this.tools.add(new HarborZoneDelimiterTool());
+        this.tools.add(new StadiumZoneDelimiterTool());
 
         this.selectedTool = this.tools.get(GameBoard.DEFAULT_SELECTED_TOOL);
 
@@ -320,16 +327,23 @@ public class GameBoard extends Observable {
 
         final Tile currentTile = this.tiles[row][column];
 
-        if (this.selectedTool.canEffect(currentTile)) {
-            if (this.selectedTool.isAfordable(currentTile, this.resources)) {
-
-                final Tile newTile = this.selectedTool.effect(currentTile, this.resources);
-                this.tiles[row][column] = newTile;
-
-                this.pendingEvolutions.remove(currentTile);
-                if (newTile instanceof Evolvable) {
-                    this.pendingEvolutions.add((Evolvable) newTile);
-                }
+        if(this.selectedTool.canEffect(currentTile)) {
+            if(this.selectedTool.isAfordable(currentTile, this.resources)) {
+            	if(!this.selectedTool.isAleadyBuild(this.resources)) {
+                    if(this.selectedTool instanceof HarborZoneDelimiterTool && this.getTilesArea(new TilePosition(row, column), 1).contains(WaterTile.getDefault())) {
+		                final Tile newTile = this.selectedTool.effect(currentTile, this.resources);
+		                this.tiles[row][column] = newTile;
+		
+		                this.pendingEvolutions.remove(currentTile);
+		                if (newTile instanceof Evolvable) {
+		                    this.pendingEvolutions.add((Evolvable) newTile);
+		                }
+                    } else {
+                    	this.message = this.texts.getNextToMsg(WaterTile.getDefault());
+                    }
+            	} else {
+            		this.message = this.texts.getAlreadyBuildMsg();
+            	}
             } else {
                 this.message = this.texts.getMissingResourcesMsg();
             }

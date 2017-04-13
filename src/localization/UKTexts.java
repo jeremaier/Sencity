@@ -24,6 +24,8 @@
 
 package localization;
 
+import model.tiles.Tile;
+
 /**
  * United Kingdom localized texts.
  */
@@ -33,6 +35,11 @@ public class UKTexts extends LocalizedTexts {
     @Override
     public String getToolCannotAffectMsg() {
         return "Cannot effect this tile";
+    }
+    
+    @Override
+    public String getAlreadyBuildMsg() {
+        return "This building can be build only one time";
     }
 
     @Override
@@ -76,4 +83,8 @@ public class UKTexts extends LocalizedTexts {
         return "Unworking population";
     }
 
+    @Override
+	public String getNextToMsg(Tile tile) {
+		return "This building need to be build next to " + tile.toString();
+	}
 }

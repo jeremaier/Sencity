@@ -34,11 +34,6 @@ public class CommercialTile extends BuildableTile {
 
     // Constants
     /**
-     * Default value of {@link CommercialTile#getNeededInhabitants()}
-     */
-    public final static int DEFAULT_MAX_WORKING_POPULATION = 30;
-    
-    /**
      * Default value of {@link CommercialTile#getEvolutionEnergyConsumption()}
      */
     public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
@@ -68,12 +63,11 @@ public class CommercialTile extends BuildableTile {
      */
     public final static int DEFAULT_PRODUCTS_PRICE = 1;
 
-
     // Implementation
     /**
      * {@link #getMaxWorkingInhabitants()}
      */
-    private final int maxWorkingInhabitants;
+    private final int maxNeededInhabitants;
     
     /**
      * {@link #getMaxNeededEnergy()}
@@ -106,7 +100,7 @@ public class CommercialTile extends BuildableTile {
         this.productsCapacity = capacity;
         this.maxNeededEnergy = CommercialTile.DEFAULT_MAX_NEEDED_ENERGY;
         this.maxNeededProducts = CommercialTile.DEFAULT_MAX_NEEDED_PRODUCTS;
-        this.maxWorkingInhabitants = CommercialTile.DEFAULT_MAX_WORKING_POPULATION;
+        this.maxNeededInhabitants = CommercialTile.DEFAULT_MAX_NEEDED_INHABITANTS;
 
     }
     
@@ -146,8 +140,8 @@ public class CommercialTile extends BuildableTile {
      * @return Maximum number of inhabitants at work. This maximum is working
      * 		   if the commerce is full.
      */
-    public final int getMaxWorkingInhabitants() {
-        return this.maxWorkingInhabitants;
+    public final int getMaxNeededInhabitants() {
+        return this.maxNeededInhabitants;
     }
     
     /**
@@ -164,7 +158,7 @@ public class CommercialTile extends BuildableTile {
         result = result * 17 + this.productsCapacity;
         result = result * 17 + this.maxNeededEnergy;
         result = result * 17 + this.maxNeededProducts;
-        result = result * 17 + this.maxWorkingInhabitants;
+        result = result * 17 + this.maxNeededInhabitants;
         return result;
     }
 
@@ -183,7 +177,7 @@ public class CommercialTile extends BuildableTile {
         		&& o.productsPrice == this.productsPrice
                 && o.maxNeededEnergy == this.maxNeededEnergy
                 && o.maxNeededProducts == this.maxNeededProducts
-                && o.maxWorkingInhabitants == this.maxWorkingInhabitants
+                && o.maxNeededInhabitants == this.maxNeededInhabitants
                 && o.productsCapacity == this.productsCapacity;
     }
 
@@ -207,7 +201,8 @@ public class CommercialTile extends BuildableTile {
         super.evolve(res);
         if (this.state == ConstructionState.BUILT) {
         	
-        	res.increaseProductsCapacity(this.productsCapacity/2);
+        	//////////////////////////////////////////////////////////////What?
+        	res.increaseProductsCapacity(this.productsCapacity / 2);
             this.update(res);
         }
     }
@@ -215,49 +210,42 @@ public class CommercialTile extends BuildableTile {
     @Override
     public void update(CityResources res) {
         if (this.state == ConstructionState.BUILT) {
-        	
-        	final int products = this.getProducts(res);
-            final int busyPercentage = products * 100 / this.productsCapacity; // Integer
-                                                                               // division
-            final int neededEnergy = Math.max(10, busyPercentage * this.maxNeededEnergy / 100); // Integer
-                                                                                                // division
-            final int neededUnworkingPopulation = busyPercentage * this.maxWorkingInhabitants / 100;
+            final int busyPercentage = this.getProducts(res) * 100 / this.productsCapacity;
+            final int neededEnergy = Math.max(10, busyPercentage * this.maxNeededEnergy / 100);
+            final int neededUnworkingPopulation = busyPercentage * this.maxNeededInhabitants / 100;
+            final boolean enoughEnergy = res.getUnconsumedEnergy() >= neededEnergy;
+            final boolean enoughPopulation = res.getUnworkingPopulation() >= neededUnworkingPopulation;
             int vacantPercentage = 100;
+            int totalPrice = res.getProductsCount() * productsPrice;
             
-            if (res.getUnconsumedEnergy() >= neededEnergy && res.getUnworkingPopulation() >= neededUnworkingPopulation) {
-            	
-                res.consumeEnergy(neededEnergy);
-                res.hireWorkers(neededUnworkingPopulation);
-           
+            if(enoughEnergy && enoughPopulation) {
                 this.isPopulationMissing = false;
                 this.isEnergyMissing = false;
-                
-                final int TotalPrice = res.getProductsCount()*productsPrice;
-                res.creditWithTaxes(TotalPrice);
-                vacantPercentage = 100 - busyPercentage;
+                vacantPercentage -= busyPercentage;
             } else {
             	int consumedEnergy = neededEnergy;
             	int workingPopulation = neededUnworkingPopulation;
             		
-	            if(res.getUnconsumedEnergy() < neededEnergy) {
+	            if(!enoughEnergy) {
 	                consumedEnergy = res.getUnconsumedEnergy();
-	                res.consumeEnergy(consumedEnergy);
 	            	this.isEnergyMissing = true;
-	            	res.hireWorkers(neededUnworkingPopulation);
-	            }
+	            } else this.isEnergyMissing = false;
 	            
-	            if(res.getUnworkingPopulation() < neededUnworkingPopulation) {
+	            if(!enoughPopulation) {
 	                workingPopulation = res.getUnworkingPopulation();
-	                res.hireWorkers(workingPopulation);
 	            	this.isPopulationMissing = true;
-	            	res.consumeEnergy(neededEnergy);
-	            }
+	            } else this.isPopulationMissing = false;
 	            
-	            final int missingEnergyPercentage = 100 - consumedEnergy * 100 / neededEnergy;
-                final int missingPopulationPercentage = 100 - workingPopulation * 100 / neededUnworkingPopulation;
-                vacantPercentage = missingEnergyPercentage * missingPopulationPercentage;
+                final int energyPercentage = consumedEnergy / this.maxNeededEnergy;
+                final int workersPercentage = workingPopulation / this.maxNeededInhabitants;
+                
+                vacantPercentage -= busyPercentage * energyPercentage * workersPercentage;
             }
-            res.consumeProducts(vacantPercentage*productsCapacity/100);
+            
+            res.consumeEnergy(neededEnergy);
+            res.hireWorkers(neededUnworkingPopulation);
+            res.creditWithTaxes(vacantPercentage * totalPrice / 100);
+            res.consumeProducts(vacantPercentage * productsCapacity / 100);
         }
     }
 
@@ -274,9 +262,6 @@ public class CommercialTile extends BuildableTile {
     private int getProducts(CityResources res) {
         assert res.getProductsCapacity() != 0;
 
-        return res.getProductsCount() * this.productsCapacity / res.getProductsCapacity(); // Integer
-        																				   // division
+        return res.getProductsCount() * this.productsCapacity / res.getProductsCapacity();
     }
-
 }
-

@@ -24,6 +24,8 @@
 
 package localization;
 
+import model.tiles.Tile;
+
 /***
  * Texts used by the game.
  */
@@ -34,6 +36,11 @@ public abstract class LocalizedTexts {
      * @return Message that indicates that the tool cannot affect a given tile.
      */
     public abstract String getToolCannotAffectMsg();
+    
+    /**
+     * @return Message that indicates that the tool can be build only one time.
+     */
+	public abstract String getAlreadyBuildMsg();
 
     /**
      * {0}: currency
@@ -82,5 +89,9 @@ public abstract class LocalizedTexts {
      * @return No-working population label.
      */
     public abstract String getUnworkingPopulationLabel();
-
+    
+    /**
+     * @return Message that indicates that the tool need to be next to a certain tile.
+     */
+	public abstract String getNextToMsg(Tile tile);
 }

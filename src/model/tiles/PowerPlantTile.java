@@ -26,7 +26,7 @@ package model.tiles;
 
 import model.CityResources;
 
-public class PowerPlantTile extends Tile implements Destroyable {
+public class PowerPlantTile extends BuildableTile {
 
     // Constant
     /**
@@ -137,5 +137,4 @@ public class PowerPlantTile extends Tile implements Destroyable {
             res.increaseEnergyProduction(extraProduction);
         }
     }
-
 }

@@ -24,6 +24,60 @@
 
 package model.tiles;
 
-public class AirportTile extends TransportTile {
+import model.CityResources;
 
+public class AirportTile extends TransportTile {
+    // Constants  
+    /**
+     * Default value of {@link #getProductsPrice()}
+     */
+    public final static int DEFAULT_PRODUCTS_PRICE = 2;
+    
+    /**
+     * Default value of {@link TransportTile#getMaxNeededEnergy()}
+     */
+    public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
+    
+    /**
+     * Default value of {@link TransportTile#getMaxNeededProducts()}
+     */
+    public final static int DEFAULT_MAX_NEEDED_PRODUCTS = 30;
+
+    /**
+     * Default value of {@link TransportTile#getNeededInhabitants()}
+     */
+    public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 30;
+    
+    /**
+     * Default value of {@link TransportTile#getProductsCapacity()}
+     */
+    protected final static int DEFAULT_PRODUCTS_CAPACITY = 10;
+
+    public AirportTile(int capacity) {
+		super(DEFAULT_PRODUCTS_PRICE);
+		
+		CityResources.setBuildAirport(true);
+		this.productsCapacity = capacity;
+        this.maxNeededEnergy = HarborTile.DEFAULT_MAX_NEEDED_ENERGY;
+        this.maxNeededProducts = HarborTile.DEFAULT_MAX_NEEDED_PRODUCTS;
+        this.maxNeededInhabitants= HarborTile.DEFAULT_MAX_NEEDED_INHABITANTS;
+	}
+	
+    public AirportTile() {
+        this(AirportTile.DEFAULT_PRODUCTS_CAPACITY);
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof AirportTile && this.equals((AirportTile) o);
+    }
+    
+    @Override
+    public void disassemble(CityResources res) {
+        if (!this.isDestroyed) {
+        	res.decreaseProductsCapacity(this.productsCapacity);
+            this.isDestroyed = true;
+            CityResources.setBuildAirport(false);
+        }
+    }
 }

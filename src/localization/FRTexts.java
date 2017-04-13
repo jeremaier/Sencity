@@ -24,6 +24,8 @@
 
 package localization;
 
+import model.tiles.Tile;
+
 /**
  * France localized texts.
  */
@@ -33,6 +35,11 @@ public class FRTexts extends LocalizedTexts {
     @Override
     public String getToolCannotAffectMsg() {
         return "Impossible de modifier cet emplacement";
+    }
+    
+    @Override
+    public String getAlreadyBuildMsg() {
+        return "Ce batiment ne peut être construit qu'une seule fois";
     }
 
     @Override
@@ -76,4 +83,8 @@ public class FRTexts extends LocalizedTexts {
         return "Population sans travail";
     }
 
+    @Override
+	public String getNextToMsg(Tile tile) {
+		return "Ce batiment doit être posé à côté de " + tile.toString();
+	}
 }

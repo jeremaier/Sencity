@@ -29,10 +29,10 @@ import model.CityResources;
 public class HarborTile extends TransportTile {
     // Constants
     /**
-     * Default value of {@link TransportTile#getEvolutionEnergyConsumption()}
+     * Default value of {@link #getProductsPrice()}
      */
-    public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
-
+    public final static int DEFAULT_PRODUCTS_PRICE = 2;
+    
     /**
      * Default value of {@link TransportTile#getMaxNeededEnergy()}
      */
@@ -53,31 +53,31 @@ public class HarborTile extends TransportTile {
      */
     protected final static int DEFAULT_PRODUCTS_CAPACITY = 10;
 
-    
-	public HarborTile(int defaultProductsCapacity) {
-		super(defaultProductsCapacity);
+	public HarborTile(int capacity) {
+		super(DEFAULT_PRODUCTS_PRICE);
+		
+		CityResources.setBuildHarbor(true);
+		this.productsCapacity = capacity;
         this.maxNeededEnergy = HarborTile.DEFAULT_MAX_NEEDED_ENERGY;
         this.maxNeededProducts = HarborTile.DEFAULT_MAX_NEEDED_PRODUCTS;
         this.maxNeededInhabitants= HarborTile.DEFAULT_MAX_NEEDED_INHABITANTS;
 	}
 	
-    /**
-     * Create with default settings.
-     */
     public HarborTile() {
         this(HarborTile.DEFAULT_PRODUCTS_CAPACITY);
     }
     
-    // Status
     @Override
     public boolean equals(Object o) {
         return o instanceof HarborTile && this.equals((HarborTile) o);
     }
     
     @Override
-    public void update(CityResources res) {
+    public void disassemble(CityResources res) {
         if (!this.isDestroyed) {
-        	
+        	res.decreaseProductsCapacity(this.productsCapacity);
+            this.isDestroyed = true;
+            CityResources.setBuildHarbor(false);
         }
     }
 }

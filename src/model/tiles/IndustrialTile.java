@@ -39,12 +39,12 @@ public class IndustrialTile extends BuildableTile {
     public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
     /**
-     * Default value of {@link IndustrialTile#getProduction}
+     * Default value of {@link IndustrialTile#getProductionCapacity}
      */
     public final static int DEFAULT_PRODUCTS_CAPACITY = 10;
 
     /**
-     * Default value of {@link IndustrialTile#maxJoiningInhabitants}
+     * Default value of {@link IndustrialTile#getMaxProduction}
      */
     public final static int DEFAULT_MAX_PRODUCTION = 15;
 
@@ -56,7 +56,7 @@ public class IndustrialTile extends BuildableTile {
     /**
      * Default value of {@link IndustrialTile#getNeededInhabitants()}
      */
-    public final static int DEFAULT_MAX_WORKING_POPULATION = 30;
+    public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 30;
     
     /**
      * {@link #getProductsCapacity()}
@@ -76,7 +76,7 @@ public class IndustrialTile extends BuildableTile {
     /**
      * {@link #getMaxNeededInhabitants()}
      */
-    private final int maxWorkingInhabitants;
+    private final int maxNeededInhabitants;
     
     // Creation
     /**
@@ -89,7 +89,7 @@ public class IndustrialTile extends BuildableTile {
         this.productsCapacity = capacity;
         this.maxProduction = IndustrialTile.DEFAULT_MAX_PRODUCTION;
         this.maxNeededEnergy = IndustrialTile.DEFAULT_MAX_NEEDED_ENERGY;
-        this.maxWorkingInhabitants = IndustrialTile.DEFAULT_MAX_WORKING_POPULATION;
+        this.maxNeededInhabitants = IndustrialTile.DEFAULT_MAX_NEEDED_INHABITANTS;
     }
 
     /**
@@ -127,7 +127,7 @@ public class IndustrialTile extends BuildableTile {
      * 		   if the industry is full.
      */
     public final int getMaxWorkingInhabitants() {
-        return this.maxWorkingInhabitants;
+        return this.maxNeededInhabitants;
     }
 
     @Override
@@ -136,7 +136,7 @@ public class IndustrialTile extends BuildableTile {
         result = result * 17 + this.productsCapacity;
         result = result * 17 + this.maxProduction;
         result = result * 17 + this.maxNeededEnergy;
-        result = result * 17 + this.maxWorkingInhabitants;
+        result = result * 17 + this.maxNeededInhabitants;
         return result;
     }
 
@@ -151,8 +151,11 @@ public class IndustrialTile extends BuildableTile {
      * @return Is {@value o} equals to this?
      */
     public boolean equals(IndustrialTile o) {
-        return this == o || super.equals(o) && o.productsCapacity == this.productsCapacity && o.maxProduction == this.maxProduction
-        		&& o.maxNeededEnergy == this.maxNeededEnergy && o.maxWorkingInhabitants == this.maxWorkingInhabitants
+        return this == o || super.equals(o)
+        		&& o.productsCapacity == this.productsCapacity
+        		&& o.maxProduction == this.maxProduction
+        		&& o.maxNeededEnergy == this.maxNeededEnergy
+        		&& o.maxNeededInhabitants == this.maxNeededInhabitants
         		&& o.isDestroyed() == this.isDestroyed();
     }
 
@@ -185,45 +188,40 @@ public class IndustrialTile extends BuildableTile {
     @Override
     public void update(CityResources res) {
         if (this.state == ConstructionState.BUILT) {
-            final int products = this.getProducts(res);
-            final int busyPercentage = products * 100 / this.productsCapacity;
+            final int busyPercentage = this.getProducts(res) * 100 / this.productsCapacity;
             final int neededEnergy = Math.max(10, busyPercentage * this.maxNeededEnergy / 100);
-            final int neededUnworkingPopulation = busyPercentage * this.maxWorkingInhabitants / 100;
+            final int neededUnworkingPopulation = busyPercentage * this.maxNeededInhabitants / 100;
             final boolean enoughEnergy = res.getUnconsumedEnergy() >= neededEnergy;
             final boolean enoughPopulation = res.getUnworkingPopulation() >= neededUnworkingPopulation;
-            int vacantPercentage = 0;
+            int productionPercentage = 100;
             
             if(enoughEnergy && enoughPopulation) {
-                res.consumeEnergy(neededEnergy);
-                res.hireWorkers(neededUnworkingPopulation);
                 this.isEnergyMissing = false;
                 this.isPopulationMissing = false;
-
-                vacantPercentage = 100 - busyPercentage;
-            } else if(!enoughEnergy || !enoughPopulation) {
+                productionPercentage -= busyPercentage;
+            } else {
             	int consumedEnergy = neededEnergy;
             	int workingPopulation = neededUnworkingPopulation;
             		
 	            if(!enoughEnergy) {
 	                consumedEnergy = res.getUnconsumedEnergy();
-	                res.consumeEnergy(consumedEnergy);
 	            	this.isEnergyMissing = true;
-	            	res.hireWorkers(neededUnworkingPopulation);
-	            }
+	            } else this.isEnergyMissing = false;
 	            
 	            if(!enoughPopulation) {
 	                workingPopulation = res.getUnworkingPopulation();
-	                res.hireWorkers(workingPopulation);
 	            	this.isPopulationMissing = true;
-	            	res.consumeEnergy(neededEnergy);
-	            }
+	            } else this.isPopulationMissing = false;
 	            
-                final int missingEnergyPercentage = 100 - consumedEnergy * 100 / neededEnergy;
-                final int missingPopulationPercentage = 100 - workingPopulation * 100 / neededUnworkingPopulation;
-                vacantPercentage = missingEnergyPercentage * missingPopulationPercentage;
+                final int energyPercentage = consumedEnergy / this.maxNeededEnergy;
+                final int workersPercentage = workingPopulation / this.maxNeededInhabitants;
+                
+                productionPercentage -= busyPercentage * energyPercentage * workersPercentage;
             }
             
-            res.storeProducts(vacantPercentage * this.maxProduction / 100);
+            res.consumeEnergy(neededEnergy);
+            res.hireWorkers(neededUnworkingPopulation);
+            res.storeProducts(productionPercentage * this.maxProduction / 100);
         }
     }
 
