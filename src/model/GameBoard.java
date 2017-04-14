@@ -330,7 +330,7 @@ public class GameBoard extends Observable {
         if(this.selectedTool.canEffect(currentTile)) {
             if(this.selectedTool.isAfordable(currentTile, this.resources)) {
             	if(!this.selectedTool.isAleadyBuild()) {
-                    if(this.selectedTool instanceof HarborZoneDelimiterTool && this.getTilesArea(new TilePosition(row, column), 1).contains(WaterTile.getDefault())) {
+                    //if(this.selectedTool instanceof HarborZoneDelimiterTool && this.getTilesArea(new TilePosition(row, column), 1).contains(WaterTile.getDefault())) {
 		                final Tile newTile = this.selectedTool.effect(currentTile, this.resources);
 		                this.tiles[row][column] = newTile;
 		
@@ -338,9 +338,9 @@ public class GameBoard extends Observable {
 		                if (newTile instanceof Evolvable) {
 		                    this.pendingEvolutions.add((Evolvable) newTile);
 		                }
-                    } else {
+                    /*} else {
                     	this.message = this.texts.getNextToMsg(WaterTile.getDefault());
-                    }
+                    }*/
             	} else {
             		this.message = this.texts.getAlreadyBuildMsg();
             	}
