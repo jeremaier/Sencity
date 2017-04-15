@@ -5,31 +5,32 @@ import java.util.List;
 
 import localization.LocalizedTexts;
 import model.CityResources;
-
+import model.tiles.IndustrialTile;
 
 /**
- * The CriminalEvent make you loose money.
+ * The InvestmentEvent make you earn more money.
  */
-public class Criminal_CommerceEvent extends Event {
+public class InvestmentEvent extends Event {
 
     /**
      * Default Constructor.
      */
-	public Criminal_CommerceEvent() {
+	public InvestmentEvent() {
         super();
     }
+
 
     /**
      * Apply no effects.
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        System.out.println("Criminal disaster occured.");
-        resources.spend(5);
+        System.out.println("An investment occured.");
+        IndustrialTile.maxProduction+=5;
         return new ArrayList<>(0);
     }
 
-    /**
+	/**
      * Return an empty message.
      */
 	@Override
@@ -38,5 +39,4 @@ public class Criminal_CommerceEvent extends Event {
     }
 
 }
-
 

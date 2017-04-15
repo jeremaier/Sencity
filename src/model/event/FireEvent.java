@@ -10,12 +10,12 @@ import model.CityResources;
 /**
  * The CriminalEvent make you loose money.
  */
-public class Criminal_IndustryEvent extends Event {
+public class FireEvent extends Event {
 
     /**
      * Default Constructor.
      */
-	public Criminal_IndustryEvent() {
+	public FireEvent() {
         super();
     }
 
@@ -24,7 +24,7 @@ public class Criminal_IndustryEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        System.out.println("Criminal disaster occured.");
+        System.out.println("Fire occured in industry.");
         resources.consumeProducts(2);
         return new ArrayList<>(0);
     }

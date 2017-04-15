@@ -31,8 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-
 import model.GameBoard;
+
 
 /**
  * The EventFactory generates Events according to their probabilities.
@@ -44,10 +44,11 @@ public class EventFactory {
      */
     private static enum eventType {
         NOTHING,
-        CRIMINAL_INDUSTRY,
-        CRIMINAL_COMMERCE,
+        FIRE,
+        STEAL,
         DISEASE,
-        FESTIVAL;
+        FESTIVAL,
+        EARTHQUAKE;
         }
 
     /**
@@ -61,11 +62,12 @@ public class EventFactory {
         private static final long serialVersionUID = -6805412774816642699L;
 
         {
-            this.put(eventType.NOTHING, 20);
-            this.put(eventType.CRIMINAL_INDUSTRY, 30);
-            this.put(eventType.CRIMINAL_INDUSTRY, 30);
-            this.put(eventType.DISEASE, 10);
-            this.put(eventType.FESTIVAL, 10);
+            this.put(eventType.NOTHING, 10);
+            this.put(eventType.FIRE, 0);
+            this.put(eventType.STEAL, 0);
+            this.put(eventType.DISEASE, 0);
+            this.put(eventType.FESTIVAL, 0);
+            this.put(eventType.EARTHQUAKE, 90);
         }
     });
 
@@ -91,17 +93,20 @@ public class EventFactory {
         eventType type = EventFactory.probalisticEventsList.get(index);
         Event result;
         switch (type) {
+        	case EARTHQUAKE:
+        		result = new EarthquakeEvent();
+        		break;
         	case FESTIVAL:
         		result = new FestivalEvent();
         		break;
         	case DISEASE:
         		result = new DiseaseEvent();
         		break;
-        	case CRIMINAL_INDUSTRY:
-        		result = new Criminal_IndustryEvent();
+        	case FIRE:
+        		result = new FireEvent();
         		break;
-        	case CRIMINAL_COMMERCE:
-        		result = new Criminal_CommerceEvent();
+        	case STEAL:
+        		result = new StealEvent();
         		break;
             case NOTHING:
                 result = new NothingEvent();

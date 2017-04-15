@@ -26,6 +26,7 @@ public class FestivalEvent extends Event {
     public List<Event> applyEffects(CityResources resources) {
         System.out.println("Disease occured.");
         resources.credit(5);
+        resources.increaseSatisfaction(5);
         return new ArrayList<>(0);
     }
 
