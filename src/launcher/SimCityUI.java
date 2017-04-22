@@ -40,6 +40,7 @@ import ui.ToolsView;
 import ui.MessagesView;
 import ui.PropertiesView;
 import ui.RefreshView;
+import ui.StartMenuView;
 import ui.GameBoardView;
 
 public final class SimCityUI extends JFrame {
@@ -94,14 +95,18 @@ public final class SimCityUI extends JFrame {
 
         // Pour que ce soit le thread graphique qui construise les composants
         // graphiques
-        SwingUtilities.invokeLater(() -> new SimCityUI(height, width));
+        //final LocalizedTexts texts = new UKTexts();
+        //SwingUtilities.invokeLater(() -> new StartMenuView(height, width));
+        
+        ///////////////
+        // Choix de la langue
+        final LocalizedTexts texts = new UKTexts();
+        SwingUtilities.invokeLater(() -> new SimCityUI(height, width, texts));
     }
 
     // Creation
-    public SimCityUI(int hauteur, int largeur) {
+    public SimCityUI(int hauteur, int largeur, LocalizedTexts texts) {
         super("SimCityTélécom");
-        // Choix de la langue
-        final LocalizedTexts texts = new UKTexts();
 
         // Création du monde
         GameBoard monde = new GameBoard(hauteur, largeur, texts);
@@ -130,7 +135,7 @@ public final class SimCityUI extends JFrame {
         this.add(right, BorderLayout.EAST);
 
         // Création du panneau de message
-        MessagesView mv = new MessagesView();
+        MessagesView mv = new MessagesView(monde);
         monde.addObserver(mv);
         this.add(mv, BorderLayout.SOUTH);
 
@@ -140,5 +145,4 @@ public final class SimCityUI extends JFrame {
         this.setResizable(false);
         this.setVisible(true);
     }
-
 }

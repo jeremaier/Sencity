@@ -29,7 +29,7 @@ import model.CityResources;
 public class AirportTile extends TransportTile {
     // Constants  
     /**
-     * Default value of {@link #getProductsPrice()}
+     * Default value of {@link TransportTile#getProductsPrice()}
      */
     public final static int DEFAULT_PRODUCTS_PRICE = 2;
     
@@ -54,6 +54,11 @@ public class AirportTile extends TransportTile {
     protected final static int DEFAULT_PRODUCTS_CAPACITY = 10;
     
     /**
+     * Default value of {@link TransportTile#getSatisfactionValue()}
+     */
+    public final static int DEFAULT_SATISFACTION_VALUE = 10;
+    
+    /**
      * This building is already build?
      */
     public static boolean alreadyBuild = false;
@@ -61,11 +66,12 @@ public class AirportTile extends TransportTile {
     public AirportTile(int capacity) {
 		super(DEFAULT_PRODUCTS_PRICE);
 		
+        this.maxNeededEnergy = AirportTile.DEFAULT_MAX_NEEDED_ENERGY;
+        this.maxNeededProducts = AirportTile.DEFAULT_MAX_NEEDED_PRODUCTS;
+        this.maxNeededInhabitants= AirportTile.DEFAULT_MAX_NEEDED_INHABITANTS;
+        this.satisfactionValue = AirportTile.DEFAULT_SATISFACTION_VALUE;
 		AirportTile.alreadyBuild = true;
 		this.productsCapacity = capacity;
-        this.maxNeededEnergy = HarborTile.DEFAULT_MAX_NEEDED_ENERGY;
-        this.maxNeededProducts = HarborTile.DEFAULT_MAX_NEEDED_PRODUCTS;
-        this.maxNeededInhabitants= HarborTile.DEFAULT_MAX_NEEDED_INHABITANTS;
 	}
 	
     public AirportTile() {

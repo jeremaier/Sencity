@@ -83,8 +83,18 @@ public class UKTexts extends LocalizedTexts {
         return "Unworking population";
     }
 
+	@Override
+	public String getSatisfactionLabel() {
+		return "Actual satisfaction";
+	}
+
     @Override
 	public String getNextToMsg(Tile tile) {
 		return "This building need to be build next to " + tile.toString();
 	}
+    
+    @Override
+	public String getBorderTitle() {
+    	return "Something special ?";
+    }
 }

@@ -26,7 +26,7 @@ public class InvestmentEvent extends Event {
 	@Override
     public List<Event> applyEffects(CityResources resources) {
         System.out.println("An investment occured.");
-        IndustrialTile.maxProduction+=5;
+        //IndustrialTile.maxProduction+=5;
         return new ArrayList<>(0);
     }
 

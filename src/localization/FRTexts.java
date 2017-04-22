@@ -83,8 +83,18 @@ public class FRTexts extends LocalizedTexts {
         return "Population sans travail";
     }
 
+	@Override
+	public String getSatisfactionLabel() {
+		return "Satisfaction actuelle";
+	}
+
     @Override
 	public String getNextToMsg(Tile tile) {
 		return "Ce batiment doit être posé à côté de " + tile.toString();
 	}
+    
+    @Override
+	public String getBorderTitle() {
+    	return "Quelque chose de spécial?";
+    }
 }
