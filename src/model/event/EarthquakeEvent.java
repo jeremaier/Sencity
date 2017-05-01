@@ -8,7 +8,6 @@ import model.CityResources;
 import model.tiles.Destroyable;
 import model.tiles.GrassTile;
 import model.tiles.Tile;
-import model.TilePosition;
 /**
  * The CriminalEvent make you loose money.
  */
@@ -20,9 +19,9 @@ public class EarthquakeEvent extends Event {
 	public EarthquakeEvent() {
         super();
     }
-
-	protected Tile innerEffect(TilePosition aTarget, CityResources r) {
-        ((Destroyable) aTarget).disassemble(r);
+			
+	protected Tile innerEffect(Tile aTarget, CityResources resources) {
+        ((Destroyable) aTarget).disassemble(resources);
         return GrassTile.getDefault();
     }
 	
@@ -31,8 +30,9 @@ public class EarthquakeEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        System.out.println("Earthquake occured.");
-        innerEffect(startingTile,resources);
+        //System.out.println("Earthquake occured at (" + startingTile.getRow() +"," + startingTile.getColumn() + ").");
+		System.out.println("Earthquake occured");
+        innerEffect(world.getTile(startingTile.getRow(), startingTile.getColumn()), resources);
         return new ArrayList<>(0);
     }
 
