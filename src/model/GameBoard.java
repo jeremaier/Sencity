@@ -261,6 +261,10 @@ public class GameBoard extends Observable {
     public int getProducts() {
         return this.resources.getProductsCount();
     }
+    
+    public int getSatisfaction() {
+    	return this.resources.getSatisfaction();
+    }
 
     // Access (Status)
     /**
@@ -330,7 +334,10 @@ public class GameBoard extends Observable {
         if(this.selectedTool.canEffect(currentTile)) {
             if(this.selectedTool.isAfordable(currentTile, this.resources)) {
             	if(!this.selectedTool.isAleadyBuild()) {
-                    //if(this.selectedTool instanceof HarborZoneDelimiterTool && this.getTilesArea(new TilePosition(row, column), 1).contains(WaterTile.getDefault())) {
+            		System.out.println(this.selectedTool);
+                    if(this.selectedTool instanceof HarborZoneDelimiterTool && !this.getTilesArea(new TilePosition(row, column), 1).contains(WaterTile.getDefault()))
+                		this.message = this.texts.getNextToMsg(WaterTile.getDefault());
+                    else {
 		                final Tile newTile = this.selectedTool.effect(currentTile, this.resources);
 		                this.tiles[row][column] = newTile;
 		
@@ -338,9 +345,7 @@ public class GameBoard extends Observable {
 		                if (newTile instanceof Evolvable) {
 		                    this.pendingEvolutions.add((Evolvable) newTile);
 		                }
-                    /*} else {
-                    	this.message = this.texts.getNextToMsg(WaterTile.getDefault());
-                    }*/
+                    }
             	} else {
             		this.message = this.texts.getAlreadyBuildMsg();
             	}

@@ -426,7 +426,7 @@ public class CityResources {
     /**
      * @return Actual satisfaction of the population.
      */
-	public int getSatisfaction(int amount) {
+	public int getSatisfaction() {
 		return this.satisfaction;
 	}
 
@@ -436,15 +436,21 @@ public class CityResources {
      * @param amount
      */
 	public void increaseSatisfaction(int amount) {
-		this.satisfaction += amount;
+		final int totalSatisfaction = this.satisfaction + amount;
+		
+		if(totalSatisfaction <= 100)
+			this.satisfaction = totalSatisfaction;
 	}
 
     /**
-     * Increase {@link #getSatisfaction()} by {@value amount}.
+     * Decrease {@link #getSatisfaction()} by {@value amount}.
      *
      * @param amount
      */
 	public void decreaseSatisfation(int amount) {
-		this.satisfaction -= amount;
+		final int totalSatisfaction = this.satisfaction - amount;
+		
+		if(totalSatisfaction >= -100)
+			this.satisfaction = totalSatisfaction;
 	}
 }

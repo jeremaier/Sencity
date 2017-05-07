@@ -40,9 +40,9 @@ public class MessagesView extends JPanel implements Observer {
 
     private JTextArea message;
 
-    public MessagesView() {
+    public MessagesView(GameBoard monde) {
         super();
-        this.setBorder(BorderFactory.createTitledBorder("Something special ?"));
+        this.setBorder(BorderFactory.createTitledBorder(monde.getTexts().getBorderTitle()));
         this.message = new JTextArea(10, 110);
         this.message.setWrapStyleWord(true);
         this.message.setLineWrap(true);

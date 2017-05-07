@@ -39,6 +39,11 @@ public class StadiumTile extends Tile implements Destroyable {
     public final static int DEFAULT_INCOME = 1000;
     
     /**
+     * Default value of {@link #getSatisfactionValue()}
+     */
+    public final static int DEFAULT_SATISFACTION_VALUE = 10;
+    
+    /**
      * {@link #getMaxNeededEnergy()}
      */
     private final int neededEnergy;
@@ -46,12 +51,12 @@ public class StadiumTile extends Tile implements Destroyable {
 	/**
      * Evolution state
      */
-    protected boolean isDestroyed;
+    private boolean isDestroyed;
     
     /**
      * {@link #isEnergyMissing()}
      */
-    protected boolean isEnergyMissing;
+    private boolean isEnergyMissing;
     
 	/**
     * {@link #getProductsPrice()}
@@ -62,11 +67,17 @@ public class StadiumTile extends Tile implements Destroyable {
      * This building is already build?
      */
     public static boolean alreadyBuild = false;
+    
+    /**
+     * {@link #getSatisfactionValue()}
+     */
+    private int satisfactionValue;
 
 	public StadiumTile() {
-		StadiumTile.alreadyBuild = true;
         this.neededEnergy = StadiumTile.DEFAULT_NEEDED_ENERGY;
-        this.income = DEFAULT_INCOME;
+        this.income = StadiumTile.DEFAULT_INCOME;
+        this.satisfactionValue = StadiumTile.DEFAULT_SATISFACTION_VALUE;
+		StadiumTile.alreadyBuild = true;
         this.isEnergyMissing = false;
 	}
 	
@@ -90,6 +101,13 @@ public class StadiumTile extends Tile implements Destroyable {
      */
     public final boolean isEnergyMissing() {
         return this.isEnergyMissing;
+    }
+    
+    /**
+     * @return Increase or decrease value of satisfaction
+     */
+    public final int getSatisfaction() {
+    	return this.satisfactionValue;
     }
     
     @Override
@@ -149,6 +167,11 @@ public class StadiumTile extends Tile implements Destroyable {
             
             res.consumeEnergy(energyAvailable);
             res.creditWithTaxes(vacantPercentage * this.income / 100);
+            this.updateSatisfaction(res);
         }
+	}
+	
+    private void updateSatisfaction(CityResources res) {
+		res.increaseSatisfaction(this.satisfactionValue);
 	}
 }

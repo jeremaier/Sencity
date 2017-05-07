@@ -43,6 +43,7 @@ public class PropertiesView extends JPanel implements Observer {
     private JLabel energy;
     private JLabel unworkingPop;
     private JLabel products;
+    private JLabel satisfaction;
 
     public PropertiesView(GameBoard w, LocalizedTexts texts) {
         super();
@@ -63,6 +64,10 @@ public class PropertiesView extends JPanel implements Observer {
         this.add(new JLabel(texts.getStoredProductsLabel()));
         this.products = new JLabel(Integer.toString(w.getProducts()));
         this.add(this.products);
+        
+        this.add(new JLabel(texts.getSatisfactionLabel()));
+        this.satisfaction = new JLabel(Integer.toString(w.getSatisfaction()));
+        this.add(this.satisfaction);
     }
 
     @Override
@@ -74,6 +79,6 @@ public class PropertiesView extends JPanel implements Observer {
         this.energy.setText("" + world.getEnergy());
         this.unworkingPop.setText("" + world.getUnworkingPopulation());
         this.products.setText("" + world.getProducts());
+        this.satisfaction.setText("" + world.getSatisfaction());
     }
-
 }

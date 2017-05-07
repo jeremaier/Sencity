@@ -31,7 +31,6 @@ import model.CityResources;
  */
 public abstract class TransportTile extends Tile implements Destroyable {
     // Implementation
-
     /**
      * {@link #getProductsCapacity()}
      */
@@ -68,9 +67,14 @@ public abstract class TransportTile extends Tile implements Destroyable {
     protected boolean isPopulationMissing;
 	
 	/**
-    * {@link #getProductsPrice()}
-    */
+     * {@link #getProductsPrice()}
+     */
     private final int productsPrice;
+    
+    /**
+     * {@link #getSatisfactionValue()}
+     */
+    protected int satisfactionValue;
 
     // Creation
 	/**
@@ -135,6 +139,13 @@ public abstract class TransportTile extends Tile implements Destroyable {
      */
     public final int getProductsPrice() {
         return this.productsPrice;
+    }
+    
+    /**
+     * @return Increase or decrease value of satisfaction
+     */
+    public final int getSatisfactionValue() {
+    	return this.satisfactionValue;
     }
 
     @Override
@@ -219,10 +230,15 @@ public abstract class TransportTile extends Tile implements Destroyable {
             res.hireWorkers(neededUnworkingPopulation);
             res.creditWithTaxes(vacantPercentage * totalPrice / 100);
             res.consumeProducts(vacantPercentage * productsCapacity / 100);
+            this.updateSatisfaction(res);
         }
     }
     
-    private int getProducts(CityResources res) {
+    private void updateSatisfaction(CityResources res) {
+		res.increaseSatisfaction(this.satisfactionValue);
+	}
+
+	private int getProducts(CityResources res) {
         assert res.getProductsCapacity() != 0;
 
         return res.getProductsCount() * this.productsCapacity / res.getProductsCapacity();

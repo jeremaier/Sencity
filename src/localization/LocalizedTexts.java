@@ -89,9 +89,19 @@ public abstract class LocalizedTexts {
      * @return No-working population label.
      */
     public abstract String getUnworkingPopulationLabel();
+
+    /**
+     * @return satisfaction label.
+     */
+    public abstract String getSatisfactionLabel();
     
     /**
      * @return Message that indicates that the tool need to be next to a certain tile.
      */
 	public abstract String getNextToMsg(Tile tile);
+
+	/**
+	 * @return Title of the game border.
+	 */
+	public abstract String getBorderTitle();
 }
