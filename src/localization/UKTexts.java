@@ -30,6 +30,10 @@ import model.tiles.Tile;
  * United Kingdom localized texts.
  */
 public class UKTexts extends LocalizedTexts {
+	@Override
+	public String getLangageName() {
+		return "English";
+	}
 
     // Messages
     @Override

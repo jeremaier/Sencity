@@ -30,6 +30,11 @@ import model.tiles.Tile;
  * Texts used by the game.
  */
 public abstract class LocalizedTexts {
+	
+	/**
+	 * @return Indicate the langage name.
+	 */
+	public abstract String getLangageName();
 
     // Message
     /**

@@ -34,14 +34,13 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import localization.LocalizedTexts;
-import localization.UKTexts;
 import model.GameBoard;
-import ui.ToolsView;
+import ui.GameBoardView;
 import ui.MessagesView;
 import ui.PropertiesView;
 import ui.RefreshView;
 import ui.StartMenuView;
-import ui.GameBoardView;
+import ui.ToolsView;
 
 public final class SimCityUI extends JFrame {
 
@@ -93,15 +92,7 @@ public final class SimCityUI extends JFrame {
             }
         }
 
-        // Pour que ce soit le thread graphique qui construise les composants
-        // graphiques
-        //final LocalizedTexts texts = new UKTexts();
-        //SwingUtilities.invokeLater(() -> new StartMenuView(height, width));
-        
-        ///////////////
-        // Choix de la langue
-        final LocalizedTexts texts = new UKTexts();
-        SwingUtilities.invokeLater(() -> new SimCityUI(height, width, texts));
+        SwingUtilities.invokeLater(() -> new StartMenuView(height, width));
     }
 
     // Creation
@@ -141,7 +132,7 @@ public final class SimCityUI extends JFrame {
 
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.pack();
-
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setVisible(true);
     }

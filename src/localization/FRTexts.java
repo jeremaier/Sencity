@@ -30,7 +30,11 @@ import model.tiles.Tile;
  * France localized texts.
  */
 public class FRTexts extends LocalizedTexts {
-
+	@Override
+	public String getLangageName() {
+		return "Français";
+	}
+	
     // Messages
     @Override
     public String getToolCannotAffectMsg() {
