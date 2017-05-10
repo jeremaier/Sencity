@@ -96,7 +96,7 @@ public abstract class LocalizedTexts {
     public abstract String getUnworkingPopulationLabel();
 
     /**
-     * @return satisfaction label.
+     * @return Satisfaction label.
      */
     public abstract String getSatisfactionLabel();
     
@@ -109,4 +109,44 @@ public abstract class LocalizedTexts {
 	 * @return Title of the game border.
 	 */
 	public abstract String getBorderTitle();
+	
+	/**
+	 * @return Language label.
+	 */
+	public abstract String getLanguageLabel();
+    
+	/**
+	 * @return Difficulty level label.
+	 */
+	public abstract String getDifficultyLabel();
+	
+	/**
+	 * @return Easy level label.
+	 */
+	public abstract String getEasyLabel();
+    
+	/**
+	 * @return Standard level Label.
+	 */
+	public abstract String getStandardLabel();
+    
+	/**
+	 * @return Hard level Label.
+	 */
+	public abstract String getHardLabel();
+    
+	/**
+	 * @return New game button Label.
+	 */
+	public abstract String getNewGameButtonLabel();
+    
+	/**
+	 * @return Load button Label.
+	 */
+	public abstract String getLoadButtonLabel();
+	
+	/**
+	 * @return Back button Label.
+	 */
+	public abstract String getBackLabel();
 }

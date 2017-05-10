@@ -101,4 +101,44 @@ public class FRTexts extends LocalizedTexts {
 	public String getBorderTitle() {
     	return "Quelque chose de spécial?";
     }
+    
+    @Override
+	public String getLanguageLabel() {
+    	return "Langue";
+    }
+    
+    @Override
+	public String getDifficultyLabel() {
+    	return "Difficulté";
+    }
+    
+    @Override
+	public String getEasyLabel() {
+    	return "Facile";
+    }
+    
+    @Override
+	public String getStandardLabel() {
+    	return "Normal";
+    }
+    
+    @Override
+	public String getHardLabel() {
+    	return "Difficile";
+    }
+
+	@Override
+	public String getNewGameButtonLabel() {
+		return "Nouvelle partie";
+	}
+
+	@Override
+	public String getLoadButtonLabel() {
+		return "Charger une partie";
+	}
+
+	@Override
+	public String getBackLabel() {
+		return "Retour";
+	}
 }

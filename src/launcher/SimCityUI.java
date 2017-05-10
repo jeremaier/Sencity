@@ -35,11 +35,12 @@ import javax.swing.SwingUtilities;
 
 import localization.LocalizedTexts;
 import model.GameBoard;
+import model.difficulty.DifficultyLevel;
 import ui.GameBoardView;
 import ui.MessagesView;
 import ui.PropertiesView;
 import ui.RefreshView;
-import ui.StartMenuView;
+import ui.MainFrame;
 import ui.ToolsView;
 
 public final class SimCityUI extends JFrame {
@@ -92,15 +93,15 @@ public final class SimCityUI extends JFrame {
             }
         }
 
-        SwingUtilities.invokeLater(() -> new StartMenuView(height, width));
+        SwingUtilities.invokeLater(() -> new MainFrame(height, width));
     }
 
     // Creation
-    public SimCityUI(int hauteur, int largeur, LocalizedTexts texts) {
+    public SimCityUI(int hauteur, int largeur, DifficultyLevel difficulty, LocalizedTexts texts) {
         super("SimCityTélécom");
 
         // Création du monde
-        GameBoard monde = new GameBoard(hauteur, largeur, texts);
+        GameBoard monde = new GameBoard(hauteur, largeur, difficulty, texts);
 
         // Création de la vue du monde, placée au centre de la fenêtre
         GameBoardView vm = new GameBoardView(monde);

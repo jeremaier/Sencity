@@ -34,17 +34,37 @@ public class DifficultyLevel {
      * Initial currency of the standard difficulty.
      */
     private final static int STANDARD_CURRENCY = 500;
+    
+    /**
+     * Initial currency of easy.
+     */
+    private final static int EASY_CURRENCY = 1000;
+    
+    /**
+     * Initial currency of difficult.
+     */
+    private final static int DIFFICULT_CURRENCY = 200;
 
     /**
      * Standard difficulty.
      */
     public final static DifficultyLevel STANDARD_LEVEL = new DifficultyLevel(DifficultyLevel.STANDARD_CURRENCY);
+    
+    /**
+     * Standard difficulty.
+     */
+    public final static DifficultyLevel EASY_LEVEL = new DifficultyLevel(DifficultyLevel.EASY_CURRENCY);
+    
+    /**
+     * Standard difficulty.
+     */
+    public final static DifficultyLevel HARD_LEVEL = new DifficultyLevel(DifficultyLevel.DIFFICULT_CURRENCY);
 
     // Constant
     /**
      * 1: {@link DifficultyLevel#getInitialCurrency()}
      */
-    public final static String TO_STRING_TEMPLATE = "Difficulty {%s ¤}";
+    public final static String TO_STRING_TEMPLATE = "Difficulty : {%s ¤}";
 
     // Implementation
     /**

@@ -101,4 +101,44 @@ public class UKTexts extends LocalizedTexts {
 	public String getBorderTitle() {
     	return "Something special ?";
     }
+    
+    @Override
+	public String getLanguageLabel() {
+    	return "Language";
+    }
+    
+    @Override
+	public String getDifficultyLabel() {
+    	return "Difficulty";
+    }
+    
+    @Override
+	public String getEasyLabel() {
+    	return "Easy";
+    }
+    
+    @Override
+	public String getStandardLabel() {
+    	return "Standard";
+    }
+    
+    @Override
+	public String getHardLabel() {
+    	return "Hard";
+    }
+
+	@Override
+	public String getNewGameButtonLabel() {
+		return "New game";
+	}
+
+	@Override
+	public String getLoadButtonLabel() {
+		return "Load a game";
+	}
+
+	@Override
+	public String getBackLabel() {
+		return "Back";
+	}
 }
