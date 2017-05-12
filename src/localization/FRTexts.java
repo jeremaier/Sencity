@@ -141,4 +141,14 @@ public class FRTexts extends LocalizedTexts {
 	public String getBackLabel() {
 		return "Retour";
 	}
+
+	@Override
+	public String getSelectLabel() {
+		return "Selectionner";
+	}
+
+	@Override
+	public String getSaveListLabel() {
+		return "Liste des sauvegardes";
+	}
 }

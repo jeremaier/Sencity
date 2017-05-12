@@ -97,11 +97,8 @@ public final class SimCityUI extends JFrame {
     }
 
     // Creation
-    public SimCityUI(int hauteur, int largeur, DifficultyLevel difficulty, LocalizedTexts texts) {
+    public SimCityUI(GameBoard monde, int hauteur, int largeur, DifficultyLevel difficulty, LocalizedTexts texts) {
         super("SimCityTélécom");
-
-        // Création du monde
-        GameBoard monde = new GameBoard(hauteur, largeur, difficulty, texts);
 
         // Création de la vue du monde, placée au centre de la fenêtre
         GameBoardView vm = new GameBoardView(monde);

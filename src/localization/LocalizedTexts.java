@@ -126,27 +126,37 @@ public abstract class LocalizedTexts {
 	public abstract String getEasyLabel();
     
 	/**
-	 * @return Standard level Label.
+	 * @return Standard level label.
 	 */
 	public abstract String getStandardLabel();
     
 	/**
-	 * @return Hard level Label.
+	 * @return Hard level label.
 	 */
 	public abstract String getHardLabel();
     
 	/**
-	 * @return New game button Label.
+	 * @return New game button label.
 	 */
 	public abstract String getNewGameButtonLabel();
     
 	/**
-	 * @return Load button Label.
+	 * @return Load button label.
 	 */
 	public abstract String getLoadButtonLabel();
 	
 	/**
-	 * @return Back button Label.
+	 * @return Back button label.
 	 */
 	public abstract String getBackLabel();
+	
+	/**
+	 * @return Select a save button label.
+	 */
+	public abstract String getSelectLabel();
+	
+	/**
+	 * @return Save list label.
+	 */
+	public abstract String getSaveListLabel();
 }

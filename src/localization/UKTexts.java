@@ -141,4 +141,14 @@ public class UKTexts extends LocalizedTexts {
 	public String getBackLabel() {
 		return "Back";
 	}
+
+	@Override
+	public String getSelectLabel() {
+		return "Select";
+	}
+
+	@Override
+	public String getSaveListLabel() {
+		return "Save list";
+	}
 }

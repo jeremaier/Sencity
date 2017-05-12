@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 
 import localization.LocalizedTexts;
 import localization.UKTexts;
+import model.GameBoard;
 import model.difficulty.Difficulties;
 
 public class MainFrame extends JFrame {
@@ -15,8 +16,10 @@ public class MainFrame extends JFrame {
 
 	public MainFrame(int height, int width) {
 		super("Simcity Télécom");
+		
+        GameBoard game = new GameBoard(height, width, difficulty.getLevel(), texts);
 
-		this.add(new MainMenuView(this, height, width));
+		this.add(new MainMenuView(this, game, height, width));
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.pack();
 		this.setResizable(false);
