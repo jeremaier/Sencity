@@ -66,7 +66,7 @@ public class IndustrialTile extends BuildableTile {
     /**
      * Maximum number of products creation for each update.
      */
-    private final int maxProduction;
+    public static int maxProduction;
 
     /**
      * {@link #getMaxNeededEnergy()}
@@ -85,9 +85,8 @@ public class IndustrialTile extends BuildableTile {
      */
     public IndustrialTile(int capacity) {
         super(IndustrialTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
-        
+        maxProduction = DEFAULT_MAX_PRODUCTION;
         this.productsCapacity = capacity;
-        this.maxProduction = IndustrialTile.DEFAULT_MAX_PRODUCTION;
         this.maxNeededEnergy = IndustrialTile.DEFAULT_MAX_NEEDED_ENERGY;
         this.maxNeededInhabitants = IndustrialTile.DEFAULT_MAX_NEEDED_INHABITANTS;
     }
@@ -111,7 +110,7 @@ public class IndustrialTile extends BuildableTile {
      * @return Maximum number of production per round.
      */
     public final int getMaxProduction() {
-        return this.maxProduction;
+        return maxProduction;
     }
 
     /**
@@ -134,7 +133,6 @@ public class IndustrialTile extends BuildableTile {
     public int hashCode() {
         int result = super.hashCode();
         result = result * 17 + this.productsCapacity;
-        result = result * 17 + this.maxProduction;
         result = result * 17 + this.maxNeededEnergy;
         result = result * 17 + this.maxNeededInhabitants;
         return result;
@@ -153,7 +151,6 @@ public class IndustrialTile extends BuildableTile {
     public boolean equals(IndustrialTile o) {
         return this == o || super.equals(o)
         		&& o.productsCapacity == this.productsCapacity
-        		&& o.maxProduction == this.maxProduction
         		&& o.maxNeededEnergy == this.maxNeededEnergy
         		&& o.maxNeededInhabitants == this.maxNeededInhabitants
         		&& o.isDestroyed() == this.isDestroyed();
@@ -221,7 +218,7 @@ public class IndustrialTile extends BuildableTile {
             
             res.consumeEnergy(neededEnergy);
             res.hireWorkers(neededUnworkingPopulation);
-            res.storeProducts(productionPercentage * this.maxProduction / 100);
+            res.storeProducts(productionPercentage * maxProduction / 100);
         }
     }
 
