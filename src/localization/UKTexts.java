@@ -30,6 +30,10 @@ import model.tiles.Tile;
  * United Kingdom localized texts.
  */
 public class UKTexts extends LocalizedTexts {
+	@Override
+	public String getLangageName() {
+		return "English";
+	}
 
     // Messages
     @Override
@@ -97,4 +101,54 @@ public class UKTexts extends LocalizedTexts {
 	public String getBorderTitle() {
     	return "Something special ?";
     }
+    
+    @Override
+	public String getLanguageLabel() {
+    	return "Language";
+    }
+    
+    @Override
+	public String getDifficultyLabel() {
+    	return "Difficulty";
+    }
+    
+    @Override
+	public String getEasyLabel() {
+    	return "Easy";
+    }
+    
+    @Override
+	public String getStandardLabel() {
+    	return "Standard";
+    }
+    
+    @Override
+	public String getHardLabel() {
+    	return "Hard";
+    }
+
+	@Override
+	public String getNewGameButtonLabel() {
+		return "New game";
+	}
+
+	@Override
+	public String getLoadButtonLabel() {
+		return "Load a game";
+	}
+
+	@Override
+	public String getBackLabel() {
+		return "Back";
+	}
+
+	@Override
+	public String getSelectLabel() {
+		return "Select";
+	}
+
+	@Override
+	public String getSaveListLabel() {
+		return "Save list";
+	}
 }

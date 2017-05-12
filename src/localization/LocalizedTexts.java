@@ -30,6 +30,11 @@ import model.tiles.Tile;
  * Texts used by the game.
  */
 public abstract class LocalizedTexts {
+	
+	/**
+	 * @return Indicate the langage name.
+	 */
+	public abstract String getLangageName();
 
     // Message
     /**
@@ -91,7 +96,7 @@ public abstract class LocalizedTexts {
     public abstract String getUnworkingPopulationLabel();
 
     /**
-     * @return satisfaction label.
+     * @return Satisfaction label.
      */
     public abstract String getSatisfactionLabel();
     
@@ -104,4 +109,54 @@ public abstract class LocalizedTexts {
 	 * @return Title of the game border.
 	 */
 	public abstract String getBorderTitle();
+	
+	/**
+	 * @return Language label.
+	 */
+	public abstract String getLanguageLabel();
+    
+	/**
+	 * @return Difficulty level label.
+	 */
+	public abstract String getDifficultyLabel();
+	
+	/**
+	 * @return Easy level label.
+	 */
+	public abstract String getEasyLabel();
+    
+	/**
+	 * @return Standard level label.
+	 */
+	public abstract String getStandardLabel();
+    
+	/**
+	 * @return Hard level label.
+	 */
+	public abstract String getHardLabel();
+    
+	/**
+	 * @return New game button label.
+	 */
+	public abstract String getNewGameButtonLabel();
+    
+	/**
+	 * @return Load button label.
+	 */
+	public abstract String getLoadButtonLabel();
+	
+	/**
+	 * @return Back button label.
+	 */
+	public abstract String getBackLabel();
+	
+	/**
+	 * @return Select a save button label.
+	 */
+	public abstract String getSelectLabel();
+	
+	/**
+	 * @return Save list label.
+	 */
+	public abstract String getSaveListLabel();
 }

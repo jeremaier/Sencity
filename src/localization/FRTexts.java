@@ -30,7 +30,11 @@ import model.tiles.Tile;
  * France localized texts.
  */
 public class FRTexts extends LocalizedTexts {
-
+	@Override
+	public String getLangageName() {
+		return "Français";
+	}
+	
     // Messages
     @Override
     public String getToolCannotAffectMsg() {
@@ -97,4 +101,54 @@ public class FRTexts extends LocalizedTexts {
 	public String getBorderTitle() {
     	return "Quelque chose de spécial?";
     }
+    
+    @Override
+	public String getLanguageLabel() {
+    	return "Langue";
+    }
+    
+    @Override
+	public String getDifficultyLabel() {
+    	return "Difficulté";
+    }
+    
+    @Override
+	public String getEasyLabel() {
+    	return "Facile";
+    }
+    
+    @Override
+	public String getStandardLabel() {
+    	return "Normal";
+    }
+    
+    @Override
+	public String getHardLabel() {
+    	return "Difficile";
+    }
+
+	@Override
+	public String getNewGameButtonLabel() {
+		return "Nouvelle partie";
+	}
+
+	@Override
+	public String getLoadButtonLabel() {
+		return "Charger une partie";
+	}
+
+	@Override
+	public String getBackLabel() {
+		return "Retour";
+	}
+
+	@Override
+	public String getSelectLabel() {
+		return "Selectionner";
+	}
+
+	@Override
+	public String getSaveListLabel() {
+		return "Liste des sauvegardes";
+	}
 }
