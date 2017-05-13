@@ -31,7 +31,8 @@ import model.CityResources;
  *
  */
 public class FireStationTile extends BuildableTile {
-
+	private static final long serialVersionUID = 1L;
+	
     // Constants
     /**
      * Default value of {@link FireStationTile#getEvolutionEnergyConsumption()}

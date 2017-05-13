@@ -31,8 +31,9 @@ import model.CityResources;
  * number of inhabitants.
  */
 public class CommercialTile extends BuildableTile {
+	private static final long serialVersionUID = 1L;
 
-    // Constants
+	// Constants
     /**
      * Default value of {@link CommercialTile#getEvolutionEnergyConsumption()}
      */

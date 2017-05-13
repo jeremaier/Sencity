@@ -24,12 +24,15 @@
 
 package model;
 
+import java.io.Serializable;
+
 /**
  * Represents the resources and the parameters of the city. An ephemeral
  * resource is reset at each step thanks to {@link CityResources#getVat()}.
  */
-public class CityResources {
-
+public class CityResources implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
     // Constant
     /**
      * Default value for {@link CityResources#getVat()}.

@@ -47,7 +47,7 @@ public class MainMenuView extends JPanel {
 		buttons[0].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SwingUtilities.invokeLater(() -> new SimCityUI(game, height, width, MainFrame.getDifficulty().getLevel(), MainFrame.getTexts()));
+				SwingUtilities.invokeLater(() -> new SimCityUI(game, MainFrame.getTexts()));
 				frame.dispose();
 			}
 		});

@@ -24,14 +24,18 @@
 
 package model.tiles;
 
+import java.io.Serializable;
+
 import model.CityResources;
 
 /**
  * Abstract superclass for all tiles.
  */
-public abstract class Tile {
+public abstract class Tile implements Serializable {
 
-    // Change
+	private static final long serialVersionUID = 1L;
+
+	// Change
     /**
      * Go to the next state.
      *

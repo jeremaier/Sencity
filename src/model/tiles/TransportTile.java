@@ -30,6 +30,8 @@ import model.CityResources;
  * Enable to sell more expensive products
  */
 public abstract class TransportTile extends Tile implements Destroyable {
+	private static final long serialVersionUID = 1L;
+	
     // Implementation
     /**
      * {@link #getProductsCapacity()}

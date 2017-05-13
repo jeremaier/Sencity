@@ -31,7 +31,8 @@ import model.CityResources;
  * number of inhabitants.
  */
 public class ResidentialTile extends BuildableTile {
-
+	private static final long serialVersionUID = 1L;
+	
     // Constants
     /**
      * Default value of {@link ResidentialTile#getEvolutionEnergyConsumption()}

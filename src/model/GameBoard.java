@@ -24,6 +24,9 @@
 
 package model;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -121,20 +124,19 @@ public class GameBoard extends Observable {
      *            - {@link #getHeight()}
      * @param width
      *            - {@link #getWidth()}
+     * @param tiles
+     * 			  - Game tiles.
+     * @param res
+     * 			  - Game resources.
      * @param difficulty
      *            - Game difficulty level.
      * @param texts
      *            - {@link #getTexts()}
      */
-    public GameBoard(int height, int width, DifficultyLevel difficulty, LocalizedTexts texts) {
+    public GameBoard(int height, int width, Tile[][] tiles, CityResources res, DifficultyLevel difficulty, LocalizedTexts texts) {
         assert width > 0 && height > 0 : "Dimensions incorrectes";
 
-        this.tiles = new Tile[height][width];
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                this.tiles[i][j] = GrassTile.getDefault();
-            }
-        }
+        this.tiles = tiles;
         this.selectedTile = this.getTile(GameBoard.DEFAULT_SELECTED_LOCATION.getRow(), GameBoard.DEFAULT_SELECTED_LOCATION.getColumn());
 
         this.tools = new ArrayList<>();
@@ -151,10 +153,26 @@ public class GameBoard extends Observable {
 
         this.pendingEvolutions = new LinkedList<>();
         this.pendingEventsList = new LinkedList<>();
-        this.resources = new CityResources(difficulty.getInitialCurrency());
+        this.resources = res;
 
         this.message = GameBoard.NOTHING_MESSAGE;
         this.texts = texts;
+    }
+    
+    /**
+     * Create a rectangle world with {@value height * width} tiles.
+     *
+     * @param height
+     *            - {@link #getHeight()}
+     * @param width
+     *            - {@link #getWidth()}
+     * @param difficulty
+     *            - Game difficulty level.
+     * @param texts
+     *            - {@link #getTexts()}
+     */
+    public GameBoard(int height, int width, DifficultyLevel difficulty, LocalizedTexts texts) {
+    	this(height, width, setTiles(height, width), new CityResources(difficulty.getInitialCurrency()), difficulty, texts);
     }
 
     /**
@@ -245,6 +263,10 @@ public class GameBoard extends Observable {
     }
 
     // Access (City Resources)
+    
+    public CityResources getResources() {
+    	return resources;
+    }
 
     public int getCurrency() {
         return this.resources.getCurrency();
@@ -284,6 +306,22 @@ public class GameBoard extends Observable {
         this.selectedTool = tool;
         this.notifyViews();
     }
+    
+    /**
+     * Setup whole tiles ({@value height}, {@value width}).
+     *
+     * @param height
+     * @param width
+     */
+    public static Tile[][] setTiles(int height, int width) {
+    	Tile[][] tiles = new Tile[height][width];
+    	
+        for (int i = 0; i < height; i++)
+            for (int j = 0; j < width; j++)
+                tiles[i][j] = GrassTile.getDefault();
+        
+        return tiles;
+    }
 
     /**
      * Select the tile at location ({@value row}, {@value column}).
@@ -320,7 +358,7 @@ public class GameBoard extends Observable {
 
     // Change (World)
     /**
-     * Effect the tile at location {@value row}, {@value column}) with
+     * Effect the tile at location ({@value row}, {@value column}) with
      * {@link #getSelectedTool()} if possible.
      *
      * @param row
@@ -435,4 +473,30 @@ public class GameBoard extends Observable {
         }
     }
 
+    /**
+     * Save a game ({@value row}, {@value column}).
+     * 
+     * @param res
+     * @param path
+     */
+	public void saveGame(CityResources res, String path) {
+		FileOutputStream fOut;
+		ObjectOutputStream oOut;
+		
+		try {
+			fOut = new FileOutputStream(path);
+			oOut = new ObjectOutputStream(fOut);
+			
+			oOut.writeObject(res);
+			oOut.writeObject(this.tiles);
+			
+			if(oOut != null)
+				oOut.close();
+			
+			if(fOut != null)
+				fOut.close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

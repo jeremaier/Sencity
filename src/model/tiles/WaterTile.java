@@ -30,6 +30,7 @@ import model.CityResources;
  * State-less tile that represents grass tiles.
  */
 public final class WaterTile extends Tile {
+	private static final long serialVersionUID = 1L;
 
     // Constant
     /**

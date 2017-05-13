@@ -27,6 +27,8 @@ package model.tiles;
 import model.CityResources;
 
 public class HarborTile extends TransportTile {
+	private static final long serialVersionUID = 1L;
+	
     // Constants
     /**
      * Default value of {@link TransportTile#getProductsPrice()}

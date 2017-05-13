@@ -35,12 +35,11 @@ import javax.swing.SwingUtilities;
 
 import localization.LocalizedTexts;
 import model.GameBoard;
-import model.difficulty.DifficultyLevel;
 import ui.GameBoardView;
+import ui.MainFrame;
 import ui.MessagesView;
 import ui.PropertiesView;
 import ui.RefreshView;
-import ui.MainFrame;
 import ui.ToolsView;
 
 public final class SimCityUI extends JFrame {
@@ -97,7 +96,7 @@ public final class SimCityUI extends JFrame {
     }
 
     // Creation
-    public SimCityUI(GameBoard monde, int hauteur, int largeur, DifficultyLevel difficulty, LocalizedTexts texts) {
+    public SimCityUI(GameBoard monde, LocalizedTexts texts) {
         super("SimCityTélécom");
 
         // Création de la vue du monde, placée au centre de la fenêtre

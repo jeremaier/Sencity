@@ -27,7 +27,9 @@ package model.tiles;
 import model.CityResources;
 
 public class AirportTile extends TransportTile {
-    // Constants  
+	private static final long serialVersionUID = 1L;
+
+	// Constants  
     /**
      * Default value of {@link TransportTile#getProductsPrice()}
      */

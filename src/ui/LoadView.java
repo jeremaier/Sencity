@@ -5,6 +5,10 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -18,6 +22,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import launcher.SimCityUI;
+import model.CityResources;
 import model.GameBoard;
 import model.tiles.Tile;
 
@@ -62,7 +68,7 @@ public class LoadView extends JPanel {
 
 		JPanel topHalf = new JPanel();
 		topHalf.setLayout(new BoxLayout(topHalf, BoxLayout.LINE_AXIS));
-		
+
 		JPanel listContainer = new JPanel(new GridLayout(1, 1));
 		listContainer.setBorder(BorderFactory.createTitledBorder(MainFrame.getTexts().getSaveListLabel()));
 		listContainer.add(listPane);
@@ -77,11 +83,11 @@ public class LoadView extends JPanel {
 		JPanel bottomHalf = new JPanel(new BorderLayout());
 		bottomHalf.add(outputPane, BorderLayout.CENTER);
 		bottomHalf.setPreferredSize(new Dimension(450, 135));
-		
+
 		splitPane.add(buttonPanel);
 		//splitPane.add(bottomHalf);
 	}
-	
+
 	class SharedListSelectionHandler implements ListSelectionListener {
 		public void valueChanged(ListSelectionEvent e) { 
 			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
@@ -105,7 +111,7 @@ public class LoadView extends JPanel {
 		buttons[0].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LoadView.load(game, width, height, selectedSave);
+				LoadView.loadGame(game, height, width, selectedSave);
 			}
 		});
 
@@ -117,23 +123,32 @@ public class LoadView extends JPanel {
 		});
 	}
 	
-	/*private static void save(GameBoard game, int height, int width, int save) {
-		Tile[][] tiles = new Tile[height][width];
-		
-		for(int i = 0; i < height; i++) {
-			for(int j = 0; j < width; j++) {
-				tiles[i][j] = game.getTile(i, j);
-			}
+	public static SimCityUI loadGame(GameBoard game, int height, int width, int save) {
+		File file = null;
+		//File file = fileChooser.getSelectedFile();
+		FileInputStream fIn;
+		ObjectInputStream oIn;
+
+		try {
+			fIn = new FileInputStream(file);
+			oIn = new ObjectInputStream(fIn);
+			
+			CityResources res = (CityResources) oIn.readObject();
+			Tile[][] tiles = (Tile[][]) oIn.readObject();
+			
+			if(oIn != null)
+				oIn.close();
+			
+			if(fIn != null)
+				fIn.close();
+			
+			return new SimCityUI(new GameBoard(height, width, tiles, res, MainFrame.getDifficulty().getLevel(), MainFrame.getTexts()), MainFrame.getTexts());
+		} catch(IOException e) {
+			e.printStackTrace();
+		} catch(ClassNotFoundException e) {
+			e.printStackTrace();
 		}
-	}*/
-	
-	private static void load(GameBoard game, int height, int width, int save) {
-		Tile[][] tiles = new Tile[height][width];
 		
-		for(int i = 0; i < height; i++) {
-			for(int j = 0; j < width; j++) {
-				tiles[i][j] = game.getTile(i, j);
-			}
-		}
+		return null;
 	}
 }

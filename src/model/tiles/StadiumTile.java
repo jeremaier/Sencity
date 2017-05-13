@@ -27,6 +27,8 @@ package model.tiles;
 import model.CityResources;
 
 public class StadiumTile extends Tile implements Destroyable {
+	private static final long serialVersionUID = 1L;
+	
     // Constants
     /**
      * Default value of {@link #getProductsPrice()}

@@ -30,8 +30,9 @@ import model.CityResources;
  * Tile that can evolve and be destroyed. An evolution has an energy cost.
  */
 public abstract class BuildableTile extends Tile implements Evolvable, Destroyable {
+	private static final long serialVersionUID = 1L;
 
-    // Implementation
+	// Implementation
     /**
      * {@link #getEvolutionEnergyConsumption()}
      */

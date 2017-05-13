@@ -27,7 +27,8 @@ package model.tiles;
 import model.CityResources;
 
 public class PowerPlantTile extends BuildableTile {
-
+	private static final long serialVersionUID = 1L;
+	
     // Constant
     /**
      * Extra energy produces for each new update. In the limit of the capacity
