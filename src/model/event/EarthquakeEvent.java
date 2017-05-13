@@ -5,10 +5,9 @@ import java.util.List;
 
 import localization.LocalizedTexts;
 import model.CityResources;
-import model.tiles.Destroyable;
 import model.tiles.GrassTile;
-import model.tiles.Tile;
-import model.TilePosition;
+import model.tools.BulldozerTool;
+import model.tools.Tool;
 /**
  * The CriminalEvent make you loose money.
  */
@@ -20,19 +19,20 @@ public class EarthquakeEvent extends Event {
 	public EarthquakeEvent() {
         super();
     }
-
-	protected Tile innerEffect(TilePosition aTarget, CityResources r) {
-        ((Destroyable) aTarget).disassemble(r);
-        return GrassTile.getDefault();
-    }
 	
     /**
      * Apply no effects.
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        System.out.println("Earthquake occured.");
-        innerEffect(startingTile,resources);
+        
+		if( !(world.tiles[this.startingRow][this.startingColumn] instanceof GrassTile) ){
+			Tool tool = new BulldozerTool();
+			world.tiles[this.startingRow][this.startingColumn] = tool.effect(world.tiles[this.startingRow][this.startingColumn], resources);
+			System.out.println("Earthquake occured at ("+ this.startingRow +" , " + this.startingColumn +" ).");
+		}else{
+			System.out.println("Earthquake occured at no man's land");
+		}
         return new ArrayList<>(0);
     }
 

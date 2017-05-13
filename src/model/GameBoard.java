@@ -74,7 +74,7 @@ public class GameBoard extends Observable {
     /**
      * Map of the world.
      */
-    private final Tile[][] tiles;
+    public final Tile[][] tiles;
 
     /**
      * Available tools.
@@ -84,7 +84,7 @@ public class GameBoard extends Observable {
     /**
      * {@link #getSelectedTool()}
      */
-    private Tool selectedTool;
+    public Tool selectedTool;
 
     /**
      * {@link #getSelectedTile()}
