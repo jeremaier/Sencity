@@ -62,4 +62,7 @@ public class MessagesView extends JPanel implements Observer {
         }
     }
 
+    public void savePrint(String msg) {
+    	this.message.append(msg + "\n");
+    }
 }

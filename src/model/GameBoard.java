@@ -24,9 +24,11 @@
 
 package model;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -55,448 +57,474 @@ import model.tools.ResidentialZoneDelimiterTool;
 import model.tools.StadiumZoneDelimiterTool;
 import model.tools.Tool;
 
-public class GameBoard extends Observable {
+public class GameBoard extends Observable implements Serializable {
+	// Constant
+	private static final long serialVersionUID = 1L;
 
-    // Constant
-    public final static DifficultyLevel DEFAULT_DIFFICULTY = DifficultyLevel.STANDARD_LEVEL;
+	public final static DifficultyLevel DEFAULT_DIFFICULTY = DifficultyLevel.STANDARD_LEVEL;
 
-    public final static TilePosition DEFAULT_SELECTED_LOCATION = new TilePosition(0, 0);
+	public final static TilePosition DEFAULT_SELECTED_LOCATION = new TilePosition(0, 0);
 
-    public final static int DEFAULT_SELECTED_TOOL = 0;
+	public final static int DEFAULT_SELECTED_TOOL = 0;
 
-    public final static int MAX_HANDLED_EVOLUTIONS = 5;
+	public final static int MAX_HANDLED_EVOLUTIONS = 5;
 
-    public final static String NOTHING_MESSAGE = "";
+	public final static String NOTHING_MESSAGE = "";
 
-    public final static AtomicInteger ROUNDCOUNTER = new AtomicInteger(0);
+	public final static AtomicInteger ROUNDCOUNTER = new AtomicInteger(0);
 
-    // Implementation
-    /**
-     * Map of the world.
-     */
-    public final Tile[][] tiles;
+	// Implementation
+	/**
+	 * Map of the world.
+	 */
+	public final Tile[][] tiles;
 
-    /**
-     * Available tools.
-     */
-    private final List<Tool> tools;
+	/**
+	 * Available tools.
+	 */
+	private final List<Tool> tools;
 
-    /**
-     * {@link #getSelectedTool()}
-     */
-    public Tool selectedTool;
+	/**
+	 * {@link #getSelectedTool()}
+	 */
+	public Tool selectedTool;
 
-    /**
-     * {@link #getSelectedTile()}
-     */
-    private Tile selectedTile;
+	/**
+	 * {@link #getSelectedTile()}
+	 */
+	private Tile selectedTile;
 
-    /**
-     * Pending evolutions.
-     */
-    private final Queue<Evolvable> pendingEvolutions;
+	/**
+	 * Pending evolutions.
+	 */
+	private final Queue<Evolvable> pendingEvolutions;
 
-    /**
-     * Events to be applied to the world at the next refresh.
-     */
-    private final List<Event> pendingEventsList;
+	/**
+	 * Events to be applied to the world at the next refresh.
+	 */
+	private final List<Event> pendingEventsList;
 
-    /**
-     * Available money.
-     */
-    private CityResources resources;
+	/**
+	 * Available money.
+	 */
+	private CityResources resources;
 
-    /**
-     * Status message.
-     */
-    private String message;
+	/**
+	 * Status message.
+	 */
+	private String message;
 
-    /**
-     * {@link #getTexts()}
-     */
-    private final LocalizedTexts texts;
+	/**
+	 * {@link #getTexts()}
+	 */
+	private final LocalizedTexts texts;
 
-    // Creation
-    /**
-     * Create a rectangle world with {@value height * width} tiles.
-     *
-     * @param height
-     *            - {@link #getHeight()}
-     * @param width
-     *            - {@link #getWidth()}
-     * @param tiles
-     * 			  - Game tiles.
-     * @param res
-     * 			  - Game resources.
-     * @param difficulty
-     *            - Game difficulty level.
-     * @param texts
-     *            - {@link #getTexts()}
-     */
-    public GameBoard(int height, int width, Tile[][] tiles, CityResources res, DifficultyLevel difficulty, LocalizedTexts texts) {
-        assert width > 0 && height > 0 : "Dimensions incorrectes";
+	/**
+	 * {@link #getDifficulty()}
+	 */
+	private final DifficultyLevel difficulty;
 
-        this.tiles = tiles;
-        this.selectedTile = this.getTile(GameBoard.DEFAULT_SELECTED_LOCATION.getRow(), GameBoard.DEFAULT_SELECTED_LOCATION.getColumn());
+	// Creation
+	/**
+	 * Create a rectangle world with {@value height * width} tiles.
+	 *
+	 * @param height
+	 *            - {@link #getHeight()}
+	 * @param width
+	 *            - {@link #getWidth()}
+	 * @param tiles
+	 * 			  - Game tiles.
+	 * @param res
+	 * 			  - Game resources.
+	 * @param difficulty
+	 *            - Game difficulty level.
+	 * @param texts
+	 *            - {@link #getTexts()}
+	 */
+	public GameBoard(Tile[][] tiles, CityResources res, DifficultyLevel difficulty, LocalizedTexts texts) {
+		this.tiles = tiles;
+		this.selectedTile = this.getTile(GameBoard.DEFAULT_SELECTED_LOCATION.getRow(), GameBoard.DEFAULT_SELECTED_LOCATION.getColumn());
 
-        this.tools = new ArrayList<>();
-        this.tools.add(new BulldozerTool());
-        this.tools.add(new PowerPlantConstructionTool());
-        this.tools.add(new ResidentialZoneDelimiterTool());
-        this.tools.add(new IndustrialZoneDelimiterTool());
-        this.tools.add(new CommercialZoneDelimiterTool());
-        this.tools.add(new AirportZoneDelimiterTool());
-        this.tools.add(new HarborZoneDelimiterTool());
-        this.tools.add(new StadiumZoneDelimiterTool());
+		this.tools = new ArrayList<>();
+		this.tools.add(new BulldozerTool());
+		this.tools.add(new PowerPlantConstructionTool());
+		this.tools.add(new ResidentialZoneDelimiterTool());
+		this.tools.add(new IndustrialZoneDelimiterTool());
+		this.tools.add(new CommercialZoneDelimiterTool());
+		this.tools.add(new AirportZoneDelimiterTool());
+		this.tools.add(new HarborZoneDelimiterTool());
+		this.tools.add(new StadiumZoneDelimiterTool());
 
-        this.selectedTool = this.tools.get(GameBoard.DEFAULT_SELECTED_TOOL);
+		this.selectedTool = this.tools.get(GameBoard.DEFAULT_SELECTED_TOOL);
 
-        this.pendingEvolutions = new LinkedList<>();
-        this.pendingEventsList = new LinkedList<>();
-        this.resources = res;
+		this.pendingEvolutions = new LinkedList<>();
+		this.pendingEventsList = new LinkedList<>();
+		this.resources = res;
+		this.difficulty = difficulty;
 
-        this.message = GameBoard.NOTHING_MESSAGE;
-        this.texts = texts;
-    }
-    
-    /**
-     * Create a rectangle world with {@value height * width} tiles.
-     *
-     * @param height
-     *            - {@link #getHeight()}
-     * @param width
-     *            - {@link #getWidth()}
-     * @param difficulty
-     *            - Game difficulty level.
-     * @param texts
-     *            - {@link #getTexts()}
-     */
-    public GameBoard(int height, int width, DifficultyLevel difficulty, LocalizedTexts texts) {
-    	this(height, width, setTiles(height, width), new CityResources(difficulty.getInitialCurrency()), difficulty, texts);
-    }
+		this.message = GameBoard.NOTHING_MESSAGE;
+		this.texts = texts;
+	}
 
-    /**
-     * Create a rectangle world with {@value height * width} tiles.
-     *
-     * @param height
-     *            - {@link #getHeight()}
-     * @param width
-     *            - {@link #getWidth()}
-     * @param texts
-     *            - {@link #getTexts()}
-     */
-    public GameBoard(int height, int width, LocalizedTexts texts) {
-        this(height, width, GameBoard.DEFAULT_DIFFICULTY, texts);
-    }
+	/**
+	 * Create a rectangle world with {@value height * width} tiles.
+	 *
+	 * @param height
+	 *            - {@link #getHeight()}
+	 * @param width
+	 *            - {@link #getWidth()}
+	 * @param difficulty
+	 *            - Game difficulty level.
+	 * @param texts
+	 *            - {@link #getTexts()}
+	 */
+	public GameBoard(int height, int width, DifficultyLevel difficulty, LocalizedTexts texts) {
+		this(setTiles(height, width), new CityResources(difficulty.getInitialCurrency()), difficulty, texts);
+	}
 
-    /**
-     * Create a square world with {@value length * length} tiles.
-     *
-     * @param length
-     *            - {@link #getWidth()} and {@link #getHeight()}
-     * @param texts
-     *            - {@link #getTexts()}
-     */
-    public GameBoard(int length, LocalizedTexts texts) {
-        this(length, length, texts);
-    }
+	/**
+	 * Create a rectangle world with {@value height * width} tiles.
+	 *
+	 * @param height
+	 *            - {@link #getHeight()}
+	 * @param width
+	 *            - {@link #getWidth()}
+	 * @param texts
+	 *            - {@link #getTexts()}
+	 */
+	public GameBoard(int height, int width, LocalizedTexts texts) {
+		this(height, width, GameBoard.DEFAULT_DIFFICULTY, texts);
+	}
 
-    // Access
-    public LocalizedTexts getTexts() {
-        return this.texts;
-    }
+	/**
+	 * Create a square world with {@value length * length} tiles.
+	 *
+	 * @param length
+	 *            - {@link #getWidth()} and {@link #getHeight()}
+	 * @param texts
+	 *            - {@link #getTexts()}
+	 */
+	public GameBoard(int length, LocalizedTexts texts) {
+		this(length, length, texts);
+	}
 
-    // Access (World)
-    /**
-     * @return Height of the world in row count.
-     */
-    public int getHeight() {
-        return this.tiles.length;
-    }
+	// Access
+	public LocalizedTexts getTexts() {
+		return this.texts;
+	}
 
-    /**
-     * @return Width of the world in column count.
-     */
-    public int getWidth() {
-        return this.tiles[0].length;
-    }
+	// Access (World)
+	/**
+	 * @return Difficulty of the world.
+	 */
+	public DifficultyLevel getDifficulty() {
+		return this.difficulty;
+	}
+	
+	/**
+	 * @return Height of the world in row count.
+	 */
+	public int getHeight() {
+		return this.tiles.length;
+	}
 
-    /**
-     * @param row
-     *            - Row number
-     * @param column
-     *            - Column number
-     * @return Cell with at location ({@value row}, {@value column}).
-     * @exception AssertionError
-     *                if {@value row} or {@value column} is invalid.
-     */
-    public Tile getTile(int row, int column) {
-        assert row >= 0 && row < this.getHeight() && column >= 0 && column < this.getWidth() : "Ligne/Colonne incorrecte";
-        return this.tiles[row][column];
-    }
+	/**
+	 * @return Width of the world in column count.
+	 */
+	public int getWidth() {
+		return this.tiles[0].length;
+	}
 
-    // Access (Tool)
-    /**
-     * @return Number of available tools.
-     */
-    public int getToolCount() {
-        return this.tools.size();
-    }
+	/**
+	 * @param row
+	 *            - Row number
+	 * @param column
+	 *            - Column number
+	 * @return Cell with at location ({@value row}, {@value column}).
+	 * @exception AssertionError
+	 *                if {@value row} or {@value column} is invalid.
+	 */
+	public Tile getTile(int row, int column) {
+		assert row >= 0 && row < this.getHeight() && column >= 0 && column < this.getWidth() : "Ligne/Colonne incorrecte";
+		return this.tiles[row][column];
+	}
 
-    /**
-     * @return Tools' iterator of available tools.
-     */
-    public Iterator<Tool> toolIterator() {
-        return this.tools.iterator();
-    }
+	// Access (Tool)
+	/**
+	 * @return Number of available tools.
+	 */
+	public int getToolCount() {
+		return this.tools.size();
+	}
 
-    // Access (Selection)
-    /**
-     * @return Selected tile.
-     */
-    public Tile getSelectedTile() {
-        return this.selectedTile;
-    }
+	/**
+	 * @return Tools' iterator of available tools.
+	 */
+	public Iterator<Tool> toolIterator() {
+		return this.tools.iterator();
+	}
 
-    public Tool getSelectedTool() {
-        return this.selectedTool;
-    }
+	// Access (Selection)
+	/**
+	 * @return Selected tile.
+	 */
+	public Tile getSelectedTile() {
+		return this.selectedTile;
+	}
 
-    // Access (City Resources)
-    
-    public CityResources getResources() {
-    	return resources;
-    }
+	public Tool getSelectedTool() {
+		return this.selectedTool;
+	}
 
-    public int getCurrency() {
-        return this.resources.getCurrency();
-    }
+	// Access (City Resources)
 
-    public int getUnworkingPopulation() {
-        return this.resources.getUnworkingPopulation();
-    }
+	public CityResources getResources() {
+		return resources;
+	}
 
-    public int getEnergy() {
-        return this.resources.getUnconsumedEnergy();
-    }
+	public int getCurrency() {
+		return this.resources.getCurrency();
+	}
 
-    public int getProducts() {
-        return this.resources.getProductsCount();
-    }
-    
-    public int getSatisfaction() {
-    	return this.resources.getSatisfaction();
-    }
+	public int getUnworkingPopulation() {
+		return this.resources.getUnworkingPopulation();
+	}
 
-    // Access (Status)
-    /**
-     * @return Status message.
-     */
-    public String getMessage() {
-        return this.message;
-    }
+	public int getEnergy() {
+		return this.resources.getUnconsumedEnergy();
+	}
 
-    // Change (Selection)
-    /**
-     *
-     * @param tool
-     *            - {@link #getSelectedTool()}.
-     */
-    public void setSelectedTool(Tool tool) {
-        this.selectedTool = tool;
-        this.notifyViews();
-    }
-    
-    /**
-     * Setup whole tiles ({@value height}, {@value width}).
-     *
-     * @param height
-     * @param width
-     */
-    public static Tile[][] setTiles(int height, int width) {
-    	Tile[][] tiles = new Tile[height][width];
-    	
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++)
-                tiles[i][j] = GrassTile.getDefault();
-        
-        return tiles;
-    }
+	public int getProducts() {
+		return this.resources.getProductsCount();
+	}
 
-    /**
-     * Select the tile at location ({@value row}, {@value column}).
-     *
-     * @param row
-     * @param column
-     */
-    public void setSelectedTile(int row, int column) {
-        this.selectedTile = this.getTile(row, column);
-        this.notifyViews();
-    }
+	public int getSatisfaction() {
+		return this.resources.getSatisfaction();
+	}
 
-    /**
-     * Return a set of TilePosition defining a square created from the given
-     * <code>startingTile</code> and the <code>areaSize</code>.
-     *
-     * @param startingTile
-     * @param areaSize
-     * @return Set of TilePosition
-     */
-    public Set<TilePosition> getTilesArea(TilePosition startingTile, int areaSize) {
-        Set<TilePosition> tilesArea = new HashSet<>();
+	// Access (Status)
+	/**
+	 * @return Status message.
+	 */
+	public String getMessage() {
+		return this.message;
+	}
 
-        for (int i = 0; i < areaSize; i++) {
-            for (int j = 0; j < areaSize; j++) {
-                int newRow = startingTile.getRow() + i < this.getHeight() ? startingTile.getRow() + i : this.getHeight() - 1;
-                int newColumn = startingTile.getColumn() + j < this.getWidth() ? startingTile.getColumn() + j : this.getWidth() - 1;
-                TilePosition newTile = new TilePosition(newRow, newColumn);
-                tilesArea.add(newTile);
-            }
-        }
-        return tilesArea;
-    }
+	// Change (Selection)
+	/**
+	 *
+	 * @param tool
+	 *            - {@link #getSelectedTool()}.
+	 */
+	public void setSelectedTool(Tool tool) {
+		this.selectedTool = tool;
+		this.notifyViews();
+	}
 
-    // Change (World)
-    /**
-     * Effect the tile at location ({@value row}, {@value column}) with
-     * {@link #getSelectedTool()} if possible.
-     *
-     * @param row
-     * @param column
-     */
-    public void effectTile(int row, int column) {
-        assert row >= 0 && row < this.getHeight() && column >= 0 && column < this.getWidth() : "Ligne/Colonne incorrecte";
+	/**
+	 * Setup whole tiles ({@value height}, {@value width}).
+	 *
+	 * @param height
+	 * @param width
+	 */
+	public static Tile[][] setTiles(int height, int width) {
+		assert width > 0 && height > 0 : "Dimensions incorrectes";
 
-        final Tile currentTile = this.tiles[row][column];
+		Tile[][] tiles = new Tile[height][width];
 
-        if(this.selectedTool.canEffect(currentTile)) {
-            if(this.selectedTool.isAfordable(currentTile, this.resources)) {
-            	if(!this.selectedTool.isAleadyBuild()) {
-            		System.out.println(this.selectedTool);
-                    if(this.selectedTool instanceof HarborZoneDelimiterTool && !this.getTilesArea(new TilePosition(row, column), 1).contains(WaterTile.getDefault()))
-                		this.message = this.texts.getNextToMsg(WaterTile.getDefault());
-                    else {
-		                final Tile newTile = this.selectedTool.effect(currentTile, this.resources);
-		                this.tiles[row][column] = newTile;
+		for (int i = 0; i < height; i++)
+			for (int j = 0; j < width; j++)
+				tiles[i][j] = GrassTile.getDefault();
+
+		return tiles;
+	}
+
+	/**
+	 * Select the tile at location ({@value row}, {@value column}).
+	 *
+	 * @param row
+	 * @param column
+	 */
+	public void setSelectedTile(int row, int column) {
+		this.selectedTile = this.getTile(row, column);
+		this.notifyViews();
+	}
+
+	/**
+	 * Return a set of TilePosition defining a square created from the given
+	 * <code>startingTile</code> and the <code>areaSize</code>.
+	 *
+	 * @param startingTile
+	 * @param areaSize
+	 * @return Set of TilePosition
+	 */
+	public Set<TilePosition> getTilesArea(TilePosition startingTile, int areaSize) {
+		Set<TilePosition> tilesArea = new HashSet<>();
+
+		for (int i = 0; i < areaSize; i++) {
+			for (int j = 0; j < areaSize; j++) {
+				int newRow = startingTile.getRow() + i < this.getHeight() ? startingTile.getRow() + i : this.getHeight() - 1;
+				int newColumn = startingTile.getColumn() + j < this.getWidth() ? startingTile.getColumn() + j : this.getWidth() - 1;
+				TilePosition newTile = new TilePosition(newRow, newColumn);
+				tilesArea.add(newTile);
+			}
+		}
+		return tilesArea;
+	}
+
+	// Change (World)
+	/**
+	 * Effect the tile at location ({@value row}, {@value column}) with
+	 * {@link #getSelectedTool()} if possible.
+	 *
+	 * @param row
+	 * @param column
+	 */
+	public void effectTile(int row, int column) {
+		assert row >= 0 && row < this.getHeight() && column >= 0 && column < this.getWidth() : "Ligne/Colonne incorrecte";
+
+		final Tile currentTile = this.tiles[row][column];
+
+		if(this.selectedTool.canEffect(currentTile)) {
+			if(this.selectedTool.isAfordable(currentTile, this.resources)) {
+				if(!this.selectedTool.isAleadyBuild()) {
+					System.out.println(this.selectedTool);
+					if(this.selectedTool instanceof HarborZoneDelimiterTool && !this.getTilesArea(new TilePosition(row, column), 1).contains(WaterTile.getDefault()))
+						this.message = this.texts.getNextToMsg(WaterTile.getDefault());
+					else {
+						final Tile newTile = this.selectedTool.effect(currentTile, this.resources);
+						this.tiles[row][column] = newTile;
+
+						this.pendingEvolutions.remove(currentTile);
+						if (newTile instanceof Evolvable) {
+							this.pendingEvolutions.add((Evolvable) newTile);
+						}
+					}
+				} else {
+					this.message = this.texts.getAlreadyBuildMsg();
+				}
+			} else {
+				this.message = this.texts.getMissingResourcesMsg();
+			}
+		} else {
+			this.message = this.texts.getToolCannotAffectMsg();
+		}
+
+		this.notifyViews();
+	}
+
+	/**
+	 * Compute the next world state.
+	 */
+	public void nextState() {
+		GameBoard.ROUNDCOUNTER.incrementAndGet();
+		this.resources.resetEphemerals();
+		this.applyPendingEvents();
+		this.applyNewEvent();
+		this.updateTiles();
+		this.applyEvolutions();
+		this.notifyViews();
+	}
+
+	/**
+	 * Applies the effects of all the pending events (resulting from the
+	 * previous one).
+	 */
+	private void applyPendingEvents() {
+		List<Event> entry;
+		for (Event event : this.pendingEventsList) {
+			entry = event.applyEffects(this.resources);
+			this.pendingEventsList.addAll(entry);
+		}
+	}
+
+	/**
+	 * Generates a new event and applies its effects.
+	 */
+	private void applyNewEvent() {
+		Event event = EventFactory.generateEvent(this);
+		List<Event> resultingEvents = event.applyEffects(this.resources);
+		assert resultingEvents != null;
+		String eventMessage = event.getMessage(this.texts);
+		assert eventMessage != null : "The event message must not be null.";
+		this.message = eventMessage.isEmpty() ? GameBoard.NOTHING_MESSAGE : eventMessage;
+		this.pendingEventsList.addAll(resultingEvents);
+	}
+
+	// Implementation (Notification)
+	/**
+	 * Notify view of a state change.
+	 */
+	private void notifyViews() {
+		this.setChanged();
+		this.notifyObservers();
+		this.message = GameBoard.NOTHING_MESSAGE;
+	}
+
+	/**
+	 * Apply evolutions in the order where it was registered.
+	 */
+	private void applyEvolutions() {
+		final int count = Math.min(GameBoard.MAX_HANDLED_EVOLUTIONS, this.pendingEvolutions.size());
+
+		for (int i = 0; i < count; i++) {
+			final Evolvable e = this.pendingEvolutions.poll(); // Not null
+
+			e.evolve(this.resources);
+
+			if (e.canEvolve()) {
+				this.pendingEvolutions.add(e);
+			}
+		}
+	}
+
+	/**
+	 * Update all tiles via {@link Tile#update(CityResources)}.
+	 */
+	private void updateTiles() {
+		for (final Tile[] rows : this.tiles) {
+			for (final Tile t : rows) {
+				t.update(this.resources);
+			}
+		}
+	}
+
+	/**
+	 * Save a game ({@value row}, {@value column}).
+	 * 
+	 * @param res
+	 * @param path
+	 */
+	public int saveGame(CityResources res) {
+		String directoryPath = System.getProperty("user.dir") + "\\saves";
+		File folder = new File(directoryPath);
+
+		if(!folder.exists())
+			folder.mkdirs();
 		
-		                this.pendingEvolutions.remove(currentTile);
-		                if (newTile instanceof Evolvable) {
-		                    this.pendingEvolutions.add((Evolvable) newTile);
-		                }
-                    }
-            	} else {
-            		this.message = this.texts.getAlreadyBuildMsg();
-            	}
-            } else {
-                this.message = this.texts.getMissingResourcesMsg();
-            }
-        } else {
-            this.message = this.texts.getToolCannotAffectMsg();
-        }
-
-        this.notifyViews();
-    }
-
-    /**
-     * Compute the next world state.
-     */
-    public void nextState() {
-        GameBoard.ROUNDCOUNTER.incrementAndGet();
-        this.resources.resetEphemerals();
-        this.applyPendingEvents();
-        this.applyNewEvent();
-        this.updateTiles();
-        this.applyEvolutions();
-        this.notifyViews();
-    }
-
-    /**
-     * Applies the effects of all the pending events (resulting from the
-     * previous one).
-     */
-    private void applyPendingEvents() {
-        List<Event> entry;
-        for (Event event : this.pendingEventsList) {
-            entry = event.applyEffects(this.resources);
-            this.pendingEventsList.addAll(entry);
-        }
-    }
-
-    /**
-     * Generates a new event and applies its effects.
-     */
-    private void applyNewEvent() {
-        Event event = EventFactory.generateEvent(this);
-        List<Event> resultingEvents = event.applyEffects(this.resources);
-        assert resultingEvents != null;
-        String eventMessage = event.getMessage(this.texts);
-        assert eventMessage != null : "The event message must not be null.";
-        this.message = eventMessage.isEmpty() ? GameBoard.NOTHING_MESSAGE : eventMessage;
-        this.pendingEventsList.addAll(resultingEvents);
-    }
-
-    // Implementation (Notification)
-    /**
-     * Notify view of a state change.
-     */
-    private void notifyViews() {
-        this.setChanged();
-        this.notifyObservers();
-        this.message = GameBoard.NOTHING_MESSAGE;
-    }
-
-    /**
-     * Apply evolutions in the order where it was registered.
-     */
-    private void applyEvolutions() {
-        final int count = Math.min(GameBoard.MAX_HANDLED_EVOLUTIONS, this.pendingEvolutions.size());
-
-        for (int i = 0; i < count; i++) {
-            final Evolvable e = this.pendingEvolutions.poll(); // Not null
-
-            e.evolve(this.resources);
-
-            if (e.canEvolve()) {
-                this.pendingEvolutions.add(e);
-            }
-        }
-    }
-
-    /**
-     * Update all tiles via {@link Tile#update(CityResources)}.
-     */
-    private void updateTiles() {
-        for (final Tile[] rows : this.tiles) {
-            for (final Tile t : rows) {
-                t.update(this.resources);
-            }
-        }
-    }
-
-    /**
-     * Save a game ({@value row}, {@value column}).
-     * 
-     * @param res
-     * @param path
-     */
-	public void saveGame(CityResources res, String path) {
+		File[] fileList = folder.listFiles();
 		FileOutputStream fOut;
 		ObjectOutputStream oOut;
-		
+		int fileNbr = fileList.length + 1;
+
 		try {
-			fOut = new FileOutputStream(path);
+			fOut = new FileOutputStream(directoryPath + "\\save" + fileNbr);
 			oOut = new ObjectOutputStream(fOut);
-			
+
 			oOut.writeObject(res);
 			oOut.writeObject(this.tiles);
-			
+			oOut.writeObject(difficulty);
+			oOut.writeObject(texts);
+
 			if(oOut != null)
 				oOut.close();
-			
+
 			if(fOut != null)
 				fOut.close();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+		
+		return fileNbr;
 	}
 }

@@ -24,12 +24,16 @@
 
 package localization;
 
+import java.io.Serializable;
+
 import model.tiles.Tile;
 
 /**
  * United Kingdom localized texts.
  */
-public class UKTexts extends LocalizedTexts {
+public class UKTexts extends LocalizedTexts implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@Override
 	public String getLangageName() {
 		return "English";
@@ -126,6 +130,11 @@ public class UKTexts extends LocalizedTexts {
 	public String getHardLabel() {
     	return "Hard";
     }
+    
+    @Override
+	public String getSizeLabel() {
+    	return "Size map";
+    }
 
 	@Override
 	public String getNewGameButtonLabel() {
@@ -150,5 +159,20 @@ public class UKTexts extends LocalizedTexts {
 	@Override
 	public String getSaveListLabel() {
 		return "Save list";
+	}
+	
+	@Override
+	public String getRefreshButtonLabel() {
+		return "Refresh";
+	}
+	
+	@Override
+	public String getSaveButtonLabel() {
+		return "Save";
+	}
+	
+	@Override
+	public String getSaveMessage(int nbr) {
+		return "Your game has been saved under the name : Save " + nbr;
 	}
 }

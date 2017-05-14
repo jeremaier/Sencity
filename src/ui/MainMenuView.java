@@ -21,7 +21,7 @@ public class MainMenuView extends JPanel {
 	private final MainFrame frame;
 	private static Color backgroundColor = new Color(44, 44, 44);
 
-	public MainMenuView(MainFrame frame, GameBoard game, int height, int width) {
+	public MainMenuView(MainFrame frame, int height, int width) {
 		super();
 
 		final SimButton newWorld = new SimButton(MainFrame.getTexts().getNewGameButtonLabel());
@@ -34,7 +34,7 @@ public class MainMenuView extends JPanel {
 		this.setLayout(new GridLayout(0, 1, 10, 10));
 		this.setBorder(new EmptyBorder(65, 50, 0, 50));
 		this.frame = frame;
-		this.actions(buttons, game, height, width);
+		this.actions(buttons, height, width);
 
 		for(SimButton button : buttons) {
 			button.setMargin(margin);
@@ -43,10 +43,11 @@ public class MainMenuView extends JPanel {
 		}
 	}
 
-	private void actions(SimButton[] buttons, GameBoard game, int height, int width) {
+	private void actions(SimButton[] buttons, int height, int width) {
 		buttons[0].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+		        GameBoard game = new GameBoard(MainFrame.getGameHeight(), MainFrame.getGameWidth(), MainFrame.getDifficulty().getLevel(), MainFrame.getTexts());
 				SwingUtilities.invokeLater(() -> new SimCityUI(game, MainFrame.getTexts()));
 				frame.dispose();
 			}
@@ -55,14 +56,14 @@ public class MainMenuView extends JPanel {
 		buttons[1].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.setNewPanel(new LoadView(frame, game, height, width));
+				frame.setNewPanel(new LoadView(frame, height, width));
 			}
 		});
 
 		buttons[2].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.setNewPanel(new OptionsView(frame, game, height, width));
+				frame.setNewPanel(new OptionsView(frame, height, width));
 			}
 		});
 	}

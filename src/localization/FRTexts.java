@@ -24,12 +24,16 @@
 
 package localization;
 
+import java.io.Serializable;
+
 import model.tiles.Tile;
 
 /**
  * France localized texts.
  */
-public class FRTexts extends LocalizedTexts {
+public class FRTexts extends LocalizedTexts implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@Override
 	public String getLangageName() {
 		return "Français";
@@ -126,6 +130,11 @@ public class FRTexts extends LocalizedTexts {
 	public String getHardLabel() {
     	return "Difficile";
     }
+    
+    @Override
+	public String getSizeLabel() {
+    	return "Taille de la carte";
+    }
 
 	@Override
 	public String getNewGameButtonLabel() {
@@ -150,5 +159,20 @@ public class FRTexts extends LocalizedTexts {
 	@Override
 	public String getSaveListLabel() {
 		return "Liste des sauvegardes";
+	}
+	
+	@Override
+	public String getRefreshButtonLabel() {
+		return "Rafraichir";
+	}
+	
+	@Override
+	public String getSaveButtonLabel() {
+		return "Sauvegarder";
+	}
+	
+	@Override
+	public String getSaveMessage(int nbr) {
+		return "La partie a bien été sauvegardée sous le nom : Sauvegarde " + nbr;
 	}
 }

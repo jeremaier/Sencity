@@ -113,8 +113,12 @@ public final class SimCityUI extends JFrame {
         PropertiesView vi = new PropertiesView(monde, texts);
         monde.addObserver(vi);
 
+        // Création du panneau de message
+        MessagesView mv = new MessagesView(monde);
+        monde.addObserver(mv);
+        
         // Création du panneau de rafraichissement
-        RefreshView rv = new RefreshView(monde);
+        RefreshView rv = new RefreshView(monde, mv);
         JPanel right = new JPanel();
         right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
         right.add(vi);
@@ -122,9 +126,6 @@ public final class SimCityUI extends JFrame {
         right.add(rv);
         this.add(right, BorderLayout.EAST);
 
-        // Création du panneau de message
-        MessagesView mv = new MessagesView(monde);
-        monde.addObserver(mv);
         this.add(mv, BorderLayout.SOUTH);
 
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

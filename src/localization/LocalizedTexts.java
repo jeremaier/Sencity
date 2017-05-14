@@ -24,13 +24,16 @@
 
 package localization;
 
+import java.io.Serializable;
+
 import model.tiles.Tile;
 
 /***
  * Texts used by the game.
  */
-public abstract class LocalizedTexts {
-	
+public abstract class LocalizedTexts implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @return Indicate the langage name.
 	 */
@@ -134,7 +137,12 @@ public abstract class LocalizedTexts {
 	 * @return Hard level label.
 	 */
 	public abstract String getHardLabel();
-    
+	
+	/**
+	 * @return Size label.
+	 */
+	public abstract String getSizeLabel();
+	
 	/**
 	 * @return New game button label.
 	 */
@@ -159,4 +167,19 @@ public abstract class LocalizedTexts {
 	 * @return Save list label.
 	 */
 	public abstract String getSaveListLabel();
+
+	/**
+	 * @return Refresh button label.
+	 */
+	public abstract String getRefreshButtonLabel();
+
+	/**
+	 * @return Save button label.
+	 */
+	public abstract String getSaveButtonLabel();
+	
+	/**
+	 * @return Save message.
+	 */
+	public abstract String getSaveMessage(int nbr);
 }

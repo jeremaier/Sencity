@@ -37,20 +37,30 @@ public class RefreshView extends JPanel {
     private static final long serialVersionUID = 1L;
 
     // Creation
-    public RefreshView(GameBoard w) {
+    public RefreshView(GameBoard w, MessagesView mv) {
         super();
         // this.setBorder(BorderFactory.createBevelBorder(1, Color.GRAY,
         // Color.BLUE));
-        JButton jb = new JButton("Refresh");
+        JButton jb = new JButton(MainFrame.getTexts().getRefreshButtonLabel());
+        JButton save = new JButton(MainFrame.getTexts().getSaveButtonLabel());
+        
         jb.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 w.nextState();
             }
-
         });
+        
+        save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int fileNbr = w.saveGame(w.getResources());
+                mv.savePrint(MainFrame.getTexts().getSaveMessage(fileNbr));
+            }
+        });
+        
         this.add(jb);
+        this.add(save);
     }
 
 }

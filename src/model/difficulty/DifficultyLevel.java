@@ -24,12 +24,16 @@
 
 package model.difficulty;
 
+import java.io.Serializable;
+
 /**
  * Represents the difficulty parameters of the game.
  */
-public class DifficultyLevel {
+public class DifficultyLevel implements Serializable {
 
-    // Constant (Standard level)
+	private static final long serialVersionUID = 1L;
+
+	// Constant (Standard level)
     /**
      * Initial currency of the standard difficulty.
      */
