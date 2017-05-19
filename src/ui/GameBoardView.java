@@ -63,13 +63,11 @@ public class GameBoardView extends JPanel implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         assert o instanceof GameBoard;
+        
         GameBoard world = (GameBoard) o;
-        for (int i = 0; i < world.getHeight(); i++) {
-            for (int j = 0; j < world.getWidth(); j++) {
+        
+        for (int i = 0; i < world.getHeight(); i++)
+            for (int j = 0; j < world.getWidth(); j++)
                 this.tiles[i][j].update();
-            }
-        }
-
     }
-
 }

@@ -138,6 +138,11 @@ public class FireStationTile extends BuildableTile {
     @Override
     public void evolve(CityResources res) {
         super.evolve(res);
+        
+        if(build) {
+        	this.state = ConstructionState.BUILT;
+        	build = false;
+        }
 
         if (this.state == ConstructionState.BUILT) {
             this.update(res);

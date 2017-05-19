@@ -33,7 +33,7 @@ public class AirportTile extends TransportTile {
     /**
      * Default value of {@link TransportTile#getProductsPrice()}
      */
-    public final static int DEFAULT_PRODUCTS_PRICE = 2;
+    public final static int DEFAULT_PRODUCTS_PRICE = 4;
     
     /**
      * Default value of {@link TransportTile#getMaxNeededEnergy()}

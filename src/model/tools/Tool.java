@@ -48,8 +48,23 @@ public abstract class Tool {
 	 * @return Regarding {@value r}, is the tool usable?
 	 */
 	public abstract boolean isAfordable (Tile aTarget, CityResources r);
+	
+	/**
+	 * @param currentTile
+	 * @return Can current tool evolve this building?
+	 */
+	public boolean canEvolve(Tile currentTile) {
+		return false;
+	}
+	
+	/**
+	 * @return Verify if the tile is already build on the board or not
+	 */
+	public boolean isAleadyBuild() {
+		return false;
+	}
 
-// Access
+	// Access
 	/**
 	 * @return Cost of the use of the tool on {@value aTarget}.
 	 */
@@ -72,15 +87,11 @@ public abstract class Tool {
 		}
 	}
 
-// Implementation
+	// Implementation
 	/**
 	 * @param aTarget
 	 * @param r
 	 * @return Effect {@value aTarget} and spend needed resources from {@value r}.
 	 */
 	protected abstract Tile innerEffect (Tile aTarget, CityResources r);
-
-	public boolean isAleadyBuild() {
-		return false;
-	}
 }

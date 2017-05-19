@@ -31,7 +31,7 @@ import model.tiles.Tile;
 
 public final class StadiumZoneDelimiterTool extends Tool {
 	// Constant
-	private final static int CURRENCY_COST = 500;
+	private final static int CURRENCY_COST = 5000;
 
 	// Status
 	/**

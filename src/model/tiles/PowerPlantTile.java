@@ -34,7 +34,7 @@ public class PowerPlantTile extends BuildableTile {
      * Extra energy produces for each new update. In the limit of the capacity
      * {@link #getProductionCapacity()}.
      */
-    public final static int EXTRA_ENERGY_PRODUCTION = 15;
+    public int EXTRA_ENERGY_PRODUCTION = 15;
 
     /**
      * Default value of {@link PowerPlantTile2#getProductionCapacity()}
@@ -50,7 +50,7 @@ public class PowerPlantTile extends BuildableTile {
     /**
      * {@link #getProductionCapacity()}
      */
-    protected final int productionCapacity;
+    protected int productionCapacity;
 
     // Creation
     /**
@@ -61,6 +61,7 @@ public class PowerPlantTile extends BuildableTile {
         super(0);
         this.productionCapacity = productionCapacity;
         this.production = 0;
+        this.state = ConstructionState.BUILT;
     }
 
     /**
@@ -125,16 +126,39 @@ public class PowerPlantTile extends BuildableTile {
     @Override
     public void evolve(CityResources res) {
         super.evolve(res);
-        if (this.state == ConstructionState.BUILT) {
-            this.update(res);
-        }
+        
+        this.update(res);
+    }
+    
+    /**
+     * @param res
+     */
+    public void evolveLevel(CityResources res) {
+		switch(state) {
+		case BUILT:
+			this.EXTRA_ENERGY_PRODUCTION += 5;
+			this.productionCapacity *= 1.2;
+			this.state = ConstructionState.BUILTLVL2;
+			break;
+			
+		case BUILTLVL2:
+			this.EXTRA_ENERGY_PRODUCTION += 10;
+			this.productionCapacity *= 1.2;
+			this.state = ConstructionState.BUILTLVL3;
+			break;
+			
+		default:
+			break;
+		}
+		
+        this.update(res);
     }
     
     @Override
     public void update(CityResources res) {
-        if (this.state == ConstructionState.BUILT) {
+		if (this.state != ConstructionState.UNDER_CONSTRUCTION || this.state != ConstructionState.DESTROYED) {
             // Double production
-            final int extraProduction = Math.min(PowerPlantTile.EXTRA_ENERGY_PRODUCTION, this.productionCapacity - this.production);
+            final int extraProduction = Math.min(this.EXTRA_ENERGY_PRODUCTION, this.productionCapacity - this.production);
 
             this.production = this.production + extraProduction;
             res.increaseEnergyProduction(extraProduction);

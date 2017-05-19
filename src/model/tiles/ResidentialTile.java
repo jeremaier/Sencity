@@ -160,17 +160,33 @@ public class ResidentialTile extends BuildableTile {
     @Override
     public void evolve(CityResources res) {
         super.evolve(res);
+		
+		switch(this.state) {
+		case BUILT:
+			this.state = ConstructionState.BUILTLVL2;
+            res.increasePopulationCapacity(this.inhabitantsCapacity * (int)(4.0 / 3));
+			break;
+			
+		case BUILTLVL2:
+			this.state = ConstructionState.BUILTLVL3;
+			res.increasePopulationCapacity(this.inhabitantsCapacity * (int)(5.0 / 3));
+			break;
+			
+		case UNDER_CONSTRUCTION:
+            this.state = ConstructionState.BUILT;
+			res.increasePopulationCapacity(this.inhabitantsCapacity);
+			break;
+			
+		default:
+			break;
+		}
 
-        if (this.state == ConstructionState.BUILT) {
-            res.increasePopulationCapacity(this.inhabitantsCapacity);
-
-            this.update(res);
-        }
+		this.update(res);
     }
 
     @Override
     public void update(CityResources res) {
-        if (this.state == ConstructionState.BUILT) {
+		if (this.state != ConstructionState.UNDER_CONSTRUCTION || this.state != ConstructionState.DESTROYED) {
             final int inhabitants = this.getInhabitants(res);
 
             final int busyPercentage = inhabitants * 100 / this.inhabitantsCapacity; // Integer
@@ -216,9 +232,9 @@ public class ResidentialTile extends BuildableTile {
     private int getInhabitants(CityResources res) {
         assert res.getPopulationCapacity() != 0;
 
-        final int caapcityPercentage = this.inhabitantsCapacity * 100 / res.getPopulationCapacity(); // Integer
+        final int capacityPercentage = this.inhabitantsCapacity * 100 / res.getPopulationCapacity(); // Integer
                                                                                                      // division
-        return res.getPopulation() * caapcityPercentage / 100; // Integer
+        return res.getPopulation() * capacityPercentage / 100; // Integer
                                                                // division
     }
 

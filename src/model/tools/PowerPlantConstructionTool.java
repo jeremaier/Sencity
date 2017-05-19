@@ -25,14 +25,18 @@
 package model.tools;
 
 import model.CityResources;
+import model.tiles.BuildableTile;
+import model.tiles.ConstructionState;
 import model.tiles.GrassTile;
 import model.tiles.PowerPlantTile;
 import model.tiles.Tile;
 
-public final class PowerPlantConstructionTool extends Tool {
+public final class PowerPlantConstructionTool extends Tool implements EvolveTool {
 
     // Constant
     private final static int CURRENCY_COST = 40;
+    private final static int EVOLVE_COST = 120;
+    private final static int EVOLVE2_COST = 240;
 
     // Status
     /**
@@ -42,6 +46,17 @@ public final class PowerPlantConstructionTool extends Tool {
     public boolean canEffect(Tile aTarget) {
         return aTarget instanceof GrassTile;
     }
+	
+	/**
+	 * canEvolve returns true if the given Tile is evolvable and has not the max level already, false otherwise.
+	 */
+	@Override
+	public boolean canEvolve (Tile aTarget) {
+		if(aTarget instanceof PowerPlantTile && ((BuildableTile) aTarget).getState() != ConstructionState.BUILTLVL3)
+			return true;
+		
+		return false;
+	}
 
     @Override
     public boolean equals(Object o) {
@@ -55,14 +70,25 @@ public final class PowerPlantConstructionTool extends Tool {
      */
     @Override
     public boolean isAfordable(Tile aTarget, CityResources r) {
+		if(aTarget instanceof PowerPlantTile)
+			return this.getEvolveCost(aTarget) <= r.getCurrency();
+
         return PowerPlantConstructionTool.CURRENCY_COST <= r.getCurrency();
     }
 
     // Access
     @Override
     public int getCost(Tile aTarget) {
+        if(aTarget instanceof PowerPlantTile)
+        	return this.getEvolveCost(aTarget);
+        
         return PowerPlantConstructionTool.CURRENCY_COST;
     }
+	
+    @Override
+	public int getEvolveCost(Tile aTarget) {
+		return ((PowerPlantTile) aTarget).getState() == ConstructionState.BUILT ? PowerPlantConstructionTool.EVOLVE_COST : PowerPlantConstructionTool.EVOLVE2_COST;
+	}
 
     @Override
     public int hashCode() {
@@ -82,11 +108,23 @@ public final class PowerPlantConstructionTool extends Tool {
 
         return new PowerPlantTile();
     }
+	
+	/**
+     * innerEffect apply the Commercial tool to the given tile and update the
+     * given CityResources.
+     */
+	@Override
+	public void evolve(Tile aTarget, CityResources r) {
+		assert canEvolve(aTarget);
+		assert isAfordable(aTarget, r);
+		
+		((PowerPlantTile)aTarget).evolveLevel(r);
+		r.spend(this.getEvolveCost(aTarget));
+	}
 
     // Debugging
     @Override
     public String toString() {
         return this.getClass().getSimpleName();
     }
-
 }

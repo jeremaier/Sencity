@@ -38,7 +38,7 @@ public class StadiumTile extends Tile implements Destroyable {
     /**
      * Default value of {@link #getProductsPrice()}
      */
-    public final static int DEFAULT_INCOME = 1000;
+    public final static int DEFAULT_INCOME = 100;
     
     /**
      * Default value of {@link #getSatisfactionValue()}

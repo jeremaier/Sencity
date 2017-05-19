@@ -25,16 +25,19 @@
 package model.tools;
 
 import model.CityResources;
+import model.tiles.BuildableTile;
+import model.tiles.ConstructionState;
 import model.tiles.GrassTile;
 import model.tiles.IndustrialTile;
 import model.tiles.Tile;
 
-public final class IndustrialZoneDelimiterTool extends Tool {
+public final class IndustrialZoneDelimiterTool extends Tool implements EvolveTool {
 
-// Constant
+	// Constant
 	private final static int CURRENCY_COST = 30;
+	private final static int EVOLVE_COST = 90;
+	private final static int EVOLVE2_COST = 180;
 
-// Status
 	// Status
 	/**
      * canEffect returns true if the given Tile is buildable, false otherwise.
@@ -42,6 +45,17 @@ public final class IndustrialZoneDelimiterTool extends Tool {
 	@Override
 	public boolean canEffect (Tile aTarget) {
 		return aTarget instanceof GrassTile;
+	}
+	
+	/**
+	 * canEvolve returns true if the given Tile is evolvable and has not the max level already, false otherwise.
+	 */
+	@Override
+	public boolean canEvolve (Tile aTarget) {
+		if(aTarget instanceof IndustrialTile && ((BuildableTile) aTarget).getState() != ConstructionState.BUILTLVL3)
+			return true;
+		
+		return false;
 	}
 
 	@Override
@@ -55,13 +69,24 @@ public final class IndustrialZoneDelimiterTool extends Tool {
      */
 	@Override
 	public boolean isAfordable (Tile aTarget, CityResources r) {
+		if(aTarget instanceof IndustrialTile)
+			return this.getEvolveCost(aTarget) <= r.getCurrency();
+		
 		return IndustrialZoneDelimiterTool.CURRENCY_COST <= r.getCurrency();
 	}
 
 // Access
 	@Override
 	public int getCost (Tile aTarget) {
+        if(aTarget instanceof IndustrialTile)
+        	return this.getEvolveCost(aTarget);
+        
 		return IndustrialZoneDelimiterTool.CURRENCY_COST;
+	}
+	
+	@Override
+	public int getEvolveCost(Tile aTarget) {
+		return ((IndustrialTile) aTarget).getState() == ConstructionState.BUILT ? IndustrialZoneDelimiterTool.EVOLVE_COST : IndustrialZoneDelimiterTool.EVOLVE2_COST;
 	}
 
 	@Override
@@ -77,15 +102,29 @@ public final class IndustrialZoneDelimiterTool extends Tool {
 	protected Tile innerEffect (Tile aTarget, CityResources r) {
 		assert canEffect(aTarget);
 		assert isAfordable(aTarget, r);
-
+		
 		r.spend(IndustrialZoneDelimiterTool.CURRENCY_COST);
 
 		return new IndustrialTile();
 	}
-
+	
+	/**
+     * innerEffect apply the Commercial tool to the given tile and update the
+     * given CityResources.
+     */
+	@Override
+	public void evolve(Tile aTarget, CityResources r) {
+		assert canEvolve(aTarget);
+		assert isAfordable(aTarget, r);
+		
+		((IndustrialTile)aTarget).evolve(r);
+		r.spend(this.getEvolveCost(aTarget));
+	}
+	
 	// Debugging
 	@Override
 	public String toString () {
 		return getClass().getSimpleName();
 	}
+
 }

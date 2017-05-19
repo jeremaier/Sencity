@@ -52,6 +52,11 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
      * {@link #getState()}
      */
     protected ConstructionState state;
+    
+    /**
+     * {@link #isBuilded()}
+     */
+    protected boolean build;
 
     // Creation
     /**
@@ -134,10 +139,8 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
                 this.isEnergyMissing = false;
 
                 res.consumeEnergy(this.evolutionEnergyConsumption);
-                this.state = ConstructionState.BUILT;
-            } else {
-                this.isEnergyMissing = true;
-            }
+                build = true;
+            } else this.isEnergyMissing = true;
         }
     }
 

@@ -54,19 +54,19 @@ public class PropertiesView extends JPanel implements Observer {
         this.add(this.currency);
 
         this.add(new JLabel(texts.getUnconsumedEnergyLabel()));
-        this.energy = new JLabel(Integer.toString(w.getEnergy()));
+        this.energy = new JLabel(Integer.toString(w.getEnergy()) + " / " + w.getEnergyProduction());
         this.add(this.energy);
 
         this.add(new JLabel(texts.getUnworkingPopulationLabel()));
-        this.unworkingPop = new JLabel(Integer.toString(w.getUnworkingPopulation()));
+        this.unworkingPop = new JLabel(Integer.toString(w.getUnworkingPopulation()) + " / " + w.getPopulation());
         this.add(this.unworkingPop);
 
         this.add(new JLabel(texts.getStoredProductsLabel()));
-        this.products = new JLabel(Integer.toString(w.getProducts()));
+        this.products = new JLabel(Integer.toString(w.getProducts()) + " / " + w.getProductsCapacity());
         this.add(this.products);
         
         this.add(new JLabel(texts.getSatisfactionLabel()));
-        this.satisfaction = new JLabel(Integer.toString(w.getSatisfaction()));
+        this.satisfaction = new JLabel(Integer.toString(w.getSatisfaction()) + " / 100");
         this.add(this.satisfaction);
     }
 
@@ -76,9 +76,9 @@ public class PropertiesView extends JPanel implements Observer {
         GameBoard world = (GameBoard) o;
 
         this.currency.setText(MessageFormat.format(world.getTexts().getCurrencyMsg(), world.getCurrency()));
-        this.energy.setText("" + world.getEnergy());
-        this.unworkingPop.setText("" + world.getUnworkingPopulation());
-        this.products.setText("" + world.getProducts());
-        this.satisfaction.setText("" + world.getSatisfaction());
+        this.energy.setText("" + world.getEnergy() + " / " + world.getEnergyProduction());
+        this.unworkingPop.setText("" + world.getUnworkingPopulation() + " / " + world.getPopulation());
+        this.products.setText("" + world.getProducts() + " / " + world.getProductsCapacity());
+        this.satisfaction.setText("" + world.getSatisfaction() + " / 100");
     }
 }

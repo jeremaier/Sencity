@@ -32,209 +32,229 @@ import model.CityResources;
  */
 public class IndustrialTile extends BuildableTile {
 	private static final long serialVersionUID = 1L;
-	
-    // Constants
-    /**
-     * Default value of {@link IndustrialTile#getEvolutionEnergyConsumption()}
-     */
-    public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
-    /**
-     * Default value of {@link IndustrialTile#getProductionCapacity}
-     */
-    public final static int DEFAULT_PRODUCTS_CAPACITY = 10;
+	// Constants
+	/**
+	 * Default value of {@link IndustrialTile#getEvolutionEnergyConsumption()}
+	 */
+	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
-    /**
-     * Default value of {@link IndustrialTile#getMaxProduction}
-     */
-    public final static int DEFAULT_MAX_PRODUCTION = 15;
+	/**
+	 * Default value of {@link IndustrialTile#getProductionCapacity}
+	 */
+	public final static int DEFAULT_PRODUCTS_CAPACITY = 10;
 
-    /**
-     * Default value of {@link IndustrialTile#getNeededEnergy()}
-     */
-    public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;  
-    
-    /**
-     * Default value of {@link IndustrialTile#getNeededInhabitants()}
-     */
-    public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 30;
-    
-    /**
-     * {@link #getProductsCapacity()}
-     */
+	/**
+	 * Default value of {@link IndustrialTile#getMaxProduction}
+	 */
+	public final static int DEFAULT_MAX_PRODUCTION = 15;
+
+	/**
+	 * Default value of {@link IndustrialTile#getNeededEnergy()}
+	 */
+	public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;  
+
+	/**
+	 * Default value of {@link IndustrialTile#getNeededInhabitants()}
+	 */
+	public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 30;
+
+	/**
+	 * {@link #getProductsCapacity()}
+	 */
 	private final int productsCapacity;
 
-    /**
-     * Maximum number of products creation for each update.
-     */
-    public static int maxProduction;
+	/**
+	 * Maximum number of products creation for each update.
+	 */
+	public static int maxProduction;
 
-    /**
-     * {@link #getMaxNeededEnergy()}
-     */
-    private final int maxNeededEnergy;
+	/**
+	 * {@link #getMaxNeededEnergy()}
+	 */
+	private final int maxNeededEnergy;
 
-    /**
-     * {@link #getMaxNeededInhabitants()}
-     */
-    private final int maxNeededInhabitants;
-    
-    // Creation
-    /**
-     * @param capacity
-     *            - {@link #getProduction()}
-     */
-    public IndustrialTile(int capacity) {
-        super(IndustrialTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
-        maxProduction = DEFAULT_MAX_PRODUCTION;
-        this.productsCapacity = capacity;
-        this.maxNeededEnergy = IndustrialTile.DEFAULT_MAX_NEEDED_ENERGY;
-        this.maxNeededInhabitants = IndustrialTile.DEFAULT_MAX_NEEDED_INHABITANTS;
-    }
+	/**
+	 * {@link #getMaxNeededInhabitants()}
+	 */
+	private final int maxNeededInhabitants;
 
-    /**
-     * Create with default settings.
-     */
-    public IndustrialTile() {
-        this(IndustrialTile.DEFAULT_PRODUCTS_CAPACITY);
-    }
+	// Creation
+	/**
+	 * @param capacity
+	 *            - {@link #getProduction()}
+	 */
+	public IndustrialTile(int capacity) {
+		super(IndustrialTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
+		maxProduction = DEFAULT_MAX_PRODUCTION;
+		this.productsCapacity = capacity;
+		this.maxNeededEnergy = IndustrialTile.DEFAULT_MAX_NEEDED_ENERGY;
+		this.maxNeededInhabitants = IndustrialTile.DEFAULT_MAX_NEEDED_INHABITANTS;
+	}
 
-    // Access
-    /**
-     * @return Maximum products capacity.
-     */
-    public final int getProductionCapacity() {
-        return this.productsCapacity;
-    }
-    
-    /**
-     * @return Maximum number of production per round.
-     */
-    public final int getMaxProduction() {
-        return maxProduction;
-    }
+	/**
+	 * Create with default settings.
+	 */
+	public IndustrialTile() {
+		this(IndustrialTile.DEFAULT_PRODUCTS_CAPACITY);
+	}
 
-    /**
-     * @return Maximum number of energy units to consume. This maximum is
-     *         consumed if the industry is full.
-     */
-    public final int getMaxNeededEnergy() {
-        return this.maxNeededEnergy;
-    }
+	// Access
+	/**
+	 * @return Maximum products capacity.
+	 */
+	public final int getProductionCapacity() {
+		return this.productsCapacity;
+	}
 
-    /**
-     * @return Maximum number of inhabitants at work. This maximum is working
-     * 		   if the industry is full.
-     */
-    public final int getMaxWorkingInhabitants() {
-        return this.maxNeededInhabitants;
-    }
+	/**
+	 * @return Maximum number of production per round.
+	 */
+	public final int getMaxProduction() {
+		return maxProduction;
+	}
 
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = result * 17 + this.productsCapacity;
-        result = result * 17 + this.maxNeededEnergy;
-        result = result * 17 + this.maxNeededInhabitants;
-        return result;
-    }
+	/**
+	 * @return Maximum number of energy units to consume. This maximum is
+	 *         consumed if the industry is full.
+	 */
+	public final int getMaxNeededEnergy() {
+		return this.maxNeededEnergy;
+	}
 
-    // Status
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof IndustrialTile && this.equals((IndustrialTile) o);
-    }
+	/**
+	 * @return Maximum number of inhabitants at work. This maximum is working
+	 * 		   if the industry is full.
+	 */
+	public final int getMaxWorkingInhabitants() {
+		return this.maxNeededInhabitants;
+	}
 
-    /**
-     * @param o
-     * @return Is {@value o} equals to this?
-     */
-    public boolean equals(IndustrialTile o) {
-        return this == o || super.equals(o)
-        		&& o.productsCapacity == this.productsCapacity
-        		&& o.maxNeededEnergy == this.maxNeededEnergy
-        		&& o.maxNeededInhabitants == this.maxNeededInhabitants
-        		&& o.isDestroyed() == this.isDestroyed();
-    }
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = result * 17 + this.productsCapacity;
+		result = result * 17 + this.maxNeededEnergy;
+		result = result * 17 + this.maxNeededInhabitants;
+		return result;
+	}
 
-    @Override
-    public boolean isDestroyed() {
-        return this.state == ConstructionState.DESTROYED;
-    }
+	// Status
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof IndustrialTile && this.equals((IndustrialTile) o);
+	}
 
-    // Change
-    @Override
-    public void disassemble(CityResources res) {
-        if (this.state == ConstructionState.BUILT) {
-            res.decreaseProductsCapacity(this.productsCapacity);
+	/**
+	 * @param o
+	 * @return Is {@value o} equals to this?
+	 */
+	public boolean equals(IndustrialTile o) {
+		return this == o || super.equals(o)
+				&& o.productsCapacity == this.productsCapacity
+				&& o.maxNeededEnergy == this.maxNeededEnergy
+				&& o.maxNeededInhabitants == this.maxNeededInhabitants
+				&& o.isDestroyed() == this.isDestroyed();
+	}
 
-            super.disassemble(res);
-        }
-    }
+	@Override
+	public boolean isDestroyed() {
+		return this.state == ConstructionState.DESTROYED;
+	}
 
-    @Override
-    public void evolve(CityResources res) {
-        super.evolve(res);
+	// Change
+	@Override
+	public void disassemble(CityResources res) {
+		if (this.state == ConstructionState.BUILT) {
+			res.decreaseProductsCapacity(this.productsCapacity);
 
-        if (this.state == ConstructionState.BUILT) {
-            res.increaseProductsCapacity(this.productsCapacity / 2);
+			super.disassemble(res);
+		}
+	}
 
-            this.update(res);
-        }
-    }
+	@Override
+	public void evolve(CityResources res) {
+		super.evolve(res);
 
-    @Override
-    public void update(CityResources res) {
-        if (this.state == ConstructionState.BUILT) {
-            final int busyPercentage = this.getProducts(res) * 100 / this.productsCapacity;
-            final int neededEnergy = Math.max(10, busyPercentage * this.maxNeededEnergy / 100);
-            final int neededUnworkingPopulation = busyPercentage * this.maxNeededInhabitants / 100;
-            final boolean enoughEnergy = res.getUnconsumedEnergy() >= neededEnergy;
-            final boolean enoughPopulation = res.getUnworkingPopulation() >= neededUnworkingPopulation;
-            int productionPercentage = 100;
-            
-            if(enoughEnergy && enoughPopulation) {
-                this.isEnergyMissing = false;
-                this.isPopulationMissing = false;
-                productionPercentage -= busyPercentage;
-            } else {
-            	int consumedEnergy = neededEnergy;
-            	int workingPopulation = neededUnworkingPopulation;
-            		
-	            if(!enoughEnergy) {
-	                consumedEnergy = res.getUnconsumedEnergy();
-	            	this.isEnergyMissing = true;
-	            } else this.isEnergyMissing = false;
-	            
-	            if(!enoughPopulation) {
-	                workingPopulation = res.getUnworkingPopulation();
-	            	this.isPopulationMissing = true;
-	            } else this.isPopulationMissing = false;
-	            
-                final int energyPercentage = consumedEnergy / this.maxNeededEnergy;
-                final int workersPercentage = workingPopulation / this.maxNeededInhabitants;
-                
-                productionPercentage -= busyPercentage * energyPercentage * workersPercentage;
-            }
-            
-            res.consumeEnergy(neededEnergy);
-            res.hireWorkers(neededUnworkingPopulation);
-            res.storeProducts(productionPercentage * maxProduction / 100);
-        }
-    }
+		switch(state) {
+		case BUILT:
+			this.state = ConstructionState.BUILTLVL2;
+			res.increasePopulationCapacity(this.productsCapacity * (int)(4.0 / 3));
+			break;
 
-    // Implementation
-    /**
-     * @param res
-     * @return The number of products in the current industry.
-     *
-     *         e.g. if the industry capacity is X = 50, the city capacity is Y
-     *         = 100 (including X) and the population is Z = 20, then the
-     *         residence has (X / Y) * Z = 10 products.
-     */
-    private int getProducts(CityResources res) {
-        assert res.getProductsCapacity() != 0;
+		case BUILTLVL2:
+			this.state = ConstructionState.BUILTLVL3;
+			res.increasePopulationCapacity(this.productsCapacity * (int)(5.0 / 3));
+			break;
 
-        return res.getProductsCount() * this.productsCapacity / res.getProductsCapacity();
-    }
+		case UNDER_CONSTRUCTION:
+			this.state = ConstructionState.BUILT;
+			res.increaseProductsCapacity(this.productsCapacity);
+			break;
+			
+		default:
+			break;
+		}
+
+		this.update(res);
+	}
+
+	@Override
+	public void update(CityResources res) {
+		if (this.state != ConstructionState.UNDER_CONSTRUCTION || this.state != ConstructionState.DESTROYED) {
+			final int busyPercentage = this.getProducts(res) * 100 / this.productsCapacity;
+			final int neededEnergy = Math.max(10, busyPercentage * this.maxNeededEnergy / 100);
+			final int neededUnworkingPopulation = busyPercentage * this.maxNeededInhabitants / 100;
+			final boolean enoughEnergy = res.getUnconsumedEnergy() >= neededEnergy;
+			final boolean enoughPopulation = res.getUnworkingPopulation() >= neededUnworkingPopulation;
+			int productionPercentage = 100;
+			
+			if(enoughEnergy && enoughPopulation) {
+				this.isEnergyMissing = false;
+				this.isPopulationMissing = false;
+				productionPercentage -= busyPercentage;
+			} else {
+				int consumedEnergy = neededEnergy;
+				int workingPopulation = neededUnworkingPopulation;
+
+				if(!enoughEnergy) {
+					consumedEnergy = res.getUnconsumedEnergy();
+					this.isEnergyMissing = true;
+				} else this.isEnergyMissing = false;
+
+				if(!enoughPopulation) {
+					workingPopulation = res.getUnworkingPopulation();
+					this.isPopulationMissing = true;
+				} else this.isPopulationMissing = false;
+
+				final float energyPercentage = (float)consumedEnergy / (this.maxNeededEnergy * 100);
+				final float workersPercentage = (float)workingPopulation / (this.maxNeededInhabitants * 100);
+
+				System.out.println(energyPercentage);
+				System.out.println(workersPercentage);
+				
+				productionPercentage *= busyPercentage / 100 * energyPercentage * workersPercentage;
+				System.out.println(productionPercentage);
+			}
+
+			res.consumeEnergy(neededEnergy);
+			res.hireWorkers(neededUnworkingPopulation);
+			res.storeProducts(productionPercentage * maxProduction / 100);
+		}
+	}
+
+	// Implementation
+	/**
+	 * @param res
+	 * @return The number of products in the current industry.
+	 *
+	 *         e.g. if the industry capacity is X = 50, the city capacity is Y
+	 *         = 100 (including X) and the population is Z = 20, then the
+	 *         residence has (X / Y) * Z = 10 products.
+	 */
+	private int getProducts(CityResources res) {
+		assert res.getProductsCapacity() != 0;
+
+		return res.getProductsCount() * this.productsCapacity / res.getProductsCapacity();
+	}
 }

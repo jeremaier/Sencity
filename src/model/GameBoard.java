@@ -50,6 +50,7 @@ import model.tiles.WaterTile;
 import model.tools.AirportZoneDelimiterTool;
 import model.tools.BulldozerTool;
 import model.tools.CommercialZoneDelimiterTool;
+import model.tools.EvolveTool;
 import model.tools.HarborZoneDelimiterTool;
 import model.tools.IndustrialZoneDelimiterTool;
 import model.tools.PowerPlantConstructionTool;
@@ -289,13 +290,25 @@ public class GameBoard extends Observable implements Serializable {
 	public int getUnworkingPopulation() {
 		return this.resources.getUnworkingPopulation();
 	}
+	
+	public int getPopulation() {
+		return this.resources.getPopulation();
+	}
 
 	public int getEnergy() {
 		return this.resources.getUnconsumedEnergy();
 	}
+	
+	public int getEnergyProduction() {
+		return this.resources.getEnergyProduction();
+	}
 
 	public int getProducts() {
 		return this.resources.getProductsCount();
+	}
+	
+	public int getProductsCapacity() {
+		return this.resources.getProductsCapacity();
 	}
 
 	public int getSatisfaction() {
@@ -385,30 +398,25 @@ public class GameBoard extends Observable implements Serializable {
 
 		final Tile currentTile = this.tiles[row][column];
 
-		if(this.selectedTool.canEffect(currentTile)) {
-			if(this.selectedTool.isAfordable(currentTile, this.resources)) {
+		if(this.selectedTool.isAfordable(currentTile, this.resources)) {
+			if(this.selectedTool.canEffect(currentTile)) {
 				if(!this.selectedTool.isAleadyBuild()) {
-					System.out.println(this.selectedTool);
 					if(this.selectedTool instanceof HarborZoneDelimiterTool && !this.getTilesArea(new TilePosition(row, column), 1).contains(WaterTile.getDefault()))
 						this.message = this.texts.getNextToMsg(WaterTile.getDefault());
 					else {
 						final Tile newTile = this.selectedTool.effect(currentTile, this.resources);
 						this.tiles[row][column] = newTile;
-
 						this.pendingEvolutions.remove(currentTile);
-						if (newTile instanceof Evolvable) {
+												
+						if (newTile instanceof Evolvable)
 							this.pendingEvolutions.add((Evolvable) newTile);
-						}
 					}
-				} else {
-					this.message = this.texts.getAlreadyBuildMsg();
-				}
-			} else {
-				this.message = this.texts.getMissingResourcesMsg();
-			}
-		} else {
-			this.message = this.texts.getToolCannotAffectMsg();
-		}
+				} else this.message = this.texts.getAlreadyBuildMsg();
+			} else if(this.selectedTool.canEvolve(currentTile)) {
+				((EvolveTool) this.selectedTool).evolve(currentTile, this.resources);
+				this.pendingEvolutions.remove(currentTile);
+			} else this.message = this.texts.getToolCannotAffectMsg();
+		} else this.message = this.texts.getMissingResourcesMsg();
 
 		this.notifyViews();
 	}
@@ -421,8 +429,8 @@ public class GameBoard extends Observable implements Serializable {
 		this.resources.resetEphemerals();
 		this.applyPendingEvents();
 		this.applyNewEvent();
-		this.updateTiles();
 		this.applyEvolutions();
+		this.updateTiles();
 		this.notifyViews();
 	}
 
@@ -466,7 +474,7 @@ public class GameBoard extends Observable implements Serializable {
 	 */
 	private void applyEvolutions() {
 		final int count = Math.min(GameBoard.MAX_HANDLED_EVOLUTIONS, this.pendingEvolutions.size());
-
+		
 		for (int i = 0; i < count; i++) {
 			final Evolvable e = this.pendingEvolutions.poll(); // Not null
 
@@ -513,8 +521,8 @@ public class GameBoard extends Observable implements Serializable {
 
 			oOut.writeObject(res);
 			oOut.writeObject(this.tiles);
-			oOut.writeObject(difficulty);
-			oOut.writeObject(texts);
+			oOut.writeObject(this.difficulty);
+			oOut.writeObject(this.texts);
 
 			if(oOut != null)
 				oOut.close();

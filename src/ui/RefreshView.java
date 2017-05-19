@@ -23,11 +23,13 @@
  */
 package ui;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import model.GameBoard;
 
@@ -44,6 +46,9 @@ public class RefreshView extends JPanel {
         JButton jb = new JButton(MainFrame.getTexts().getRefreshButtonLabel());
         JButton save = new JButton(MainFrame.getTexts().getSaveButtonLabel());
         
+		this.setLayout(new GridLayout(0, 1, 0, 10));
+		this.setBorder(new EmptyBorder(100, 0, 100, 10));
+		
         jb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

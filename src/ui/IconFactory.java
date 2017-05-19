@@ -30,6 +30,7 @@ import javax.swing.ImageIcon;
 
 import model.tiles.BuildableTile;
 import model.tiles.Destroyable;
+import model.tiles.PowerPlantTile;
 import model.tiles.Tile;
 import model.tools.Tool;
 
@@ -42,163 +43,181 @@ import model.tools.Tool;
  */
 public class IconFactory {
 
-    // Constant
-    /**
-     * Default value of {@link IconFactory#getpathTemplate()} 1: id
-     */
-    public final static String DEFAULT_PATH_TEMPLATE = "resources/icons/%s.png";
+	// Constant
+	/**
+	 * Default value of {@link IconFactory#getpathTemplate()} 1: id
+	 */
+	public final static String DEFAULT_PATH_TEMPLATE = "resources/icons/%s.png";
 
-    /**
-     * {@link IconFactory#getInstance()}
-     */
-    private final static IconFactory INSTANCE = new IconFactory(IconFactory.DEFAULT_PATH_TEMPLATE);
+	/**
+	 * {@link IconFactory#getInstance()}
+	 */
+	private final static IconFactory INSTANCE = new IconFactory(IconFactory.DEFAULT_PATH_TEMPLATE);
 
-    /**
-     * 1: path
-     */
-    private final static String ERROR_MESSAGE_TEMPLATE = "error: icon not found at %s";
+	/**
+	 * 1: path
+	 */
+	private final static String ERROR_MESSAGE_TEMPLATE = "error: icon not found at %s";
 
-    // Constant (id)
-    /**
-     * Default 'no-icon' for tool.
-     */
-    private final static String NO_ICON_TOOL_ID = "no-icon-tool";
+	// Constant (id)
+	/**
+	 * Default 'no-icon' for tool.
+	 */
+	private final static String NO_ICON_TOOL_ID = "no-icon-tool";
 
-    /**
-     * Default 'no-icon' for tile.
-     */
-    private final static String NO_ICON_TILE_ID = "no-icon-tile";
+	/**
+	 * Default 'no-icon' for tile.
+	 */
+	private final static String NO_ICON_TILE_ID = "no-icon-tile";
 
-    /**
-     * Icon for all Destroyable tiles where {@link Destroyable#isDestroyed()} is
-     * true.
-     */
-    public final static String DEBRIS_TILE_ID = "debris";
+	/**
+	 * Icon for all Destroyable tiles where {@link Destroyable#isDestroyed()} is
+	 * true.
+	 */
+	public final static String DEBRIS_TILE_ID = "debris";
 
-    /**
-     * Id if {@link BuildableTile#isEnergyMissing()} is enabled.
-     */
-    public final static String MISSING_ENERGY_POSTID = "missing-energy";
-    
-    /**
-     * Id if {@link BuildableTile#isPopulationMissing()} is enabled.
-     */
-    public final static String MISSING_POPULATION_POSTID = "missing-population";
+	/**
+	 * Id if {@link BuildableTile#isEnergyMissing()} is enabled.
+	 */
+	public final static String MISSING_ENERGY_POSTID = "missing-energy";
 
-    // Implementation
-    private final String pathTemplate;
+	/**
+	 * Id if {@link BuildableTile#isPopulationMissing()} is enabled.
+	 */
+	public final static String MISSING_POPULATION_POSTID = "missing-population";
 
-    // Factory
-    static public IconFactory getInstance() {
-        return IconFactory.INSTANCE;
-    }
+	// Implementation
+	private final String pathTemplate;
 
-    // Creation
-    /**
-     * Prefer use {@link IconFactory#getInstance()} instead.
-     *
-     * @param pathTpl
-     */
-    private IconFactory(String pathTpl) {
-        this.pathTemplate = pathTpl;
-    }
+	// Factory
+	static public IconFactory getInstance() {
+		return IconFactory.INSTANCE;
+	}
 
-    // Access
-    /**
-     * @return Path template to icons.
-     */
-    public String getpathTemplate() {
-        return this.pathTemplate;
-    }
+	// Creation
+	/**
+	 * Prefer use {@link IconFactory#getInstance()} instead.
+	 *
+	 * @param pathTpl
+	 */
+	private IconFactory(String pathTpl) {
+		this.pathTemplate = pathTpl;
+	}
 
-    /**
-     * @param aTool
-     * @return Icon associated to {@value aTool}.
-     */
-    public ImageIcon getToolIcon(Tool aTool) {
-        final String toolId = this.dashSeparatedWordsFromCamelCase(aTool.getClass().getSimpleName());
-        return this.getIcon(toolId, IconFactory.NO_ICON_TOOL_ID);
-    }
+	// Access
+	/**
+	 * @return Path template to icons.
+	 */
+	public String getpathTemplate() {
+		return this.pathTemplate;
+	}
 
-    /**
-     * @param aTile
-     * @return Icon associated to {@value aTile}.
-     */
-    public ImageIcon getTileIcon(Tile aTile) {
-        return this.getIcon(this.getTileId(aTile), IconFactory.NO_ICON_TILE_ID);
-    }
+	/**
+	 * @param aTool
+	 * @return Icon associated to {@value aTool}.
+	 */
+	public ImageIcon getToolIcon(Tool aTool) {
+		final String toolId = this.dashSeparatedWordsFromCamelCase(aTool.getClass().getSimpleName());
+		return this.getIcon(toolId, IconFactory.NO_ICON_TOOL_ID);
+	}
 
-    // Implementation
-    /**
-     * @param aIconId
-     * @param aReplacementIconId
-     *            - May be null.
-     * @return Retrieve icon with {@value aId} as name or {@value aIconId} if
-     *         {@value aId} doesn't exist. If both are not retrievable then
-     *         throw a runtime exception.
-     */
-    private ImageIcon getIcon(String aIconId, String aReplacementIconId) {
-        final String path = String.format(this.pathTemplate, aIconId);
-        final URL url1 = ClassLoader.getSystemResource(path);
+	/**
+	 * @param aTile
+	 * @return Icon associated to {@value aTile}.
+	 */
+	public ImageIcon getTileIcon(Tile aTile) {
+		return this.getIcon(this.getTileId(aTile), IconFactory.NO_ICON_TILE_ID);
+	}
 
-        if (url1 != null) {
-            return new ImageIcon(url1);
-        } else if (aReplacementIconId != null) {
-            return this.getIcon(aReplacementIconId, null);
-        } else {
-            throw new RuntimeException(String.format(IconFactory.ERROR_MESSAGE_TEMPLATE, path));
-        }
-    }
+	/**
+	 * @param aTile
+	 * @return Level number associated to {@value aTile}.
+	 */
+	public String getLevelLabel(Tile aTile) {
+		switch(((BuildableTile) aTile).getState()) {
+		case BUILT: return "1";
+		case BUILTLVL2: return "2";
+		case BUILTLVL3: return "3";
+		default: return " ";
+		}
+	}
 
-    /**
-     * e.g. turns "RandomWord" into "random-word".
-     *
-     * @param s
-     *            - CamelCase string
-     * @return lower-case string with dash-separated words.
-     */
-    private String dashSeparatedWordsFromCamelCase(String s) {
-        final String regexPattern = "([a-z])([A-Z]+)";
-        final String replacementPattern = "$1-$2";
+	// Implementation
+	/**
+	 * @param aIconId
+	 * @param aReplacementIconId
+	 *            - May be null.
+	 * @return Retrieve icon with {@value aId} as name or {@value aIconId} if
+	 *         {@value aId} doesn't exist. If both are not retrievable then
+	 *         throw a runtime exception.
+	 */
+	private ImageIcon getIcon(String aIconId, String aReplacementIconId) {
+		final String path = String.format(this.pathTemplate, aIconId);
+		final URL url1 = ClassLoader.getSystemResource(path);
 
-        return s.replaceAll(regexPattern, replacementPattern).toLowerCase();
-    }
+		if (url1 != null) {
+			return new ImageIcon(url1);
+		} else if (aReplacementIconId != null) {
+			return this.getIcon(aReplacementIconId, null);
+		} else {
+			throw new RuntimeException(String.format(IconFactory.ERROR_MESSAGE_TEMPLATE, path));
+		}
+	}
 
-    /**
-     * @param aTile
-     * @return Id that corresponds to {@value aTile}.
-     */
-    private String getTileId(Tile aTile) {
-        if (aTile instanceof Destroyable && ((Destroyable) aTile).isDestroyed()) {
-            return IconFactory.DEBRIS_TILE_ID;
-        } else {
-            final String id = this.dashSeparatedWordsFromCamelCase(aTile.getClass().getSimpleName());
-            // Turn the class's name into dash-separated words in lower-case.
+	/**
+	 * e.g. turns "RandomWord" into "random-word".
+	 *
+	 * @param s
+	 *            - CamelCase string
+	 * @return lower-case string with dash-separated words.
+	 */
+	private String dashSeparatedWordsFromCamelCase(String s) {
+		final String regexPattern = "([a-z])([A-Z]+)";
+		final String replacementPattern = "$1-$2";
 
-            if (aTile instanceof BuildableTile) {
-                final BuildableTile t = (BuildableTile) aTile;
+		return s.replaceAll(regexPattern, replacementPattern).toLowerCase();
+	}
 
-                final String statePostId = '-' + t.getState().name().toLowerCase().replace('_', '-');
-                // Turn enumeration value into dash-separated words in
-                // lower-case
+	/**
+	 * @param aTile
+	 * @return Id that corresponds to {@value aTile}.
+	 */
+	private String getTileId(Tile aTile) {
+		if (aTile instanceof Destroyable && ((Destroyable) aTile).isDestroyed()) {
+			return IconFactory.DEBRIS_TILE_ID;
+		} else {
+			final String id = this.dashSeparatedWordsFromCamelCase(aTile.getClass().getSimpleName());
+			// Turn the class's name into dash-separated words in lower-case.
 
-                final String energyPostId;
-                if (t.isEnergyMissing()) {
-                    energyPostId = '-' + IconFactory.MISSING_ENERGY_POSTID;
-                } else {
-                    energyPostId = "";
-                }
+			if (aTile instanceof BuildableTile) {
+				final BuildableTile t = (BuildableTile) aTile;
 
-                final String populationPostId;
-                if (t.isPopulationMissing())
-                	populationPostId = '-' + IconFactory.MISSING_POPULATION_POSTID;
-                else populationPostId = "";
+				final String statePostId;
+				if(!(t instanceof PowerPlantTile))
+					statePostId = '-' + t.getState().name().toLowerCase().replace('_', '-');
+				else statePostId = "";
+				// Turn enumeration value into dash-separated words in
+				// lower-case
 
-                return id + statePostId + energyPostId + statePostId + populationPostId;
-            } else {
-                return id;
-            }
-        }
-    }
+				final String energyPostId;
+				if (t.isEnergyMissing()) {
+					energyPostId = '-' + IconFactory.MISSING_ENERGY_POSTID;
+				} else {
+					energyPostId = "";
+				}
+
+				final String populationPostId;
+				if (t.isPopulationMissing())
+					populationPostId = '-' + IconFactory.MISSING_POPULATION_POSTID;
+				else populationPostId = "";
+
+
+
+				return id + statePostId + energyPostId + populationPostId;
+			} else {
+				return id;
+			}
+		}
+	}
 
 }
