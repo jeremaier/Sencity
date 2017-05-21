@@ -31,18 +31,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+
+import localization.LocalizedTexts;
+import model.CityResources;
 import model.GameBoard;
+import model.TilePosition;
+import model.tiles.ConstructionState;
+import model.tiles.FireStationTile;
+import model.tiles.Tile;
+import model.tiles.WaterTile;
 
 
 /**
  * The EventFactory generates Events according to their probabilities.
  */
-public class EventFactory {
+public class EventFactory extends Event{
 
     /**
      * Default Constructor.
      */
-    private static enum eventType {
+	public EventFactory(){
+		super();
+	}
+    public static enum eventType {
         NOTHING,
         FIRE,
         STEAL,
@@ -62,12 +73,19 @@ public class EventFactory {
         private static final long serialVersionUID = -6805412774816642699L;
 
         {
-            this.put(eventType.NOTHING, 10);
+        /*	if(world.getTilesArea(startingTile, 4).contains(PoliceStationTile())){
+                this.put(eventType.STEAL, 10);
+                this.put(eventType.NOTHING, 10);
+        	}else{
+                this.put(eventType.STEAL, 20);
+                this.put(eventType.NOTHING, 0);
+        	}
+        	*/
+        	
             this.put(eventType.FIRE, 0);
-            this.put(eventType.STEAL, 0);
             this.put(eventType.DISEASE, 0);
             this.put(eventType.FESTIVAL, 0);
-            this.put(eventType.EARTHQUAKE, 90);
+            this.put(eventType.EARTHQUAKE, 80);
         }
     });
 
@@ -117,4 +135,17 @@ public class EventFactory {
         }
         return result;
     }
+
+	@Override
+	public List<Event> applyEffects(CityResources resources) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getMessage(LocalizedTexts texts) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

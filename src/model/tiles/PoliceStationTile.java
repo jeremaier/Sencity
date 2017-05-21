@@ -31,6 +31,7 @@ import model.CityResources;
  *
  */
 public class PoliceStationTile extends BuildableTile {
+	
 	private static final long serialVersionUID = 1L;
 	
     // Constants

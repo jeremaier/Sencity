@@ -26,10 +26,10 @@ public class EarthquakeEvent extends Event {
 	@Override
     public List<Event> applyEffects(CityResources resources) {
         
-		if( !(world.tiles[this.startingRow][this.startingColumn] instanceof GrassTile) ){
+		if( !(world.tiles[startingTile.getRow()][startingTile.getColumn()] instanceof GrassTile) ){
 			Tool tool = new BulldozerTool();
-			world.tiles[this.startingRow][this.startingColumn] = tool.effect(world.tiles[this.startingRow][this.startingColumn], resources);
-			System.out.println("Earthquake occured at ("+ this.startingRow +" , " + this.startingColumn +" ).");
+			world.tiles[startingTile.getRow()][startingTile.getColumn()] = tool.effect(world.tiles[startingTile.getRow()][startingTile.getColumn()], resources);
+			System.out.println("Earthquake occured at ("+ startingTile.getRow() +" , " + startingTile.getColumn() +" ).");
 		}else{
 			System.out.println("Earthquake occured at no man's land");
 		}
