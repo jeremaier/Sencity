@@ -58,7 +58,7 @@ public final class WaterTile extends Tile {
     // Access
     @Override
     public int hashCode() {
-        return 0;
+        return 1;
     }
 
     /**

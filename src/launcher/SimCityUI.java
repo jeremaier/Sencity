@@ -118,7 +118,7 @@ public final class SimCityUI extends JFrame {
         monde.addObserver(mv);
         
         // Création du panneau de rafraichissement
-        RefreshView rv = new RefreshView(monde, mv);
+        RefreshView rv = new RefreshView(this, monde, mv);
         JPanel right = new JPanel();
         right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
         right.add(vi);
@@ -134,4 +134,10 @@ public final class SimCityUI extends JFrame {
         this.setResizable(false);
         this.setVisible(true);
     }
+
+    public void setNewPanel(JPanel panel) {
+		this.getContentPane().removeAll();
+		this.getContentPane().add(panel);
+		this.revalidate();
+	}
 }

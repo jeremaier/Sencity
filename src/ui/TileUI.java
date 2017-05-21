@@ -30,10 +30,8 @@ import java.text.MessageFormat;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 import model.GameBoard;
-import model.tiles.Evolvable;
 import model.tiles.Tile;
 import model.tools.Tool;
 
@@ -52,9 +50,7 @@ public class TileUI extends JLabel {
         this.model = m;
         this.row = row;
         this.column = column;
-        
-        this.setVerticalAlignment(SwingConstants.BOTTOM);
-        this.setHorizontalAlignment(SwingConstants.LEFT);
+
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -83,9 +79,6 @@ public class TileUI extends JLabel {
         } else this.setToolTipText(this.model.getTexts().getToolCannotAffectMsg());
 
         ImageIcon ii = IconFactory.getInstance().getTileIcon(elt);
-        
-        if(elt instanceof Evolvable)
-        	this.setText(IconFactory.getInstance().getLevelLabel(elt));
         
         this.setIcon(ii);
     }

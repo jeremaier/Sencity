@@ -137,13 +137,13 @@ public class PowerPlantTile extends BuildableTile {
 		switch(state) {
 		case BUILT:
 			this.EXTRA_ENERGY_PRODUCTION += 5;
-			this.productionCapacity *= 1.2;
+			this.productionCapacity *= 1.5;
 			this.state = ConstructionState.BUILTLVL2;
 			break;
 			
 		case BUILTLVL2:
 			this.EXTRA_ENERGY_PRODUCTION += 10;
-			this.productionCapacity *= 1.2;
+			this.productionCapacity *= 1.5;
 			this.state = ConstructionState.BUILTLVL3;
 			break;
 			

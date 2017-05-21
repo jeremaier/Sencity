@@ -28,9 +28,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.SwingUtilities;
 
+import launcher.SimCityUI;
 import model.GameBoard;
 
 public class RefreshView extends JPanel {
@@ -39,33 +41,59 @@ public class RefreshView extends JPanel {
     private static final long serialVersionUID = 1L;
 
     // Creation
-    public RefreshView(GameBoard w, MessagesView mv) {
+    public RefreshView(JFrame frame, GameBoard game, MessagesView mv) {
         super();
-        // this.setBorder(BorderFactory.createBevelBorder(1, Color.GRAY,
-        // Color.BLUE));
-        JButton jb = new JButton(MainFrame.getTexts().getRefreshButtonLabel());
-        JButton save = new JButton(MainFrame.getTexts().getSaveButtonLabel());
         
+        JButton refresh = new JButton(MainFrame.getTexts().getRefreshButtonLabel());
+        JButton save = new JButton(MainFrame.getTexts().getSaveButtonLabel());
+        JButton newGame = new JButton(MainFrame.getTexts().getNewGameButtonLabel());
+        JButton load = new JButton(MainFrame.getTexts().getLoadButtonLabel());
+        JButton options = new JButton("Options");
+        JButton[] buttons = {refresh, save, newGame, load, options};
+
 		this.setLayout(new GridLayout(0, 1, 0, 10));
-		this.setBorder(new EmptyBorder(100, 0, 100, 10));
-		
-        jb.addActionListener(new ActionListener() {
+		this.actions(buttons, (SimCityUI)frame, game, mv, game.getHeight(), game.getWidth());
+        
+        for(JButton button : buttons)
+        	this.add(button);
+    }
+
+	private void actions(JButton[] buttons, SimCityUI frame, GameBoard game, MessagesView mv, int height, int width) {		
+		buttons[0].addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                w.nextState();
+                game.nextState();
             }
         });
         
-        save.addActionListener(new ActionListener() {
+        buttons[1].addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int fileNbr = w.saveGame(w.getResources());
+                int fileNbr = game.saveGame(game.getResources());
                 mv.savePrint(MainFrame.getTexts().getSaveMessage(fileNbr));
             }
         });
+		
+		buttons[2].addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SwingUtilities.invokeLater(() -> new SimCityUI(new GameBoard(MainFrame.getGameHeight(), MainFrame.getGameWidth(), MainFrame.getDifficulty().getLevel(), MainFrame.getTexts()), MainFrame.getTexts()));
+				frame.dispose();
+			}
+		});
         
-        this.add(jb);
-        this.add(save);
-    }
-
+		buttons[3].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	frame.setNewPanel(new LoadView(frame, game, height, width));
+            }
+        });
+        
+		buttons[4].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	frame.setNewPanel(new OptionsView(frame, game, height, width));
+            }
+        });
+	}
 }
