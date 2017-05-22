@@ -5,6 +5,7 @@ import java.util.List;
 
 import localization.LocalizedTexts;
 import model.CityResources;
+import model.GameBoard;
 import model.tiles.GrassTile;
 import model.tools.BulldozerTool;
 import model.tools.Tool;
@@ -16,8 +17,8 @@ public class EarthquakeEvent extends Event {
     /**
      * Default Constructor.
      */
-	public EarthquakeEvent() {
-        super();
+	public EarthquakeEvent(GameBoard world) {
+        super(world);
     }
 	
     /**

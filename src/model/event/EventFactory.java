@@ -112,7 +112,7 @@ public class EventFactory extends Event{
         Event result;
         switch (type) {
         	case EARTHQUAKE:
-        		result = new EarthquakeEvent();
+        		result = new EarthquakeEvent(world);
         		break;
         	case FESTIVAL:
         		result = new FestivalEvent();
