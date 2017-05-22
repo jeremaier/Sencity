@@ -24,7 +24,6 @@ public class StealEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        System.out.println("Steal occured in commerce.");
         resources.spend(5);
         return new ArrayList<>(0);
     }
@@ -34,7 +33,12 @@ public class StealEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-        return "";
+		if(texts.getLangageName()=="Français"){
+			return "Vos commerces ont étés pillés";
+		}
+		else{
+			return "Your shops have been stealed";
+		}
     }
 
 }

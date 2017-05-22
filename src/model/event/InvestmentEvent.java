@@ -25,7 +25,6 @@ public class InvestmentEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        System.out.println("An investment occured.");
         IndustrialTile.maxProduction+=3;
         return new ArrayList<>(0);
     }
@@ -35,7 +34,12 @@ public class InvestmentEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-        return "";
+		if(texts.getLangageName()=="Français"){
+			return "Des investisseurs ont cru en votre industrie";
+		}
+		else{
+			return "Investors believed in your industry";
+		}
     }
 
 }

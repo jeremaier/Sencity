@@ -48,7 +48,6 @@ public class NothingEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        System.out.println("No disaster occured.");
         return new ArrayList<>(0);
     }
 

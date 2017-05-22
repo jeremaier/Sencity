@@ -38,9 +38,9 @@ import model.TilePosition;
  */
 public abstract class Event {
 
-    protected TilePosition startingTile;
+    protected static TilePosition startingTile;
     protected Set<TilePosition> appearanceCoordinates;
-    protected GameBoard world;
+    protected static GameBoard world;
     
     /**
      * Default Constructor.
@@ -53,10 +53,9 @@ public abstract class Event {
      * @param the game board
      */
     public Event(GameBoard world) {
-        this.world = world;
-        int startingRow = ThreadLocalRandom.current().nextInt(0, this.world.getHeight());
-        int startingColumn = ThreadLocalRandom.current().nextInt(0, this.world.getWidth());
-        this.startingTile = new TilePosition(startingRow, startingColumn);
+        int startingRow = ThreadLocalRandom.current().nextInt(0, world.getHeight());
+        int startingColumn = ThreadLocalRandom.current().nextInt(0, world.getWidth());
+        startingTile = new TilePosition(startingRow, startingColumn);
     }
 
     /**

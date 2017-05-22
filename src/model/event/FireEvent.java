@@ -24,7 +24,6 @@ public class FireEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        System.out.println("Fire occured in industry.");
         resources.consumeProducts(2);
         return new ArrayList<>(0);
     }
@@ -34,7 +33,12 @@ public class FireEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-        return "";
+		if(texts.getLangageName()=="Français"){
+			return "Les réserves d'une industrie ont brulés";
+		}
+		else{
+			return "Reserves of an industry burned";
+		}
     }
 
 }

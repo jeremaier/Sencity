@@ -7,15 +7,14 @@ import localization.LocalizedTexts;
 import model.CityResources;
 import model.GameBoard;
 import model.tiles.GrassTile;
-import model.tools.BulldozerTool;
-import model.tools.Tool;
+
 /**
- * The CriminalEvent make you loose money.
+ * The EarthquakeEvent make you loose a building.
  */
 public class EarthquakeEvent extends Event {
 
     /**
-     * Default Constructor.
+     * Constructor.
      */
 	public EarthquakeEvent(GameBoard world) {
         super(world);
@@ -27,11 +26,7 @@ public class EarthquakeEvent extends Event {
 	@Override
     public List<Event> applyEffects(CityResources resources) {
 		if( !(world.tiles[startingTile.getRow()][startingTile.getColumn()] instanceof GrassTile) ){
-			Tool tool = new BulldozerTool();
-			world.tiles[startingTile.getRow()][startingTile.getColumn()] = tool.effect(world.tiles[startingTile.getRow()][startingTile.getColumn()], resources);
-			System.out.println("Earthquake occured at ("+ startingTile.getRow() +" , " + startingTile.getColumn() +" ).");
-		}else{
-			System.out.println("Earthquake occured at no man's land");
+			world.tiles[startingTile.getRow()][startingTile.getColumn()] = GrassTile.getDefault();
 		}
         return new ArrayList<>(0);
     }
@@ -41,9 +36,14 @@ public class EarthquakeEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-        return "";
-    }
-
+		if(texts.getLangageName()=="Français"){
+			return "Un tremblement de terre a fait des dégâts en ("+ startingTile.getRow() +" , " + startingTile.getColumn() +" ).";
+		}
+		else{
+			return "Earthquake occured at ("+ startingTile.getRow() +" , " + startingTile.getColumn() +" ).";
+		}
+	}
 }
+
 
 

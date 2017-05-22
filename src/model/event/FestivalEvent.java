@@ -24,7 +24,6 @@ public class FestivalEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        System.out.println("Disease occured.");
         resources.credit(5);
         resources.increaseSatisfaction(5);
         return new ArrayList<>(0);
@@ -35,7 +34,12 @@ public class FestivalEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-        return "";
+		if(texts.getLangageName()=="Français"){
+			return "Un festival a été organisé";
+		}
+		else{
+			return "A festival was organized";
+		}
     }
 
 }

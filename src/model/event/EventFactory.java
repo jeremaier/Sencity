@@ -35,12 +35,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import localization.LocalizedTexts;
 import model.CityResources;
 import model.GameBoard;
-import model.TilePosition;
-import model.tiles.ConstructionState;
-import model.tiles.FireStationTile;
-import model.tiles.Tile;
 import model.tiles.WaterTile;
-
 
 /**
  * The EventFactory generates Events according to their probabilities.
@@ -59,7 +54,9 @@ public class EventFactory extends Event{
         STEAL,
         DISEASE,
         FESTIVAL,
-        EARTHQUAKE;
+        EARTHQUAKE,
+        MATCH,
+        INVESTMENT;
         }
 
     /**
@@ -73,19 +70,39 @@ public class EventFactory extends Event{
         private static final long serialVersionUID = -6805412774816642699L;
 
         {
-        /*	if(world.getTilesArea(startingTile, 4).contains(PoliceStationTile())){
-                this.put(eventType.STEAL, 10);
-                this.put(eventType.NOTHING, 10);
-        	}else{
-                this.put(eventType.STEAL, 20);
-                this.put(eventType.NOTHING, 0);
-        	}
-        	*/
         	
-            this.put(eventType.FIRE, 0);
-            this.put(eventType.DISEASE, 0);
-            this.put(eventType.FESTIVAL, 0);
-            this.put(eventType.EARTHQUAKE, 80);
+        /*	
+        if( world.getTilesArea(startingTile, 4).contains(WaterTile.getDefault()) ){
+                this.put(eventType.STEAL, 100);
+                this.put(eventType.NOTHING, 0);
+                this.put(eventType.INVESTMENT, 0);
+            	this.put(eventType.MATCH, 0);
+                this.put(eventType.FIRE, 0);
+                this.put(eventType.DISEASE, 0);
+                this.put(eventType.FESTIVAL, 0);
+                this.put(eventType.EARTHQUAKE, 0);
+        	}else{
+                this.put(eventType.STEAL, 0);
+                this.put(eventType.NOTHING, 100);
+                this.put(eventType.INVESTMENT, 0);
+            	this.put(eventType.MATCH, 0);
+                this.put(eventType.FIRE, 0);
+                this.put(eventType.DISEASE, 0);
+                this.put(eventType.FESTIVAL, 0);
+                this.put(eventType.EARTHQUAKE, 0);
+        	}
+        */
+        
+        this.put(eventType.STEAL, 100);
+        this.put(eventType.NOTHING, 0);
+        this.put(eventType.INVESTMENT, 0);
+    	this.put(eventType.MATCH, 0);
+        this.put(eventType.FIRE, 0);
+        this.put(eventType.DISEASE, 0);
+        this.put(eventType.FESTIVAL, 0);
+        this.put(eventType.EARTHQUAKE, 0);
+        	
+        	
         }
     });
 
@@ -111,6 +128,12 @@ public class EventFactory extends Event{
         eventType type = EventFactory.probalisticEventsList.get(index);
         Event result;
         switch (type) {
+        	case MATCH:
+        		result = new MatchEvent();
+        		break;
+        	case INVESTMENT:
+        		result = new InvestmentEvent();
+        		break;
         	case EARTHQUAKE:
         		result = new EarthquakeEvent(world);
         		break;
