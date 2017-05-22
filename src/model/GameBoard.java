@@ -57,6 +57,7 @@ import model.tools.PowerPlantConstructionTool;
 import model.tools.ResidentialZoneDelimiterTool;
 import model.tools.StadiumZoneDelimiterTool;
 import model.tools.Tool;
+import model.tools.WaterZoneDelimiterTool;
 
 public class GameBoard extends Observable implements Serializable {
 	// Constant
@@ -155,6 +156,7 @@ public class GameBoard extends Observable implements Serializable {
 		this.tools.add(new AirportZoneDelimiterTool());
 		this.tools.add(new HarborZoneDelimiterTool());
 		this.tools.add(new StadiumZoneDelimiterTool());
+		this.tools.add(new WaterZoneDelimiterTool());
 
 		this.selectedTool = this.tools.get(GameBoard.DEFAULT_SELECTED_TOOL);
 
@@ -221,7 +223,7 @@ public class GameBoard extends Observable implements Serializable {
 	public DifficultyLevel getDifficulty() {
 		return this.difficulty;
 	}
-	
+
 	/**
 	 * @return Height of the world in row count.
 	 */
@@ -290,7 +292,7 @@ public class GameBoard extends Observable implements Serializable {
 	public int getUnworkingPopulation() {
 		return this.resources.getUnworkingPopulation();
 	}
-	
+
 	public int getPopulation() {
 		return this.resources.getPopulation();
 	}
@@ -298,7 +300,7 @@ public class GameBoard extends Observable implements Serializable {
 	public int getEnergy() {
 		return this.resources.getUnconsumedEnergy();
 	}
-	
+
 	public int getEnergyProduction() {
 		return this.resources.getEnergyProduction();
 	}
@@ -306,7 +308,7 @@ public class GameBoard extends Observable implements Serializable {
 	public int getProducts() {
 		return this.resources.getProductsCount();
 	}
-	
+
 	public int getProductsCapacity() {
 		return this.resources.getProductsCapacity();
 	}
@@ -373,16 +375,42 @@ public class GameBoard extends Observable implements Serializable {
 	 */
 	public Set<TilePosition> getTilesArea(TilePosition startingTile, int areaSize) {
 		Set<TilePosition> tilesArea = new HashSet<>();
-
-		for (int i = 0; i < areaSize; i++) {
-			for (int j = 0; j < areaSize; j++) {
+		int beginningRow = startingTile.getRow() != 0 ? -1 : 0;
+		int beginningColumn = startingTile.getColumn() != 0 ? -1 : 0;
+		
+		for (int i = beginningRow; i < areaSize; i++) {
+			for (int j = beginningColumn; j < areaSize; j++) {
 				int newRow = startingTile.getRow() + i < this.getHeight() ? startingTile.getRow() + i : this.getHeight() - 1;
 				int newColumn = startingTile.getColumn() + j < this.getWidth() ? startingTile.getColumn() + j : this.getWidth() - 1;
 				TilePosition newTile = new TilePosition(newRow, newColumn);
 				tilesArea.add(newTile);
 			}
 		}
+		
 		return tilesArea;
+	}
+	
+	/**
+	 * @param row
+	 * @param column
+	 * @param areaSize
+	 * @param tile
+	 * @param tilesNbr
+	 * @return if a certain tile is in certain area of the map.
+	 */
+	public boolean isInTileArea(int row, int column, int areaSize, Tile tile, int tilesNeeded) {
+		int number = 0;
+		Set<TilePosition> tilesArea = this.getTilesArea(new TilePosition(row, column), areaSize);
+		
+		for(TilePosition tilePos : tilesArea)
+			if(tiles[tilePos.getRow()][tilePos.getColumn()].equals(tile)) {
+				number++;
+				
+				if(number >= tilesNeeded)
+					return true;
+			}
+		
+		return false;
 	}
 
 	// Change (World)
@@ -401,13 +429,13 @@ public class GameBoard extends Observable implements Serializable {
 		if(this.selectedTool.isAfordable(currentTile, this.resources)) {
 			if(this.selectedTool.canEffect(currentTile)) {
 				if(!this.selectedTool.isAleadyBuild()) {
-					if(this.selectedTool instanceof HarborZoneDelimiterTool && !this.getTilesArea(new TilePosition(row, column), 1).contains(WaterTile.getDefault()))
+					if(this.selectedTool instanceof HarborZoneDelimiterTool && !this.isInTileArea(row, column, 2, WaterTile.getDefault(), 3))
 						this.message = this.texts.getNextToMsg(WaterTile.getDefault());
 					else {
 						final Tile newTile = this.selectedTool.effect(currentTile, this.resources);
 						this.tiles[row][column] = newTile;
 						this.pendingEvolutions.remove(currentTile);
-												
+
 						if (newTile instanceof Evolvable)
 							this.pendingEvolutions.add((Evolvable) newTile);
 					}
@@ -474,7 +502,7 @@ public class GameBoard extends Observable implements Serializable {
 	 */
 	private void applyEvolutions() {
 		final int count = Math.min(GameBoard.MAX_HANDLED_EVOLUTIONS, this.pendingEvolutions.size());
-		
+
 		for (int i = 0; i < count; i++) {
 			final Evolvable e = this.pendingEvolutions.poll(); // Not null
 
@@ -509,7 +537,7 @@ public class GameBoard extends Observable implements Serializable {
 
 		if(!folder.exists())
 			folder.mkdirs();
-		
+
 		File[] fileList = folder.listFiles();
 		FileOutputStream fOut;
 		ObjectOutputStream oOut;
@@ -532,7 +560,7 @@ public class GameBoard extends Observable implements Serializable {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return fileNbr;
 	}
 }

@@ -52,7 +52,7 @@ public final class CommercialZoneDelimiterTool extends Tool implements EvolveToo
 	 */
 	@Override
 	public boolean canEvolve (Tile aTarget) {
-		if(aTarget instanceof CommercialTile && ((BuildableTile) aTarget).getState() != ConstructionState.BUILTLVL3)
+		if(aTarget instanceof CommercialTile && (((BuildableTile) aTarget).getState() == ConstructionState.BUILT || ((BuildableTile) aTarget).getState() == ConstructionState.BUILTLVL2))
 			return true;
 		
 		return false;
@@ -69,10 +69,7 @@ public final class CommercialZoneDelimiterTool extends Tool implements EvolveToo
      */
 	@Override
 	public boolean isAfordable (Tile aTarget, CityResources r) {
-		if(aTarget instanceof CommercialTile)
-			return this.getEvolveCost(aTarget) <= r.getCurrency();
-		
-		return CommercialZoneDelimiterTool.CURRENCY_COST <= r.getCurrency();
+		return this.getCost(aTarget) <= r.getCurrency();
 	}
 
 	// Access
@@ -95,15 +92,23 @@ public final class CommercialZoneDelimiterTool extends Tool implements EvolveToo
 	}
 
 	/**
+	 * spend check assertions and dispend the money needed to build or evolve
+	 */
+	@Override
+	public void spend(Tile aTarget, CityResources r) {
+		assert canEvolve(aTarget);
+		assert isAfordable(aTarget, r);
+		
+		r.spend(this.getCost(aTarget));
+	}
+	
+	/**
      * innerEffect apply the Commercial tool to the given tile and update the
      * given CityResources.
      */
 	@Override
 	protected Tile innerEffect (Tile aTarget, CityResources r) {
-		assert canEffect(aTarget);
-		assert isAfordable(aTarget, r);
-		
-		r.spend(CommercialZoneDelimiterTool.CURRENCY_COST);
+		this.spend(aTarget, r);
 
 		return new CommercialTile();
 	}
@@ -114,11 +119,9 @@ public final class CommercialZoneDelimiterTool extends Tool implements EvolveToo
      */
 	@Override
 	public void evolve(Tile aTarget, CityResources r) {
-		assert canEvolve(aTarget);
-		assert isAfordable(aTarget, r);
+		this.spend(aTarget, r);
 		
 		((CommercialTile)aTarget).evolve(r);
-		r.spend(this.getEvolveCost(aTarget));
 	}
 
 	// Debugging

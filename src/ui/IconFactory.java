@@ -30,7 +30,6 @@ import javax.swing.ImageIcon;
 
 import model.tiles.BuildableTile;
 import model.tiles.Destroyable;
-import model.tiles.PowerPlantTile;
 import model.tiles.Tile;
 import model.tools.Tool;
 
@@ -129,19 +128,6 @@ public class IconFactory {
 		return this.getIcon(this.getTileId(aTile), IconFactory.NO_ICON_TILE_ID);
 	}
 
-	/**
-	 * @param aTile
-	 * @return Level number associated to {@value aTile}.
-	 */
-	public String getLevelLabel(Tile aTile) {
-		switch(((BuildableTile) aTile).getState()) {
-		case BUILT: return "1";
-		case BUILTLVL2: return "2";
-		case BUILTLVL3: return "3";
-		default: return " ";
-		}
-	}
-
 	// Implementation
 	/**
 	 * @param aIconId
@@ -192,10 +178,7 @@ public class IconFactory {
 			if (aTile instanceof BuildableTile) {
 				final BuildableTile t = (BuildableTile) aTile;
 
-				final String statePostId;
-				if(!(t instanceof PowerPlantTile))
-					statePostId = '-' + t.getState().name().toLowerCase().replace('_', '-');
-				else statePostId = "";
+				final String statePostId = '-' + t.getState().name().toLowerCase().replace('_', '-');
 				// Turn enumeration value into dash-separated words in
 				// lower-case
 
@@ -210,8 +193,6 @@ public class IconFactory {
 				if (t.isPopulationMissing())
 					populationPostId = '-' + IconFactory.MISSING_POPULATION_POSTID;
 				else populationPostId = "";
-
-
 
 				return id + statePostId + energyPostId + populationPostId;
 			} else {

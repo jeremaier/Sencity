@@ -233,18 +233,17 @@ public class CommercialTile extends BuildableTile {
 			final int neededEnergy = Math.max(10, busyPercentage * this.maxNeededEnergy / 100);
 			final int neededUnworkingPopulation = busyPercentage * this.maxNeededInhabitants / 100;
 			final boolean enoughEnergy = res.getUnconsumedEnergy() >= neededEnergy;
-			final boolean enoughPopulation = res.getUnworkingPopulation() >= neededUnworkingPopulation;
-			int vacantPercentage = 100;
+			final boolean enoughPopulation = res.getUnworkingPopulation() > neededUnworkingPopulation;
+			int consumedEnergy = neededEnergy;
+			int workingPopulation = neededUnworkingPopulation;
+			int soldPercentage = 100;
 			int totalPrice = res.getProductsCount() * productsPrice;
 
 			if(enoughEnergy && enoughPopulation) {
 				this.isPopulationMissing = false;
 				this.isEnergyMissing = false;
-				vacantPercentage -= busyPercentage;
+				soldPercentage -= busyPercentage;
 			} else {
-				int consumedEnergy = neededEnergy;
-				int workingPopulation = neededUnworkingPopulation;
-
 				if(!enoughEnergy) {
 					consumedEnergy = res.getUnconsumedEnergy();
 					this.isEnergyMissing = true;
@@ -255,17 +254,16 @@ public class CommercialTile extends BuildableTile {
 					this.isPopulationMissing = true;
 				} else this.isPopulationMissing = false;
 
-				final int energyPercentage = consumedEnergy / this.maxNeededEnergy;
-				final int workersPercentage = workingPopulation / this.maxNeededInhabitants;
+				final float energyPercentage = (float)consumedEnergy / this.maxNeededEnergy;
+				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
 
-				//////////////////////Mauvais calcul
-				vacantPercentage -= busyPercentage / 100 * energyPercentage * workersPercentage;
+				soldPercentage -= busyPercentage / 100 * energyPercentage * workersPercentage;
 			}
 
-			res.consumeEnergy(neededEnergy);
-			res.hireWorkers(neededUnworkingPopulation);
-			res.creditWithTaxes(vacantPercentage * totalPrice / 100);
-			res.consumeProducts(vacantPercentage * productsCapacity / 100);
+			res.consumeEnergy(consumedEnergy);
+			res.hireWorkers(workingPopulation);
+			res.creditWithTaxes(soldPercentage * totalPrice);
+			res.consumeProducts(soldPercentage * productsCapacity);
 		}
 	}
 

@@ -15,5 +15,11 @@ public interface EvolveTool {
 	 * @param aTarget
 	 * @return Evolve cost function regarding actual state.
 	 */
-	abstract public int getEvolveCost(Tile aTarget);
+	abstract int getEvolveCost(Tile aTarget);
+	
+	/**
+	 * @param aTarget
+	 * @param r
+	 */
+	abstract void spend(Tile aTarget, CityResources r);
 }

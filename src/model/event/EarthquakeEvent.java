@@ -25,7 +25,6 @@ public class EarthquakeEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        
 		if( !(world.tiles[startingTile.getRow()][startingTile.getColumn()] instanceof GrassTile) ){
 			Tool tool = new BulldozerTool();
 			world.tiles[startingTile.getRow()][startingTile.getColumn()] = tool.effect(world.tiles[startingTile.getRow()][startingTile.getColumn()], resources);

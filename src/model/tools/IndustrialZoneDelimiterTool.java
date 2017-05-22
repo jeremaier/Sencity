@@ -52,7 +52,7 @@ public final class IndustrialZoneDelimiterTool extends Tool implements EvolveToo
 	 */
 	@Override
 	public boolean canEvolve (Tile aTarget) {
-		if(aTarget instanceof IndustrialTile && ((BuildableTile) aTarget).getState() != ConstructionState.BUILTLVL3)
+		if(aTarget instanceof IndustrialTile && (((BuildableTile) aTarget).getState() == ConstructionState.BUILT || ((BuildableTile) aTarget).getState() == ConstructionState.BUILTLVL2))
 			return true;
 		
 		return false;
@@ -69,10 +69,7 @@ public final class IndustrialZoneDelimiterTool extends Tool implements EvolveToo
      */
 	@Override
 	public boolean isAfordable (Tile aTarget, CityResources r) {
-		if(aTarget instanceof IndustrialTile)
-			return this.getEvolveCost(aTarget) <= r.getCurrency();
-		
-		return IndustrialZoneDelimiterTool.CURRENCY_COST <= r.getCurrency();
+		return this.getCost(aTarget) <= r.getCurrency();
 	}
 
 // Access
@@ -93,32 +90,38 @@ public final class IndustrialZoneDelimiterTool extends Tool implements EvolveToo
 	public int hashCode () {
 		return getClass().hashCode();
 	}
+	
+	/**
+	 * spend check assertions and dispend the money needed to build or evolve
+	 */
+	@Override
+	public void spend(Tile aTarget, CityResources r) {
+		assert canEvolve(aTarget);
+		assert isAfordable(aTarget, r);
+		
+		r.spend(this.getCost(aTarget));
+	}
 
 	/**
      * innerEffect apply the Industrial tool to the given tile and update the
      * given CityResources.
      */
 	@Override
-	protected Tile innerEffect (Tile aTarget, CityResources r) {
-		assert canEffect(aTarget);
-		assert isAfordable(aTarget, r);
-		
-		r.spend(IndustrialZoneDelimiterTool.CURRENCY_COST);
+	protected Tile innerEffect(Tile aTarget, CityResources r) {
+		this.spend(aTarget, r);
 
 		return new IndustrialTile();
 	}
 	
 	/**
-     * innerEffect apply the Commercial tool to the given tile and update the
+     * innerEffect apply the Industrial tool to the given tile and update the
      * given CityResources.
      */
 	@Override
 	public void evolve(Tile aTarget, CityResources r) {
-		assert canEvolve(aTarget);
-		assert isAfordable(aTarget, r);
-		
+		this.spend(aTarget, r);
+
 		((IndustrialTile)aTarget).evolve(r);
-		r.spend(this.getEvolveCost(aTarget));
 	}
 	
 	// Debugging
@@ -126,5 +129,4 @@ public final class IndustrialZoneDelimiterTool extends Tool implements EvolveToo
 	public String toString () {
 		return getClass().getSimpleName();
 	}
-
 }

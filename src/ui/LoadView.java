@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,14 +33,14 @@ import model.tiles.Tile;
 public class LoadView extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private final MainFrame frame;
+	private final JFrame frame;
 
 	JTextArea output;
 	JList<String> list; 
 	ListSelectionModel listSelectionModel;
 	private int selectedSave = -1;
 
-	public LoadView(MainFrame frame, int height, int width) {
+	public LoadView(JFrame frame, GameBoard game, int height, int width) {
 		super(new BorderLayout());
 
 		JPanel buttonPanel = new JPanel();
@@ -51,7 +52,7 @@ public class LoadView extends JPanel {
 		this.setOpaque(true);
 		this.setBackground(MainMenuView.getBackgroundColor());
 		this.frame = frame;
-		this.actions(buttons, height, width);
+		this.actions(buttons, game, height, width);
 
 		list = new JList<String>(listData);
 		listSelectionModel = list.getSelectionModel();
@@ -124,7 +125,7 @@ public class LoadView extends JPanel {
 		}
 	}
 
-	private void actions(SimButton[] buttons, int height, int width) {		
+	private void actions(SimButton[] buttons, GameBoard game, int height, int width) {		
 		buttons[0].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -138,7 +139,12 @@ public class LoadView extends JPanel {
 		buttons[1].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.setNewPanel(new MainMenuView(frame, height, width));
+				if(frame instanceof MainFrame)
+					((MainFrame)frame).setNewPanel(new MainMenuView(frame, height, width));
+				else {
+					new SimCityUI(game,  MainFrame.getTexts());
+					frame.dispose();
+				}
 			}
 		});
 	}

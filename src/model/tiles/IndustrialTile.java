@@ -206,7 +206,9 @@ public class IndustrialTile extends BuildableTile {
 			final int neededEnergy = Math.max(10, busyPercentage * this.maxNeededEnergy / 100);
 			final int neededUnworkingPopulation = busyPercentage * this.maxNeededInhabitants / 100;
 			final boolean enoughEnergy = res.getUnconsumedEnergy() >= neededEnergy;
-			final boolean enoughPopulation = res.getUnworkingPopulation() >= neededUnworkingPopulation;
+			final boolean enoughPopulation = res.getUnworkingPopulation() > neededUnworkingPopulation;
+			int consumedEnergy = neededEnergy;
+			int workingPopulation = neededUnworkingPopulation;
 			int productionPercentage = 100;
 			
 			if(enoughEnergy && enoughPopulation) {
@@ -214,9 +216,6 @@ public class IndustrialTile extends BuildableTile {
 				this.isPopulationMissing = false;
 				productionPercentage -= busyPercentage;
 			} else {
-				int consumedEnergy = neededEnergy;
-				int workingPopulation = neededUnworkingPopulation;
-
 				if(!enoughEnergy) {
 					consumedEnergy = res.getUnconsumedEnergy();
 					this.isEnergyMissing = true;
@@ -227,18 +226,14 @@ public class IndustrialTile extends BuildableTile {
 					this.isPopulationMissing = true;
 				} else this.isPopulationMissing = false;
 
-				final float energyPercentage = (float)consumedEnergy / (this.maxNeededEnergy * 100);
-				final float workersPercentage = (float)workingPopulation / (this.maxNeededInhabitants * 100);
+				final float energyPercentage = (float)consumedEnergy / this.maxNeededEnergy;
+				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
 
-				System.out.println(energyPercentage);
-				System.out.println(workersPercentage);
-				
 				productionPercentage *= busyPercentage / 100 * energyPercentage * workersPercentage;
-				System.out.println(productionPercentage);
 			}
 
-			res.consumeEnergy(neededEnergy);
-			res.hireWorkers(neededUnworkingPopulation);
+			res.consumeEnergy(consumedEnergy);
+			res.hireWorkers(workingPopulation);
 			res.storeProducts(productionPercentage * maxProduction / 100);
 		}
 	}

@@ -57,7 +57,7 @@ public final class ResidentialZoneDelimiterTool extends Tool implements EvolveTo
 	 */
 	@Override
 	public boolean canEvolve (Tile aTarget) {
-		if(!(aTarget instanceof ResidentialTile) || ((BuildableTile) aTarget).getState() == ConstructionState.BUILTLVL3)
+		if(!(aTarget instanceof ResidentialTile) || (((BuildableTile) aTarget).getState() == ConstructionState.BUILT || ((BuildableTile) aTarget).getState() == ConstructionState.BUILTLVL2))
 			return false;
 		
 		return true;
@@ -75,10 +75,7 @@ public final class ResidentialZoneDelimiterTool extends Tool implements EvolveTo
      */
 	@Override
 	public boolean isAfordable (Tile aTarget, CityResources r) {
-		if(aTarget instanceof ResidentialTile)
-			return this.getEvolveCost(aTarget) <= r.getCurrency();
-			
-		return ResidentialZoneDelimiterTool.CURRENCY_COST <= r.getCurrency();
+		return this.getCost(aTarget) <= r.getCurrency();
 	}
 
 // Access
@@ -92,12 +89,23 @@ public final class ResidentialZoneDelimiterTool extends Tool implements EvolveTo
 	
 	@Override
 	public int getEvolveCost(Tile aTarget) {
-		return ((ResidentialTile) aTarget).getState() == ConstructionState.BUILT ? ResidentialZoneDelimiterTool.EVOLVE_COST : ResidentialZoneDelimiterTool.EVOLVE2_COST;
+		return ((ResidentialTile)aTarget).getState() == ConstructionState.BUILT ? ResidentialZoneDelimiterTool.EVOLVE_COST : ResidentialZoneDelimiterTool.EVOLVE2_COST;
 	}
 
 	@Override
 	public int hashCode () {
 		return getClass().hashCode();
+	}
+	
+	/**
+	 * spend check assertions and dispend the money needed to build or evolve
+	 */
+	@Override
+	public void spend(Tile aTarget, CityResources r) {
+		assert canEvolve(aTarget);
+		assert isAfordable(aTarget, r);
+		
+		r.spend(this.getCost(aTarget));
 	}
 
 	/**
@@ -105,26 +113,21 @@ public final class ResidentialZoneDelimiterTool extends Tool implements EvolveTo
      * given CityResources.
      */
 	@Override
-	protected Tile innerEffect (Tile aTarget, CityResources r) {
-		assert canEffect(aTarget);
-		assert isAfordable(aTarget, r);
+	protected Tile innerEffect(Tile aTarget, CityResources r) {
+		this.spend(aTarget, r);
 		
-		r.spend(ResidentialZoneDelimiterTool.CURRENCY_COST);
-
 		return new ResidentialTile();
 	}
 
 	/**
-     * innerEffect apply the Commercial tool to the given tile and update the
+     * innerEffect apply the Residential tool to the given tile and update the
      * given CityResources.
      */
 	@Override
 	public void evolve(Tile aTarget, CityResources r) {
-		assert canEvolve(aTarget);
-		assert isAfordable(aTarget, r);
+		this.spend(aTarget, r);
 		
 		((ResidentialTile)aTarget).evolve(r);
-		r.spend(this.getEvolveCost(aTarget));
 	}
 
 	// Debugging

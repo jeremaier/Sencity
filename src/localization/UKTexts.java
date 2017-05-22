@@ -98,7 +98,7 @@ public class UKTexts extends LocalizedTexts implements Serializable {
 
     @Override
 	public String getNextToMsg(Tile tile) {
-		return "This building need to be build next to " + tile.toString();
+		return "This building need to be build next to water";
 	}
     
     @Override

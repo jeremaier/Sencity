@@ -57,7 +57,7 @@ public final class BulldozerTool extends Tool {
      * isAfordable returns true if the user can apply a buildozer to a tile,
      * false otherwise.
      */
-//    @Override
+    @Override
     public boolean isAfordable(Tile aTarget, CityResources r) {
         return BulldozerTool.CURRENCY_COST <= r.getCurrency();
     }

@@ -98,7 +98,7 @@ public class FRTexts extends LocalizedTexts implements Serializable {
 
     @Override
 	public String getNextToMsg(Tile tile) {
-		return "Ce batiment doit être posé à côté de " + tile.toString();
+		return "Ce batiment doit être posé à côté de l'eau";
 	}
     
     @Override

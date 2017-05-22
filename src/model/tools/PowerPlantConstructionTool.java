@@ -52,7 +52,7 @@ public final class PowerPlantConstructionTool extends Tool implements EvolveTool
 	 */
 	@Override
 	public boolean canEvolve (Tile aTarget) {
-		if(aTarget instanceof PowerPlantTile && ((BuildableTile) aTarget).getState() != ConstructionState.BUILTLVL3)
+		if(aTarget instanceof PowerPlantTile && (((BuildableTile) aTarget).getState() == ConstructionState.BUILT || ((BuildableTile) aTarget).getState() == ConstructionState.BUILTLVL2))
 			return true;
 		
 		return false;
@@ -73,7 +73,7 @@ public final class PowerPlantConstructionTool extends Tool implements EvolveTool
 		if(aTarget instanceof PowerPlantTile)
 			return this.getEvolveCost(aTarget) <= r.getCurrency();
 
-        return PowerPlantConstructionTool.CURRENCY_COST <= r.getCurrency();
+        return this.getCost(aTarget) <= r.getCurrency();
     }
 
     // Access
@@ -94,6 +94,17 @@ public final class PowerPlantConstructionTool extends Tool implements EvolveTool
     public int hashCode() {
         return this.getClass().hashCode();
     }
+    
+	/**
+	 * spend check assertions and dispend the money needed to build or evolve
+	 */
+	@Override
+	public void spend(Tile aTarget, CityResources r) {
+		assert canEvolve(aTarget);
+		assert isAfordable(aTarget, r);
+		
+		r.spend(this.getCost(aTarget));
+	}
 
     /**
      * innerEffect apply the PowerPlant tool to the given tile and update the
@@ -101,25 +112,20 @@ public final class PowerPlantConstructionTool extends Tool implements EvolveTool
      */
     @Override
     protected Tile innerEffect(Tile aTarget, CityResources r) {
-        assert this.canEffect(aTarget);
-        assert this.isAfordable(aTarget, r);
-
-        r.spend(PowerPlantConstructionTool.CURRENCY_COST);
+		this.spend(aTarget, r);
 
         return new PowerPlantTile();
     }
 	
 	/**
-     * innerEffect apply the Commercial tool to the given tile and update the
+     * innerEffect apply the PowerPlant tool to the given tile and update the
      * given CityResources.
      */
 	@Override
 	public void evolve(Tile aTarget, CityResources r) {
-		assert canEvolve(aTarget);
-		assert isAfordable(aTarget, r);
+		this.spend(aTarget, r);
 		
 		((PowerPlantTile)aTarget).evolveLevel(r);
-		r.spend(this.getEvolveCost(aTarget));
 	}
 
     // Debugging
