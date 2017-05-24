@@ -25,6 +25,7 @@
 package model.tiles;
 
 import model.CityResources;
+import model.GameBoard;
 
 /**
  * Enable to welcome new inhabitants and consume energy units according to the
@@ -35,34 +36,34 @@ public class CommercialTile extends BuildableTile {
 
 	// Constants
 	/**
-	 * Default value of {@link CommercialTile#getEvolutionEnergyConsumption()}
+	 * Default value of {@link #getMaintenanceCost()}
+	 */
+	public final static int DEFAULT_MAINTENANCE_COST = 4;
+
+	/**
+	 * Default value of {@link #getEvolutionEnergyConsumption()}
 	 */
 	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
 	/**
-	 * Default value of {@link CommercialTile#getMaxNeededEnergy()}
+	 * Default value of {@link #getMaxNeededEnergy()}
 	 */
-	public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
+	public final static int DEFAULT_MAX_NEEDED_ENERGY = 10;
 
 	/**
-	 * Default value of {@link CommercialTile#getMaxNeededProducts()}
+	 * Default value of {@link #getMaxSoldProducts()}
 	 */
-	public final static int DEFAULT_MAX_NEEDED_PRODUCTS = 30;
+	public final static int DEFAULT_MAX_SOLD_PRODUCTS = 15;
 
 	/**
-	 * Default value of {@link CommercialTile#getNeededInhabitants()}
+	 * Default value of {@link #getMaxNeededInhabitants()}
 	 */
-	public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 30;
+	public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 15;
 
 	/**
-	 * Default value of {@link CommercialTile#getProductsCapacity()}
+	 * Default value of {@link #getProductsPrice()}
 	 */
-	public final static int DEFAULT_PRODUCTS_CAPACITY = 10;
-
-	/**
-	 * Default value of {@link CommercialTile#getProductsPrice()}
-	 */
-	public final static int DEFAULT_PRODUCTS_PRICE = 1;
+	public final static int DEFAULT_PRODUCTS_PRICE = 5;
 
 	// Implementation
 	/**
@@ -76,50 +77,25 @@ public class CommercialTile extends BuildableTile {
 	private final int maxNeededEnergy;
 
 	/**
-	 * {@link #getMaxNeededProducts()}
+	 * {@link #getMaxSoldProducts()}
 	 */
-	private final int maxNeededProducts;
-
-	/**
-	 * {@link #getProductsCapacity()}
-	 */
-	private final int productsCapacity;
+	private final int maxSoldProducts;
 
 	/**
 	 * {@link #getProductsPrice()}
 	 */
 	private int productsPrice;
 
-	// Creation
-	/**
-	 * @param capacity
-	 *            - {@link #getProductsCapacity()}
-	 */
-	public CommercialTile(int capacity) {
+	public CommercialTile() {
 		super(CommercialTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
-		this.productsCapacity = capacity;
 		this.productsPrice = CommercialTile.DEFAULT_PRODUCTS_PRICE;
 		this.maxNeededEnergy = CommercialTile.DEFAULT_MAX_NEEDED_ENERGY;
-		this.maxNeededProducts = CommercialTile.DEFAULT_MAX_NEEDED_PRODUCTS;
+		this.maxSoldProducts = CommercialTile.DEFAULT_MAX_SOLD_PRODUCTS;
 		this.maxNeededInhabitants = CommercialTile.DEFAULT_MAX_NEEDED_INHABITANTS;
-
-	}
-
-	/**
-	 * Create with default settings.
-	 */
-	public CommercialTile() {
-		this(CommercialTile.DEFAULT_PRODUCTS_CAPACITY);
+		this.maintenanceCost = CommercialTile.DEFAULT_MAINTENANCE_COST;
 	}
 
 	// Access
-
-	/**
-	 * @return Maximum products capacity.
-	 */
-	public final int getProductsCapacity() {
-		return this.productsCapacity;
-	}
 
 	/**
 	 * @return Maximum number of energy units to consume. This maximum is
@@ -131,10 +107,10 @@ public class CommercialTile extends BuildableTile {
 
 	/**
 	 * @return Maximum number of products units to consume. This maximum is
-	 *         consumed if the commerce is full.
+	 *         consumed if the commerce has maximum employee and energy.
 	 */
-	public final int getMaxNeededProducts() {
-		return this.maxNeededProducts;
+	public final int getMaxSoldProducts() {
+		return this.maxSoldProducts;
 	}
 
 	/**
@@ -156,9 +132,8 @@ public class CommercialTile extends BuildableTile {
 	public int hashCode() {
 		int result = super.hashCode();
 		result = result * 17 + this.productsPrice;
-		result = result * 17 + this.productsCapacity;
 		result = result * 17 + this.maxNeededEnergy;
-		result = result * 17 + this.maxNeededProducts;
+		result = result * 17 + this.maxSoldProducts;
 		result = result * 17 + this.maxNeededInhabitants;
 		return result;
 	}
@@ -177,9 +152,8 @@ public class CommercialTile extends BuildableTile {
 		return this == o || super.equals(o) 
 				&& o.productsPrice == this.productsPrice
 				&& o.maxNeededEnergy == this.maxNeededEnergy
-				&& o.maxNeededProducts == this.maxNeededProducts
-				&& o.maxNeededInhabitants == this.maxNeededInhabitants
-				&& o.productsCapacity == this.productsCapacity;
+				&& o.maxSoldProducts == this.maxSoldProducts
+				&& o.maxNeededInhabitants == this.maxNeededInhabitants;
 	}
 
 	@Override
@@ -190,59 +164,51 @@ public class CommercialTile extends BuildableTile {
 	// Change
 	@Override
 	public void disassemble(CityResources res) {
-		if (this.state == ConstructionState.BUILT) {
-			res.decreaseProductsCapacity(this.productsCapacity);
+		if(this.state == ConstructionState.BUILT || this.state == ConstructionState.BUILTLVL2 || this.state == ConstructionState.BUILTLVL3)
 			super.disassemble(res);
-		}
 	}
 
 	@Override
 	public void evolve(CityResources res) {
-		super.evolve(res);
-		System.out.println("cdvc");
-
 		switch(state) {
 		case BUILT:
 			this.state = ConstructionState.BUILTLVL2;
-			this.productsPrice = (int)(CommercialTile.DEFAULT_PRODUCTS_PRICE * 1.25);
-			res.increaseProductsCapacity(this.productsCapacity * (int)(4.0 / 3));
+			this.productsPrice = (int)(CommercialTile.DEFAULT_PRODUCTS_PRICE * 1.2);
 			break;
-			
+
 		case BUILTLVL2:
 			this.state = ConstructionState.BUILTLVL3;
-			this.productsPrice = (int)(CommercialTile.DEFAULT_PRODUCTS_PRICE * 1.5);
-			res.increaseProductsCapacity(this.productsCapacity * (int)(5.0 / 3));
+			this.productsPrice = (int)(CommercialTile.DEFAULT_PRODUCTS_PRICE * 1.4);
 			break;
-			
+
 		case UNDER_CONSTRUCTION:
-            this.state = ConstructionState.BUILT;
-			res.increaseProductsCapacity(this.productsCapacity);
+			this.state = ConstructionState.BUILT;
 			break;
-			
+
 		default:
 			break;
 		}
-		
+
+		super.evolve(res);
+
 		this.update(res);
 	}
 
 	@Override
 	public void update(CityResources res) {
-		if (this.state != ConstructionState.UNDER_CONSTRUCTION || this.state != ConstructionState.DESTROYED) {
-			final int busyPercentage = this.getProducts(res) * 100 / this.productsCapacity;
-			final int neededEnergy = Math.max(10, busyPercentage * this.maxNeededEnergy / 100);
-			final int neededUnworkingPopulation = busyPercentage * this.maxNeededInhabitants / 100;
-			final boolean enoughEnergy = res.getUnconsumedEnergy() >= neededEnergy;
-			final boolean enoughPopulation = res.getUnworkingPopulation() > neededUnworkingPopulation;
-			int consumedEnergy = neededEnergy;
-			int workingPopulation = neededUnworkingPopulation;
+		if (this.state != ConstructionState.UNDER_CONSTRUCTION && this.state != ConstructionState.DESTROYED) {
+			int consumedEnergy = this.maxNeededEnergy;
+			int workingPopulation = this.maxNeededInhabitants;
+			int soldProducts = this.maxSoldProducts;
+			final double fluctuation = (7 + (Math.random() * 6)) / 10;
+			final boolean enoughProducts = res.getProductsCount() >= soldProducts;
+			final boolean enoughEnergy = res.getUnconsumedEnergy() >= consumedEnergy;
+			final boolean enoughPopulation = res.getUnworkingPopulation() > workingPopulation;
 			int soldPercentage = 100;
-			int totalPrice = res.getProductsCount() * productsPrice;
 
-			if(enoughEnergy && enoughPopulation) {
+			if(enoughEnergy && enoughPopulation && enoughProducts) {
 				this.isPopulationMissing = false;
 				this.isEnergyMissing = false;
-				soldPercentage -= busyPercentage;
 			} else {
 				if(!enoughEnergy) {
 					consumedEnergy = res.getUnconsumedEnergy();
@@ -253,33 +219,22 @@ public class CommercialTile extends BuildableTile {
 					workingPopulation = res.getUnworkingPopulation();
 					this.isPopulationMissing = true;
 				} else this.isPopulationMissing = false;
+				
+				if(!enoughProducts)
+					soldProducts = res.getProductsCount();
 
+				final float productsPercentage = (float)soldProducts / this.maxSoldProducts;
 				final float energyPercentage = (float)consumedEnergy / this.maxNeededEnergy;
 				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
 
-				soldPercentage -= busyPercentage / 100 * energyPercentage * workersPercentage;
+				soldPercentage -= productsPercentage * energyPercentage * workersPercentage;
 			}
 
-			res.consumeEnergy(consumedEnergy);
+			res.consumeEnergy(Math.max(2, consumedEnergy));
 			res.hireWorkers(workingPopulation);
-			res.creditWithTaxes(soldPercentage * totalPrice);
-			res.consumeProducts(soldPercentage * productsCapacity);
+			res.creditWithTaxes((int)(fluctuation * soldPercentage / 100.0 * maxSoldProducts * productsPrice));
+			res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
+			res.consumeProducts((int)(soldPercentage / 100.0 * maxSoldProducts));
 		}
-	}
-
-	// Implementation
-	/**
-	 * @param res
-	 * @return Approximation of the number of inhabitants in the current
-	 *         residence if the population is uniformly distributed.
-	 *
-	 *         e.g. if the residence capacity is X = 50, the city capacity is Y
-	 *         = 100 (including X) and the population is Z = 20, then the
-	 *         residence has (X / Y) * Z = 10 inhabitants.
-	 */
-	private int getProducts(CityResources res) {
-		assert res.getProductsCapacity() != 0;
-
-		return res.getProductsCount() * this.productsCapacity / res.getProductsCapacity();
 	}
 }

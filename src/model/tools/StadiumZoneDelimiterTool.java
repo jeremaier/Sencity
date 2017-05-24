@@ -25,6 +25,7 @@
 package model.tools;
 
 import model.CityResources;
+import model.GameBoard;
 import model.tiles.StadiumTile;
 import model.tiles.GrassTile;
 import model.tiles.Tile;
@@ -61,6 +62,11 @@ public final class StadiumZoneDelimiterTool extends Tool {
 		return StadiumTile.alreadyBuild;
 	}
 
+	@Override
+	public boolean isCorrespondantTile(Tile aTarget) {
+		return aTarget instanceof StadiumTile;
+	}
+
 	// Access
 	@Override
 	public int getCost (Tile aTarget) {
@@ -81,7 +87,7 @@ public final class StadiumZoneDelimiterTool extends Tool {
 		assert canEffect(aTarget);
 		assert isAfordable(aTarget, r);
 
-		r.spend(StadiumZoneDelimiterTool.CURRENCY_COST);
+		r.spend((int)(Math.round(this.getCost(null) * GameBoard.getDifficulty().getCoeff())));
 
 		return new StadiumTile();
 	}

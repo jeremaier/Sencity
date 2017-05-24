@@ -25,6 +25,7 @@
 package model.tiles;
 
 import model.CityResources;
+import model.GameBoard;
 
 /**
  * FireStation increase satisfaction and reduce probability of FireEvent
@@ -32,141 +33,137 @@ import model.CityResources;
  */
 public class FireStationTile extends BuildableTile {
 	private static final long serialVersionUID = 1L;
-	
-    // Constants
-    /**
-     * Default value of {@link FireStationTile#getEvolutionEnergyConsumption()}
-     */
-    public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
-    /**
-     * Default value of {@link FireStationTile#getMaxNeededEnergy()}
-     */
-    public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
+	// Constants
+	/**
+	 * Default value of {@link FireStationTile#getMaintenanceCost()}
+	 */
+	public final static int DEFAULT_MAINTENANCE_COST = 4;
 
-    /**
-     * Default value of {@link FireStationTile#getMaintenanceCost()}
-     */
-    public final static int DEFAULT_MAINTENANCE_COST = 5;
-    
-    /**
-     * Default value of {@link FireStationTile#getSatisfactionValue()}
-     */
-    public final static int DEFAULT_SATISFACTION_VALUE = 5;
-    
-    // Implementation
-    
-    /**
-     * {@link #getMaxNeededEnergy()}
-     */
-    private final int maxNeededEnergy;
-    
-    /**
-     * {@link #getMaintenanceCost()}
-     */
-    private final int maintenanceCost;
+	/**
+	 * Default value of {@link FireStationTile#getEvolutionEnergyConsumption()}
+	 */
+	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
-    /**
-     * {@link #getSatisfactionValue()}
-     */
-    private final int satisfactionValue;
-    
-    // Creation
-    
-    /**
-     * Create with default settings.
-     */
-    public FireStationTile() {
-        super(FireStationTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
-        this.satisfactionValue = FireStationTile.DEFAULT_SATISFACTION_VALUE;
-        this.maintenanceCost = FireStationTile.DEFAULT_MAINTENANCE_COST;
-        this.maxNeededEnergy = FireStationTile.DEFAULT_MAX_NEEDED_ENERGY;
-    }
+	/**
+	 * Default value of {@link FireStationTile#getMaxNeededEnergy()}
+	 */
+	public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
 
-    // Access
-    
-    /**
-     * @return Maximum number of energy units to consume. This maximum is
-     *         consumed if the fire station is full.
-     */
-    public final int getMaxNeededEnergy() {
-        return this.maxNeededEnergy;
-    }
+	/**
+	 * Default value of {@link FireStationTile#getSatisfactionValue()}
+	 */
+	public final static int DEFAULT_SATISFACTION_VALUE = 5;
 
-    public final int getMaintenanceCost() {
-        return this.maintenanceCost;
-    }
-    public final int getSatisfactionValue() {
-        return this.satisfactionValue;
-    }
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = result * 17 + this.maxNeededEnergy;
-        return result;
-    }
+	// Implementation
 
-    // Status
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof FireStationTile && this.equals((FireStationTile) o);
-    }
+	/**
+	 * {@link #getMaxNeededEnergy()}
+	 */
+	private final int maxNeededEnergy;
 
-    /**
-     * @param o
-     * @return Is {@value o} equals to this?
-     */
-    public boolean equals(FireStationTile o) {
-        return this == o || super.equals(o) && o.maxNeededEnergy == this.maxNeededEnergy 
-        									&& o.maintenanceCost == this.maintenanceCost
-        									&& o.satisfactionValue == this.satisfactionValue;
-    }
+	/**
+	 * {@link #getMaintenanceCost()}
+	 */
+	private final int maintenanceCost;
 
-    @Override
-    public boolean isDestroyed() {
-        return this.state == ConstructionState.DESTROYED;
-    }
+	/**
+	 * {@link #getSatisfactionValue()}
+	 */
+	private final int satisfactionValue;
 
-    // Change
-    @Override
-    public void disassemble(CityResources res) {
-        if (this.state == ConstructionState.BUILT) {
-            super.disassemble(res);
-        }
-    }
+	// Creation
 
-    @Override
-    public void evolve(CityResources res) {
-        super.evolve(res);
-        
-        if(build) {
-        	this.state = ConstructionState.BUILT;
-        	build = false;
-        }
+	/**
+	 * Create with default settings.
+	 */
+	public FireStationTile() {
+		super(FireStationTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
+		this.satisfactionValue = FireStationTile.DEFAULT_SATISFACTION_VALUE;
+		this.maintenanceCost = FireStationTile.DEFAULT_MAINTENANCE_COST;
+		this.maxNeededEnergy = FireStationTile.DEFAULT_MAX_NEEDED_ENERGY;
+	}
 
-        if (this.state == ConstructionState.BUILT) {
-            this.update(res);
-        }
-    }
+	// Access
 
-    @Override
-    public void update(CityResources res) {
-        if (this.state == ConstructionState.BUILT) {
-        	int vacantPercentage = 100;
-            int neededEnergy = Math.max(1,this.maxNeededEnergy / 100);
+	/**
+	 * @return Maximum number of energy units to consume. This maximum is
+	 *         consumed if the fire station is full.
+	 */
+	public final int getMaxNeededEnergy() {
+		return this.maxNeededEnergy;
+	}
 
-            if (res.getUnconsumedEnergy() >= neededEnergy) {
-                res.consumeEnergy(neededEnergy);
-                this.isEnergyMissing = false;
-                
-            } else {
-                final int consumedEnergy = res.getUnconsumedEnergy();
-                vacantPercentage -= consumedEnergy / neededEnergy * 100;
-                res.consumeEnergy(consumedEnergy);
-                this.isEnergyMissing = true;
-                }
-            res.spend(this.maintenanceCost);
-            res.increaseSatisfaction(satisfactionValue*vacantPercentage);
-        }
-    }
+	/**
+	 * @return Increase or decrease value of satisfaction
+	 */
+	public final int getSatisfactionValue() {
+		return this.satisfactionValue;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = result * 17 + this.maxNeededEnergy;
+		result = result * 17 + this.maintenanceCost;
+		result = result * 17 + this.satisfactionValue;
+		return result;
+	}
+
+	// Status
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof FireStationTile && this.equals((FireStationTile) o);
+	}
+
+	/**
+	 * @param o
+	 * @return Is {@value o} equals to this?
+	 */
+	public boolean equals(FireStationTile o) {
+		return this == o || super.equals(o)
+				&& o.maxNeededEnergy == this.maxNeededEnergy 
+				&& o.maintenanceCost == this.maintenanceCost
+				&& o.satisfactionValue == this.satisfactionValue;
+	}
+
+	@Override
+	public boolean isDestroyed() {
+		return this.state == ConstructionState.DESTROYED;
+	}
+
+	// Change
+	@Override
+	public void disassemble(CityResources res) {
+		if (this.state == ConstructionState.BUILT)
+			super.disassemble(res);
+	}
+
+	@Override
+	public void evolve(CityResources res) {
+		this.update(res);
+
+		super.evolve(res);
+	}
+
+	@Override
+	public void update(CityResources res) {
+		if (this.state == ConstructionState.BUILT) {
+			int vacantPercentage = 100;
+			int neededEnergy = Math.max(1,this.maxNeededEnergy / 100);
+
+			if (res.getUnconsumedEnergy() >= neededEnergy) {
+				res.consumeEnergy(neededEnergy);
+				this.isEnergyMissing = false;
+			} else {
+				final int consumedEnergy = res.getUnconsumedEnergy();
+				vacantPercentage -= consumedEnergy / neededEnergy * 100;
+				res.consumeEnergy(consumedEnergy);
+				this.isEnergyMissing = true;
+			}
+
+			res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
+			res.increaseSatisfaction(satisfactionValue * vacantPercentage);
+		}
+	}
 }

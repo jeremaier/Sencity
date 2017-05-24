@@ -50,6 +50,11 @@ public abstract class LocalizedTexts implements Serializable {
      */
 	public abstract String getAlreadyBuildMsg();
 
+	/**
+	 * @return Message that indicates that the tool cannot evolve a given tile.
+	 */
+	public abstract String getToolCannotEvolveMsg();
+	
     /**
      * {0}: currency
      *
@@ -182,4 +187,9 @@ public abstract class LocalizedTexts implements Serializable {
 	 * @return Save message.
 	 */
 	public abstract String getSaveMessage(int nbr);
+
+	/**
+	 * @return Vat Label.
+	 */
+	public abstract String getVatLabel();
 }

@@ -25,6 +25,7 @@
 package model.tools;
 
 import model.CityResources;
+import model.GameBoard;
 import model.tiles.BuildableTile;
 import model.tiles.CommercialTile;
 import model.tiles.ConstructionState;
@@ -52,7 +53,7 @@ public final class CommercialZoneDelimiterTool extends Tool implements EvolveToo
 	 */
 	@Override
 	public boolean canEvolve (Tile aTarget) {
-		if(aTarget instanceof CommercialTile && (((BuildableTile) aTarget).getState() == ConstructionState.BUILT || ((BuildableTile) aTarget).getState() == ConstructionState.BUILTLVL2))
+		if(this.isCorrespondantTile(aTarget) && (((BuildableTile) aTarget).getState() == ConstructionState.BUILT || ((BuildableTile) aTarget).getState() == ConstructionState.BUILTLVL2))
 			return true;
 		
 		return false;
@@ -70,6 +71,11 @@ public final class CommercialZoneDelimiterTool extends Tool implements EvolveToo
 	@Override
 	public boolean isAfordable (Tile aTarget, CityResources r) {
 		return this.getCost(aTarget) <= r.getCurrency();
+	}
+	
+	@Override
+	public boolean isCorrespondantTile(Tile aTarget) {
+		return aTarget instanceof CommercialTile;
 	}
 
 	// Access
@@ -99,7 +105,7 @@ public final class CommercialZoneDelimiterTool extends Tool implements EvolveToo
 		assert canEvolve(aTarget);
 		assert isAfordable(aTarget, r);
 		
-		r.spend(this.getCost(aTarget));
+		r.spend((int)(Math.round(this.getCost(aTarget) * GameBoard.getDifficulty().getCoeff())));
 	}
 	
 	/**

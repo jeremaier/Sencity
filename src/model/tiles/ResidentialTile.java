@@ -35,27 +35,27 @@ public class ResidentialTile extends BuildableTile {
 	
     // Constants
     /**
-     * Default value of {@link ResidentialTile#getEvolutionEnergyConsumption()}
+     * Default value of {@link #getEvolutionEnergyConsumption()}
      */
     public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
     /**
-     * Default value of {@link ResidentialTile#maxJoiningInhabitants}
+     * Default value of {@link #maxJoiningInhabitants}
      */
-    private final static int DEFAULT_MAX_JOINING_INHABITANTS = 15;
+    public final static int DEFAULT_MAX_JOINING_INHABITANTS = 15;
 
     /**
-     * Default value of {@link ResidentialTile#maxLeavingInhabitants}
+     * Default value of {@link #maxLeavingInhabitants}
      */
-    private final static int DEFAULT_MAX_LEAVING_INHABITANTS = 10;
+    public final static int DEFAULT_MAX_LEAVING_INHABITANTS = 10;
 
     /**
-     * Default value of {@link ResidentialTile#getMaxNeededEnergy()}
+     * Default value of {@link #getMaxNeededEnergy()}
      */
-    public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
+    public final static int DEFAULT_MAX_NEEDED_ENERGY = 25;
 
     /**
-     * Default value of {@link ResidentialTile#getInhabitantsCapacity()}
+     * Default value of {@link #getInhabitantsCapacity()}
      */
     public final static int DEFAULT_INHABITANTS_CAPACITY = 40;
 
@@ -80,11 +80,6 @@ public class ResidentialTile extends BuildableTile {
      */
     private final int maxNeededEnergy;
 
-    // Creation
-    /**
-     * @param capacity
-     *            - {@link #getInhabitantsCapacity()}
-     */
     public ResidentialTile(int capacity) {
         super(ResidentialTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
 
@@ -116,6 +111,20 @@ public class ResidentialTile extends BuildableTile {
     public final int getMaxNeededEnergy() {
         return this.maxNeededEnergy;
     }
+    
+    /**
+     * @return Maximum number of inhabitants more per residentialTile per refresh.
+     */
+    public final int getMaxJoiningInhabitants() {
+        return this.maxJoiningInhabitants;
+    }
+    
+    /**
+     * @return Maximum number of inhabitants less per residentialTile per refresh.
+     */
+    public final int getMaxLeavingInhabitants() {
+        return this.maxLeavingInhabitants;
+    }
 
     @Override
     public int hashCode() {
@@ -138,8 +147,11 @@ public class ResidentialTile extends BuildableTile {
      * @return Is {@value o} equals to this?
      */
     public boolean equals(ResidentialTile o) {
-        return this == o || super.equals(o) && o.inhabitantsCapacity == this.inhabitantsCapacity && o.maxJoiningInhabitants == this.maxJoiningInhabitants
-                && o.maxLeavingInhabitants == this.maxLeavingInhabitants && o.maxNeededEnergy == this.maxNeededEnergy;
+        return this == o || super.equals(o)
+        		&& o.inhabitantsCapacity == this.inhabitantsCapacity
+        		&& o.maxJoiningInhabitants == this.maxJoiningInhabitants
+                && o.maxLeavingInhabitants == this.maxLeavingInhabitants
+                && o.maxNeededEnergy == this.maxNeededEnergy;
     }
 
     @Override
@@ -150,7 +162,7 @@ public class ResidentialTile extends BuildableTile {
     // Change
     @Override
     public void disassemble(CityResources res) {
-        if (this.state == ConstructionState.BUILT) {
+        if (this.state == ConstructionState.BUILT || this.state == ConstructionState.BUILTLVL2 || this.state == ConstructionState.BUILTLVL3) {
             res.decreasePopulationCapacity(this.inhabitantsCapacity);
 
             super.disassemble(res);
@@ -159,8 +171,6 @@ public class ResidentialTile extends BuildableTile {
 
     @Override
     public void evolve(CityResources res) {
-        super.evolve(res);
-		
 		switch(this.state) {
 		case BUILT:
 			this.state = ConstructionState.BUILTLVL2;
@@ -181,26 +191,28 @@ public class ResidentialTile extends BuildableTile {
 			break;
 		}
 
+        super.evolve(res);
+
 		this.update(res);
     }
 
     @Override
     public void update(CityResources res) {
-		if (this.state != ConstructionState.UNDER_CONSTRUCTION || this.state != ConstructionState.DESTROYED) {
+		if (this.state != ConstructionState.UNDER_CONSTRUCTION && this.state != ConstructionState.DESTROYED) {
             final int inhabitants = this.getInhabitants(res);
 
-            final int busyPercentage = inhabitants * 100 / this.inhabitantsCapacity; // Integer
-                                                                                     // division
-            final int neededEnergy = Math.max(1, busyPercentage * this.maxNeededEnergy / 100); // Integer
-                                                                                               // division
-
+            final int busyPercentage = inhabitants * 100 / this.inhabitantsCapacity; 	// Integer
+                                                                                     	// division
+            final int neededEnergy = (int)Math.max(2, Math.ceil(busyPercentage * this.maxNeededEnergy / 100.0)); 	// Integer
+                                                                                               						// division
+            
             if (res.getUnconsumedEnergy() >= neededEnergy) {
                 res.consumeEnergy(neededEnergy);
                 this.isEnergyMissing = false;
 
                 // Less space is available, less newcomers join
                 final int vacantPercentage = 100 - busyPercentage;
-                final int newcomers = vacantPercentage * this.maxJoiningInhabitants / 100;
+                final int newcomers = (int)Math.ceil(vacantPercentage * this.maxJoiningInhabitants / 100.0);
 
                 res.increasePopulation(newcomers);
             } else {
@@ -229,11 +241,12 @@ public class ResidentialTile extends BuildableTile {
      *         = 100 (including X) and the population is Z = 20, then the
      *         residence has (X / Y) * Z = 10 inhabitants.
      */
-    private int getInhabitants(CityResources res) {
+    public int getInhabitants(CityResources res) {
         assert res.getPopulationCapacity() != 0;
 
         final int capacityPercentage = this.inhabitantsCapacity * 100 / res.getPopulationCapacity(); // Integer
                                                                                                      // division
+
         return res.getPopulation() * capacityPercentage / 100; // Integer
                                                                // division
     }

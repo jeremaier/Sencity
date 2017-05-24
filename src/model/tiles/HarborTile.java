@@ -30,33 +30,33 @@ public class HarborTile extends TransportTile {
 	private static final long serialVersionUID = 1L;
 	
     // Constants
-    /**
-     * Default value of {@link TransportTile#getProductsPrice()}
-     */
-    public final static int DEFAULT_PRODUCTS_PRICE = 4;
+	/**
+	 * Default value of {@link TransportTile#getMaintenanceCost()}
+	 */
+	public final static int DEFAULT_MAINTENANCE_COST = 10;
     
     /**
      * Default value of {@link TransportTile#getMaxNeededEnergy()}
      */
-    public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
+    public final static int DEFAULT_MAX_NEEDED_ENERGY = 80;
     
-    /**
-     * Default value of {@link TransportTile#getMaxNeededProducts()}
-     */
-    public final static int DEFAULT_MAX_NEEDED_PRODUCTS = 30;
+	/**
+	 * Default value of {@link TransportTile#getMaxSoldProducts()}
+	 */
+	public final static int DEFAULT_MAX_SOLD_PRODUCTS = 30;
 
     /**
-     * Default value of {@link TransportTile#getNeededInhabitants()}
+     * Default value of {@link TransportTile#getMaxNeededInhabitants()}
      */
     public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 30;
-    
+	
     /**
-     * Default value of {@link TransportTile#getProductsCapacity()}
+     * Default value of {@link TransportTile#getProductsPrice()}
      */
-    protected final static int DEFAULT_PRODUCTS_CAPACITY = 10;
+    public final static int DEFAULT_PRODUCTS_PRICE = 10;
     
     /**
-     * Default value of {@link #getSatisfactionValue()}
+     * Default value of {@link TransportTile#getSatisfactionValue()}
      */
     public final static int DEFAULT_SATISFACTION_VALUE = 10;
     
@@ -65,20 +65,23 @@ public class HarborTile extends TransportTile {
      */
     public static boolean alreadyBuild = false;
 
-	public HarborTile(int capacity) {
+	public HarborTile() {
 		super(DEFAULT_PRODUCTS_PRICE);
 		
         this.maxNeededEnergy = HarborTile.DEFAULT_MAX_NEEDED_ENERGY;
-        this.maxNeededProducts = HarborTile.DEFAULT_MAX_NEEDED_PRODUCTS;
+        this.maxSoldProducts = HarborTile.DEFAULT_MAX_SOLD_PRODUCTS;
         this.maxNeededInhabitants = HarborTile.DEFAULT_MAX_NEEDED_INHABITANTS;
         this.satisfactionValue = HarborTile.DEFAULT_SATISFACTION_VALUE;
+        this.maintenanceCost = HarborTile.DEFAULT_MAINTENANCE_COST;
 		HarborTile.alreadyBuild = true;
-		this.productsCapacity = capacity;
 	}
 	
-    public HarborTile() {
-        this(HarborTile.DEFAULT_PRODUCTS_CAPACITY);
-    }
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+        result = result * 17 + Boolean.hashCode(StadiumTile.alreadyBuild);
+        return result;
+	}
     
     @Override
     public boolean equals(Object o) {
@@ -88,7 +91,6 @@ public class HarborTile extends TransportTile {
     @Override
     public void disassemble(CityResources res) {
         if (!this.isDestroyed) {
-        	res.decreaseProductsCapacity(this.productsCapacity);
             this.isDestroyed = true;
             HarborTile.alreadyBuild = false;
         }

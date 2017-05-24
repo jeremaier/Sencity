@@ -25,6 +25,7 @@
 package model.tools;
 
 import model.CityResources;
+import model.GameBoard;
 import model.tiles.HarborTile;
 import model.tiles.GrassTile;
 import model.tiles.Tile;
@@ -62,6 +63,11 @@ public final class HarborZoneDelimiterTool extends Tool {
 		return HarborTile.alreadyBuild;
 	}
 
+	@Override
+	public boolean isCorrespondantTile(Tile aTarget) {
+		return aTarget instanceof HarborTile;
+	}
+
 	// Access
 	@Override
 	public int getCost (Tile aTarget) {
@@ -82,7 +88,7 @@ public final class HarborZoneDelimiterTool extends Tool {
 		assert canEffect(aTarget);
 		assert isAfordable(aTarget, r);
 
-		r.spend(HarborZoneDelimiterTool.CURRENCY_COST);
+		r.spend((int)(Math.round(this.getCost(null) * GameBoard.getDifficulty().getCoeff())));
 
 		return new HarborTile();
 	}

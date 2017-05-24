@@ -25,11 +25,17 @@
 package model.tiles;
 
 import model.CityResources;
+import model.GameBoard;
 
 public class PowerPlantTile extends BuildableTile {
 	private static final long serialVersionUID = 1L;
 	
     // Constant
+	/**
+	 * Default value of {@link #getMaintenanceCost()}
+	 */
+	public final static int DEFAULT_MAINTENANCE_COST = 4;
+	
     /**
      * Extra energy produces for each new update. In the limit of the capacity
      * {@link #getProductionCapacity()}.
@@ -37,9 +43,9 @@ public class PowerPlantTile extends BuildableTile {
     public int EXTRA_ENERGY_PRODUCTION = 15;
 
     /**
-     * Default value of {@link PowerPlantTile2#getProductionCapacity()}
+     * Default value of {@link #getProductionCapacity()}
      */
-    public final static int DEFAULT_PRODUCTION_CAPACITY = 70;
+    public final static int DEFAULT_PRODUCTION_CAPACITY = 100;
 
     // Implementation
     /**
@@ -51,17 +57,13 @@ public class PowerPlantTile extends BuildableTile {
      * {@link #getProductionCapacity()}
      */
     protected int productionCapacity;
-
-    // Creation
-    /**
-     * @param productionCapacity
-     *            - {@link #getProductionCapacity()}
-     */
+    
     public PowerPlantTile(int productionCapacity) {
         super(0);
         this.productionCapacity = productionCapacity;
         this.production = 0;
         this.state = ConstructionState.BUILT;
+        this.maintenanceCost = PowerPlantTile.DEFAULT_MAINTENANCE_COST;
     }
 
     /**
@@ -117,7 +119,7 @@ public class PowerPlantTile extends BuildableTile {
     // Change
     @Override
     public void disassemble(CityResources res) {
-        if (this.state == ConstructionState.BUILT) {
+        if (this.state == ConstructionState.BUILT || this.state == ConstructionState.BUILTLVL2 || this.state == ConstructionState.BUILTLVL3) {
             res.decreaseEnergyProduction(this.productionCapacity);
             super.disassemble(res);
         }
@@ -156,11 +158,13 @@ public class PowerPlantTile extends BuildableTile {
     
     @Override
     public void update(CityResources res) {
-		if (this.state != ConstructionState.UNDER_CONSTRUCTION || this.state != ConstructionState.DESTROYED) {
+		if (this.state != ConstructionState.UNDER_CONSTRUCTION && this.state != ConstructionState.DESTROYED) {
             // Double production
             final int extraProduction = Math.min(this.EXTRA_ENERGY_PRODUCTION, this.productionCapacity - this.production);
 
             this.production = this.production + extraProduction;
+            
+            res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
             res.increaseEnergyProduction(extraProduction);
         }
     }
