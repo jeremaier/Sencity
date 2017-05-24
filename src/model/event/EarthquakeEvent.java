@@ -7,6 +7,7 @@ import localization.LocalizedTexts;
 import model.CityResources;
 import model.GameBoard;
 import model.tiles.GrassTile;
+import model.tiles.WaterTile;
 
 /**
  * The EarthquakeEvent make you loose a building.
@@ -25,7 +26,7 @@ public class EarthquakeEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-		if( !(world.tiles[startingTile.getRow()][startingTile.getColumn()] instanceof GrassTile) ){
+		if( !(world.tiles[startingTile.getRow()][startingTile.getColumn()] instanceof WaterTile) ){
 			world.tiles[startingTile.getRow()][startingTile.getColumn()] = GrassTile.getDefault();
 		}
         return new ArrayList<>(0);
