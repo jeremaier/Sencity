@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import localization.LocalizedTexts;
+import model.difficulty.Difficulties;
 import model.difficulty.DifficultyLevel;
 import model.event.Event;
 import model.event.EventFactory;
@@ -124,7 +125,7 @@ public class GameBoard extends Observable implements Serializable {
 	/**
 	 * {@link #getDifficulty()}
 	 */
-	private final DifficultyLevel difficulty;
+	private static DifficultyLevel difficulty;
 
 	// Creation
 	/**
@@ -163,7 +164,7 @@ public class GameBoard extends Observable implements Serializable {
 		this.pendingEvolutions = new LinkedList<>();
 		this.pendingEventsList = new LinkedList<>();
 		this.resources = res;
-		this.difficulty = difficulty;
+		GameBoard.difficulty = difficulty;
 
 		this.message = GameBoard.NOTHING_MESSAGE;
 		this.texts = texts;
@@ -220,8 +221,8 @@ public class GameBoard extends Observable implements Serializable {
 	/**
 	 * @return Difficulty of the world.
 	 */
-	public DifficultyLevel getDifficulty() {
-		return this.difficulty;
+	public static DifficultyLevel getDifficulty() {
+		return GameBoard.difficulty;
 	}
 
 	/**
@@ -326,6 +327,15 @@ public class GameBoard extends Observable implements Serializable {
 	}
 
 	// Change (Selection)
+	/**
+	 * Change the difficulty of the current gameBoard
+	 * 
+	 * @param difficulty
+	 */
+	public void setDifficulty(Difficulties difficulty) {
+		GameBoard.difficulty = difficulty.getLevel();
+	}
+	
 	/**
 	 *
 	 * @param tool
@@ -440,9 +450,10 @@ public class GameBoard extends Observable implements Serializable {
 							this.pendingEvolutions.add((Evolvable) newTile);
 					}
 				} else this.message = this.texts.getAlreadyBuildMsg();
-			} else if(this.selectedTool.canEvolve(currentTile)) {
-				((EvolveTool) this.selectedTool).evolve(currentTile, this.resources);
-				this.pendingEvolutions.remove(currentTile);
+			} else if(currentTile instanceof Evolvable && this.selectedTool.isCorrespondantTile(currentTile)) {
+				if(this.selectedTool.canEvolve(currentTile))
+					((EvolveTool) this.selectedTool).evolve(currentTile, this.resources);
+				else this.message = this.texts.getToolCannotEvolveMsg();
 			} else this.message = this.texts.getToolCannotAffectMsg();
 		} else this.message = this.texts.getMissingResourcesMsg();
 
@@ -549,7 +560,7 @@ public class GameBoard extends Observable implements Serializable {
 
 			oOut.writeObject(res);
 			oOut.writeObject(this.tiles);
-			oOut.writeObject(this.difficulty);
+			oOut.writeObject(GameBoard.difficulty);
 			oOut.writeObject(this.texts);
 
 			if(oOut != null)

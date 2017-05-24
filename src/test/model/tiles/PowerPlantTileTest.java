@@ -1,9 +1,11 @@
 package test.model.tiles;
-import org.junit.Test;
 
 import org.junit.Assert;
+import org.junit.Test;
 
+import localization.UKTexts;
 import model.CityResources;
+import model.GameBoard;
 import model.tiles.PowerPlantTile;
 
 public class PowerPlantTileTest {
@@ -11,6 +13,7 @@ public class PowerPlantTileTest {
     @Test
     public void testInit() {
         PowerPlantTile ppt = new PowerPlantTile();
+		Assert.assertEquals(PowerPlantTile.DEFAULT_MAINTENANCE_COST, ppt.getMaintenanceCost());
         Assert.assertEquals(PowerPlantTile.DEFAULT_PRODUCTION_CAPACITY, ppt.getProductionCapacity());
         ppt = new PowerPlantTile(10);
         Assert.assertEquals(10, ppt.getProductionCapacity());
@@ -27,6 +30,8 @@ public class PowerPlantTileTest {
     
     @Test
     public void testDisassemble() {
+		@SuppressWarnings("unused")
+		GameBoard gb = new GameBoard(10, new UKTexts());
         PowerPlantTile ppt = new PowerPlantTile();
         CityResources resources = new CityResources(100);
         ppt.update(resources);
@@ -45,6 +50,8 @@ public class PowerPlantTileTest {
     
     @Test
     public void testIsEquals() {
+		@SuppressWarnings("unused")
+		GameBoard gb = new GameBoard(10, new UKTexts());
         PowerPlantTile ppt1 = new PowerPlantTile();
         CityResources resources = new CityResources(100);
         ppt1.update(resources);
@@ -54,6 +61,4 @@ public class PowerPlantTileTest {
         ppt2.disassemble(resources);
         Assert.assertEquals(true, ppt1.equals(ppt2));
     }
-    
-    
 }

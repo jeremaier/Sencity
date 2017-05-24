@@ -50,6 +50,11 @@ public class UKTexts extends LocalizedTexts implements Serializable {
         return "This building can be build only one time";
     }
 
+	@Override
+	public String getToolCannotEvolveMsg() {
+		return "Impossible to evolve this building anymore (building unevolvable or maximum level reached or must be build before evolve)";
+	}
+
     @Override
     public String getCurrencyMsg() {
         return "£ {0}";
@@ -174,5 +179,10 @@ public class UKTexts extends LocalizedTexts implements Serializable {
 	@Override
 	public String getSaveMessage(int nbr) {
 		return "Your game has been saved under the name : Save " + nbr;
+	}
+	
+	@Override
+	public String getVatLabel() {
+		return "Tax on products";
 	}
 }

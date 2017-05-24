@@ -25,6 +25,7 @@
 package model.tools;
 
 import model.CityResources;
+import model.GameBoard;
 import model.tiles.BuildableTile;
 import model.tiles.ConstructionState;
 import model.tiles.GrassTile;
@@ -57,10 +58,10 @@ public final class ResidentialZoneDelimiterTool extends Tool implements EvolveTo
 	 */
 	@Override
 	public boolean canEvolve (Tile aTarget) {
-		if(!(aTarget instanceof ResidentialTile) || (((BuildableTile) aTarget).getState() == ConstructionState.BUILT || ((BuildableTile) aTarget).getState() == ConstructionState.BUILTLVL2))
-			return false;
+		if(this.isCorrespondantTile(aTarget) && (((BuildableTile) aTarget).getState() == ConstructionState.BUILT || ((BuildableTile) aTarget).getState() == ConstructionState.BUILTLVL2))
+			return true;
 		
-		return true;
+		return false;
 	}
 
 	@Override
@@ -78,9 +79,14 @@ public final class ResidentialZoneDelimiterTool extends Tool implements EvolveTo
 		return this.getCost(aTarget) <= r.getCurrency();
 	}
 
-// Access
 	@Override
-	public int getCost (Tile aTarget) {
+	public boolean isCorrespondantTile(Tile aTarget) {
+		return aTarget instanceof ResidentialTile;
+	}
+
+	// Access
+	@Override
+	public int getCost(Tile aTarget) {
         if(aTarget instanceof ResidentialTile)
         	return this.getEvolveCost(aTarget);
         
@@ -105,7 +111,7 @@ public final class ResidentialZoneDelimiterTool extends Tool implements EvolveTo
 		assert canEvolve(aTarget);
 		assert isAfordable(aTarget, r);
 		
-		r.spend(this.getCost(aTarget));
+		r.spend((int)(Math.round(this.getCost(aTarget) * GameBoard.getDifficulty().getCoeff())));
 	}
 
 	/**

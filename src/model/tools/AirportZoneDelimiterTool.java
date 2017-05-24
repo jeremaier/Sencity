@@ -25,6 +25,7 @@
 package model.tools;
 
 import model.CityResources;
+import model.GameBoard;
 import model.tiles.AirportTile;
 import model.tiles.GrassTile;
 import model.tiles.Tile;
@@ -62,6 +63,11 @@ public final class AirportZoneDelimiterTool extends Tool {
 		return AirportTile.alreadyBuild;
 	}
 
+	@Override
+	public boolean isCorrespondantTile(Tile aTarget) {
+		return aTarget instanceof AirportTile;
+	}
+
 	// Access
 	@Override
 	public int getCost (Tile aTarget) {
@@ -82,7 +88,7 @@ public final class AirportZoneDelimiterTool extends Tool {
 		assert canEffect(aTarget);
 		assert isAfordable(aTarget, r);
 
-		r.spend(AirportZoneDelimiterTool.CURRENCY_COST);
+		r.spend((int)(Math.round(this.getCost(null) * GameBoard.getDifficulty().getCoeff())));
 
 		return new AirportTile();
 	}

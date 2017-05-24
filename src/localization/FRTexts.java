@@ -50,6 +50,11 @@ public class FRTexts extends LocalizedTexts implements Serializable {
         return "Ce batiment ne peut être construit qu'une seule fois";
     }
 
+	@Override
+	public String getToolCannotEvolveMsg() {
+		return "Impossible de faire evoluer ce batiment (batiment qui ne peut pas evoluer ou qui a atteint son niveau maximum ou doit être totalement construit)";
+	}
+
     @Override
     public String getCurrencyMsg() {
         return "{0} €";
@@ -174,5 +179,10 @@ public class FRTexts extends LocalizedTexts implements Serializable {
 	@Override
 	public String getSaveMessage(int nbr) {
 		return "La partie a bien été sauvegardée sous le nom : Sauvegarde " + nbr;
+	}
+	
+	@Override
+	public String getVatLabel() {
+		return "Taxe sur les produits";
 	}
 }

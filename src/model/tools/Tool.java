@@ -63,6 +63,12 @@ public abstract class Tool {
 	public boolean isAleadyBuild() {
 		return false;
 	}
+	
+	/**
+	 * @return 
+	 * @return The target is the same building as the tool.
+	 */
+	public abstract boolean isCorrespondantTile(Tile aTarget);
 
 	// Access
 	/**

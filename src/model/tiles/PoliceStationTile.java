@@ -25,149 +25,143 @@
 package model.tiles;
 
 import model.CityResources;
+import model.GameBoard;
 
 /**
  * PoliceStation increase satisfaction and reduce probability of PoliceEvent
  *
  */
 public class PoliceStationTile extends BuildableTile {
-	
 	private static final long serialVersionUID = 1L;
+
+	// Constants
+	/**
+	 * Default value of {@link PoliceStationTile#getMaintenanceCost()}
+	 */
+	public final static int DEFAULT_MAINTENANCE_COST = 4;
+
+	/**
+	 * Default value of {@link PoliceStationTile#getEvolutionEnergyConsumption()}
+	 */
+	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
+
+	/**
+	 * Default value of {@link PoliceStationTile#getMaxNeededEnergy()}
+	 */
+	public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
+
+	/**
+	 * Default value of {@link PoliceStationTile#getSatisfactionValue()}
+	 */
+	public final static int DEFAULT_SATISFACTION_VALUE = 5;
+
+	// Implementation
+
+	/**
+	 * {@link #getMaxNeededEnergy()}
+	 */
+	private final int maxNeededEnergy;
+
+	/**
+	 * {@link #getMaintenanceCost()}
+	 */
+	private final int maintenanceCost;
+
+	/**
+	 * {@link #getSatisfactionValue()}
+	 */
+	private final int satisfactionValue;
+
+	// Creation
+	/**
+	 * Create with default settings.
+	 */
+	public PoliceStationTile() {
+		super(PoliceStationTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
+		this.satisfactionValue = PoliceStationTile.DEFAULT_SATISFACTION_VALUE;
+		this.maintenanceCost = PoliceStationTile.DEFAULT_MAINTENANCE_COST;
+		this.maxNeededEnergy = PoliceStationTile.DEFAULT_MAX_NEEDED_ENERGY;
+	}
+
+	// Access
+	/**
+	 * @return Maximum number of energy units to consume. This maximum is
+	 *         consumed if the Police station is full.
+	 */
+	public final int getMaxNeededEnergy() {
+		return this.maxNeededEnergy;
+	}
 	
-    // Constants
-    /**
-     * Default value of {@link PoliceStationTile#getEvolutionEnergyConsumption()}
-     */
-    public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
+	/**
+	 * @return Increase or decrease value of satisfaction
+	 */
+	public final int getSatisfactionValue() {
+		return this.satisfactionValue;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = result * 17 + this.maxNeededEnergy;
+		result = result * 17 + this.maintenanceCost;
+		result = result * 17 + this.satisfactionValue;
+		return result;
+	}
 
-    /**
-     * Default value of {@link PoliceStationTile#getMaxNeededEnergy()}
-     */
-    public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
+	// Status
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof PoliceStationTile && this.equals((PoliceStationTile) o);
+	}
 
-    /**
-     * Default value of {@link PoliceStationTile#getMaintenanceCost()}
-     */
-    public final static int DEFAULT_MAINTENANCE_COST = 5;
-    
-    /**
-     * Default value of {@link PoliceStationTile#getSatisfactionValue()}
-     */
-    public final static int DEFAULT_SATISFACTION_VALUE = 5;
-    
-    // Implementation
-    
-    /**
-     * {@link #getMaxNeededEnergy()}
-     */
-    private final int maxNeededEnergy;
-    
-    /**
-     * {@link #getMaintenanceCost()}
-     */
-    private final int maintenanceCost;
+	/**
+	 * @param o
+	 * @return Is {@value o} equals to this?
+	 */
+	public boolean equals(PoliceStationTile o) {
+		return this == o || super.equals(o)
+				&& o.maxNeededEnergy == this.maxNeededEnergy 
+				&& o.maintenanceCost == this.maintenanceCost
+				&& o.satisfactionValue == this.satisfactionValue;
+	}
 
-    /**
-     * {@link #getSatisfactionValue()}
-     */
-    private final int satisfactionValue;
-    
-    // Creation
-    
-    /**
-     * Create with default settings.
-     */
-    public PoliceStationTile() {
-        super(PoliceStationTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
-        this.satisfactionValue = PoliceStationTile.DEFAULT_SATISFACTION_VALUE;
-        this.maintenanceCost = PoliceStationTile.DEFAULT_MAINTENANCE_COST;
-        this.maxNeededEnergy = PoliceStationTile.DEFAULT_MAX_NEEDED_ENERGY;
-    }
+	@Override
+	public boolean isDestroyed() {
+		return this.state == ConstructionState.DESTROYED;
+	}
 
-    // Access
-    
-    /**
-     * @return Maximum number of energy units to consume. This maximum is
-     *         consumed if the Police station is full.
-     */
-    public final int getMaxNeededEnergy() {
-        return this.maxNeededEnergy;
-    }
+	// Change
+	@Override
+	public void disassemble(CityResources res) {
+		if (this.state == ConstructionState.BUILT)
+			super.disassemble(res);
+	}
 
-    public final int getMaintenanceCost() {
-        return this.maintenanceCost;
-    }
-    public final int getSatisfactionValue() {
-        return this.satisfactionValue;
-    }
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = result * 17 + this.maxNeededEnergy;
-        return result;
-    }
+	@Override
+	public void evolve(CityResources res) {
+		this.update(res);
 
-    // Status
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof PoliceStationTile && this.equals((PoliceStationTile) o);
-    }
+		super.evolve(res);
+	}
 
-    /**
-     * @param o
-     * @return Is {@value o} equals to this?
-     */
-    public boolean equals(PoliceStationTile o) {
-        return this == o || super.equals(o) && o.maxNeededEnergy == this.maxNeededEnergy 
-        									&& o.maintenanceCost == this.maintenanceCost
-        									&& o.satisfactionValue == this.satisfactionValue;
-    }
+	@Override
+	public void update(CityResources res) {
+		if (this.state == ConstructionState.BUILT) {
+			int vacantPercentage = 100;
+			int neededEnergy = Math.max(1,this.maxNeededEnergy / 100);
 
-    @Override
-    public boolean isDestroyed() {
-        return this.state == ConstructionState.DESTROYED;
-    }
+			if (res.getUnconsumedEnergy() >= neededEnergy) {
+				res.consumeEnergy(neededEnergy);
+				this.isEnergyMissing = false;
+			} else {
+				final int consumedEnergy = res.getUnconsumedEnergy();
+				vacantPercentage -= consumedEnergy / neededEnergy * 100;
+				res.consumeEnergy(consumedEnergy);
+				this.isEnergyMissing = true;
+			}
 
-    // Change
-    @Override
-    public void disassemble(CityResources res) {
-        if (this.state == ConstructionState.BUILT) {
-            super.disassemble(res);
-        }
-    }
-
-    @Override
-    public void evolve(CityResources res) {
-        super.evolve(res);
-        
-        if(build) {
-        	this.state = ConstructionState.BUILT;
-        	build = false;
-        }
-
-        if (this.state == ConstructionState.BUILT) {
-            this.update(res);
-        }
-    }
-
-    @Override
-    public void update(CityResources res) {
-        if (this.state == ConstructionState.BUILT) {
-        	int vacantPercentage = 100;
-            int neededEnergy = Math.max(1,this.maxNeededEnergy / 100);
-
-            if (res.getUnconsumedEnergy() >= neededEnergy) {
-                res.consumeEnergy(neededEnergy);
-                this.isEnergyMissing = false;
-                
-            } else {
-                final int consumedEnergy = res.getUnconsumedEnergy();
-                vacantPercentage -= consumedEnergy / neededEnergy * 100;
-                res.consumeEnergy(consumedEnergy);
-                this.isEnergyMissing = true;
-                }
-            res.spend(this.maintenanceCost);
-            res.increaseSatisfaction(satisfactionValue*vacantPercentage);
-        }
-    }
+			res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
+			res.increaseSatisfaction(satisfactionValue * vacantPercentage);
+		}
+	}
 }

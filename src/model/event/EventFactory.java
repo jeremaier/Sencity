@@ -63,7 +63,7 @@ public class EventFactory extends Event{
      * Probabilities bound to a specific event. The sum of all probabilities
      * must be equal to 100
      */
-    private static Map<eventType, Integer> event_probabilities = Collections.unmodifiableMap(new HashMap<eventType, Integer>() {
+    private static final Map<eventType, Integer> event_probabilities = Collections.unmodifiableMap(new HashMap<eventType, Integer>() {
         /**
          *
          */
@@ -71,7 +71,7 @@ public class EventFactory extends Event{
 
         {
         	
-        
+        /*	
         if( world.getTilesArea(startingTile, 4).contains(WaterTile.getDefault()) ){
                 this.put(eventType.STEAL, 100);
                 this.put(eventType.NOTHING, 0);
@@ -90,7 +90,19 @@ public class EventFactory extends Event{
                 this.put(eventType.DISEASE, 0);
                 this.put(eventType.FESTIVAL, 0);
                 this.put(eventType.EARTHQUAKE, 0);
-        	}      	
+        	}
+        */
+        
+        this.put(eventType.STEAL, 100);
+        this.put(eventType.NOTHING, 0);
+        this.put(eventType.INVESTMENT, 0);
+    	this.put(eventType.MATCH, 0);
+        this.put(eventType.FIRE, 0);
+        this.put(eventType.DISEASE, 0);
+        this.put(eventType.FESTIVAL, 0);
+        this.put(eventType.EARTHQUAKE, 0);
+        	
+        	
         }
     });
 

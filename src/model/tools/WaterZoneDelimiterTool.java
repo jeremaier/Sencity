@@ -1,6 +1,7 @@
 package model.tools;
 
 import model.CityResources;
+import model.GameBoard;
 import model.tiles.GrassTile;
 import model.tiles.Tile;
 import model.tiles.WaterTile;
@@ -32,6 +33,11 @@ public class WaterZoneDelimiterTool extends Tool{
 		return WaterZoneDelimiterTool.CURRENCY_COST <= r.getCurrency();
 	}
 
+	@Override
+	public boolean isCorrespondantTile(Tile aTarget) {
+		return aTarget instanceof WaterTile;
+	}
+
 	// Access
 	@Override
 	public int getCost (Tile aTarget) {
@@ -52,7 +58,7 @@ public class WaterZoneDelimiterTool extends Tool{
 		assert canEffect(aTarget);
 		assert isAfordable(aTarget, r);
 
-		r.spend(WaterZoneDelimiterTool.CURRENCY_COST);
+		r.spend((int)(Math.round(this.getCost(null) * GameBoard.getDifficulty().getCoeff())));
 
 		return WaterTile.getDefault();
 	}

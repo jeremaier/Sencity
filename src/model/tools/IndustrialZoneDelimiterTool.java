@@ -25,6 +25,7 @@
 package model.tools;
 
 import model.CityResources;
+import model.GameBoard;
 import model.tiles.BuildableTile;
 import model.tiles.ConstructionState;
 import model.tiles.GrassTile;
@@ -52,7 +53,7 @@ public final class IndustrialZoneDelimiterTool extends Tool implements EvolveToo
 	 */
 	@Override
 	public boolean canEvolve (Tile aTarget) {
-		if(aTarget instanceof IndustrialTile && (((BuildableTile) aTarget).getState() == ConstructionState.BUILT || ((BuildableTile) aTarget).getState() == ConstructionState.BUILTLVL2))
+		if(this.isCorrespondantTile(aTarget) && (((BuildableTile) aTarget).getState() == ConstructionState.BUILT || ((BuildableTile) aTarget).getState() == ConstructionState.BUILTLVL2))
 			return true;
 		
 		return false;
@@ -72,7 +73,12 @@ public final class IndustrialZoneDelimiterTool extends Tool implements EvolveToo
 		return this.getCost(aTarget) <= r.getCurrency();
 	}
 
-// Access
+	@Override
+	public boolean isCorrespondantTile(Tile aTarget) {
+		return aTarget instanceof IndustrialTile;
+	}
+
+	// Access
 	@Override
 	public int getCost (Tile aTarget) {
         if(aTarget instanceof IndustrialTile)
@@ -99,7 +105,7 @@ public final class IndustrialZoneDelimiterTool extends Tool implements EvolveToo
 		assert canEvolve(aTarget);
 		assert isAfordable(aTarget, r);
 		
-		r.spend(this.getCost(aTarget));
+		r.spend((int)(Math.round(this.getCost(aTarget) * GameBoard.getDifficulty().getCoeff())));
 	}
 
 	/**

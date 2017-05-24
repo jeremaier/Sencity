@@ -120,6 +120,7 @@ public class OptionsView extends JPanel {
 				if(frame instanceof MainFrame)
 					((MainFrame)frame).setNewPanel(new MainMenuView(frame, height, width));
 				else {
+					game.setDifficulty(MainFrame.getDifficulty());
 					new SimCityUI(game, MainFrame.getTexts());
 					frame.dispose();
 				}

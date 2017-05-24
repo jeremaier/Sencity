@@ -25,6 +25,7 @@
 package model.tools;
 
 import model.CityResources;
+import model.GameBoard;
 import model.tiles.Destroyable;
 import model.tiles.GrassTile;
 import model.tiles.Tile;
@@ -35,7 +36,7 @@ import model.tiles.Tile;
 public final class BulldozerTool extends Tool {
 
     // Constant
-    private final static int CURRENCY_COST = 10;
+    private final static int CURRENCY_COST = 50;
 
     // Status
     /**
@@ -62,6 +63,11 @@ public final class BulldozerTool extends Tool {
         return BulldozerTool.CURRENCY_COST <= r.getCurrency();
     }
 
+	@Override
+	public boolean isCorrespondantTile(Tile aTarget) {
+		return aTarget instanceof GrassTile;
+	}
+
     // Access
     @Override
     public int getCost(Tile aTarget) {
@@ -83,7 +89,7 @@ public final class BulldozerTool extends Tool {
         assert isAfordable(aTarget, r);
 
         ((Destroyable) aTarget).disassemble(r);
-        r.spend(BulldozerTool.CURRENCY_COST);
+        r.spend((int)(Math.round(this.getCost(null) * GameBoard.getDifficulty().getCoeff())));
 
         return GrassTile.getDefault();
     }

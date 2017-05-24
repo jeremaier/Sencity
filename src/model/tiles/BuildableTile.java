@@ -54,9 +54,9 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
     protected ConstructionState state;
     
     /**
-     * {@link #isBuilded()}
+     * {@link #getMaintenanceCost()}
      */
-    protected boolean build;
+    protected int maintenanceCost;
 
     // Creation
     /**
@@ -88,12 +88,20 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
     public final ConstructionState getState() {
         return this.state;
     }
+    
+    /**
+     * @return Maintenance cost.
+     */
+    public int getMaintenanceCost() {
+    	return this.maintenanceCost;
+    }
 
     @Override
     public int hashCode() {
         int result = 1;
-        result = result * 17 + evolutionEnergyConsumption;
-        result = result * 17 + state.hashCode();
+        result = result * 17 + this.evolutionEnergyConsumption;
+        result = result * 17 + this.maintenanceCost;
+        result = result * 17 + this.state.hashCode();
         return result;
     }
 
@@ -103,7 +111,7 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
      * @return Is {@value o} equals to this?
      */
     public boolean equals(BuildableTile o) {
-        return o.evolutionEnergyConsumption == evolutionEnergyConsumption && o.state == state;
+        return o.evolutionEnergyConsumption == this.evolutionEnergyConsumption && o.state == this.state && o.maintenanceCost == this.maintenanceCost;
     }
 
     // Status
@@ -134,12 +142,12 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
 
     @Override
     public void evolve(CityResources res) {
-        if (canEvolve()) {
+        if (canEvolve() && this.state == ConstructionState.UNDER_CONSTRUCTION && !(this instanceof PowerPlantTile)) {
             if (res.getUnconsumedEnergy() >= evolutionEnergyConsumption) {
                 this.isEnergyMissing = false;
 
                 res.consumeEnergy(this.evolutionEnergyConsumption);
-                build = true;
+    			this.state = ConstructionState.BUILT;
             } else this.isEnergyMissing = true;
         }
     }

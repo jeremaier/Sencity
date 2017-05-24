@@ -25,6 +25,7 @@
 package model.tiles;
 
 import model.CityResources;
+import model.GameBoard;
 
 /**
  * Enable to welcome new inhabitants and consume energy units according to the
@@ -35,6 +36,11 @@ public class IndustrialTile extends BuildableTile {
 
 	// Constants
 	/**
+	 * Default value of {@link #getMaintenanceCost()}
+	 */
+	public final static int DEFAULT_MAINTENANCE_COST = 4;
+	
+	/**
 	 * Default value of {@link IndustrialTile#getEvolutionEnergyConsumption()}
 	 */
 	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
@@ -42,12 +48,12 @@ public class IndustrialTile extends BuildableTile {
 	/**
 	 * Default value of {@link IndustrialTile#getProductionCapacity}
 	 */
-	public final static int DEFAULT_PRODUCTS_CAPACITY = 10;
+	public final static int DEFAULT_PRODUCTS_CAPACITY = 20;
 
 	/**
 	 * Default value of {@link IndustrialTile#getMaxProduction}
 	 */
-	public final static int DEFAULT_MAX_PRODUCTION = 15;
+	public final static int DEFAULT_MAX_PRODUCTION = 5;
 
 	/**
 	 * Default value of {@link IndustrialTile#getNeededEnergy()}
@@ -90,6 +96,7 @@ public class IndustrialTile extends BuildableTile {
 		this.productsCapacity = capacity;
 		this.maxNeededEnergy = IndustrialTile.DEFAULT_MAX_NEEDED_ENERGY;
 		this.maxNeededInhabitants = IndustrialTile.DEFAULT_MAX_NEEDED_INHABITANTS;
+		this.maintenanceCost = IndustrialTile.DEFAULT_MAINTENANCE_COST;
 	}
 
 	/**
@@ -165,8 +172,8 @@ public class IndustrialTile extends BuildableTile {
 	// Change
 	@Override
 	public void disassemble(CityResources res) {
-		if (this.state == ConstructionState.BUILT) {
-			res.decreaseProductsCapacity(this.productsCapacity);
+		if (this.state == ConstructionState.BUILT || this.state == ConstructionState.BUILTLVL2 || this.state == ConstructionState.BUILTLVL3) {
+			res.decreaseProductsCapacity(this.getProducts(res), this.productsCapacity);
 
 			super.disassemble(res);
 		}
@@ -174,17 +181,15 @@ public class IndustrialTile extends BuildableTile {
 
 	@Override
 	public void evolve(CityResources res) {
-		super.evolve(res);
-
 		switch(state) {
 		case BUILT:
 			this.state = ConstructionState.BUILTLVL2;
-			res.increasePopulationCapacity(this.productsCapacity * (int)(4.0 / 3));
+			res.increaseProductsCapacity(this.productsCapacity * (int)(4.0 / 3));
 			break;
 
 		case BUILTLVL2:
 			this.state = ConstructionState.BUILTLVL3;
-			res.increasePopulationCapacity(this.productsCapacity * (int)(5.0 / 3));
+			res.increaseProductsCapacity(this.productsCapacity * (int)(5.0 / 3));
 			break;
 
 		case UNDER_CONSTRUCTION:
@@ -196,17 +201,19 @@ public class IndustrialTile extends BuildableTile {
 			break;
 		}
 
+		super.evolve(res);
+		
 		this.update(res);
 	}
 
 	@Override
 	public void update(CityResources res) {
-		if (this.state != ConstructionState.UNDER_CONSTRUCTION || this.state != ConstructionState.DESTROYED) {
-			final int busyPercentage = this.getProducts(res) * 100 / this.productsCapacity;
-			final int neededEnergy = Math.max(10, busyPercentage * this.maxNeededEnergy / 100);
-			final int neededUnworkingPopulation = busyPercentage * this.maxNeededInhabitants / 100;
+		if (this.state != ConstructionState.UNDER_CONSTRUCTION && this.state != ConstructionState.DESTROYED) {
+			final int neededEnergy = Math.max(5, this.maxNeededEnergy / 100);
+			final int neededUnworkingPopulation = this.maxNeededInhabitants / 100;
 			final boolean enoughEnergy = res.getUnconsumedEnergy() >= neededEnergy;
 			final boolean enoughPopulation = res.getUnworkingPopulation() > neededUnworkingPopulation;
+			final double fluctuation = (7 + (Math.random() * 6)) / 10;
 			int consumedEnergy = neededEnergy;
 			int workingPopulation = neededUnworkingPopulation;
 			int productionPercentage = 100;
@@ -214,7 +221,6 @@ public class IndustrialTile extends BuildableTile {
 			if(enoughEnergy && enoughPopulation) {
 				this.isEnergyMissing = false;
 				this.isPopulationMissing = false;
-				productionPercentage -= busyPercentage;
 			} else {
 				if(!enoughEnergy) {
 					consumedEnergy = res.getUnconsumedEnergy();
@@ -229,12 +235,13 @@ public class IndustrialTile extends BuildableTile {
 				final float energyPercentage = (float)consumedEnergy / this.maxNeededEnergy;
 				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
 
-				productionPercentage *= busyPercentage / 100 * energyPercentage * workersPercentage;
+				productionPercentage *= energyPercentage * workersPercentage;
 			}
-
+						
 			res.consumeEnergy(consumedEnergy);
 			res.hireWorkers(workingPopulation);
-			res.storeProducts(productionPercentage * maxProduction / 100);
+			res.storeProducts((int)(fluctuation * productionPercentage * Math.ceil(maxProduction / 100.0)));
+            res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
 		}
 	}
 
@@ -247,7 +254,7 @@ public class IndustrialTile extends BuildableTile {
 	 *         = 100 (including X) and the population is Z = 20, then the
 	 *         residence has (X / Y) * Z = 10 products.
 	 */
-	private int getProducts(CityResources res) {
+	public int getProducts(CityResources res) {
 		assert res.getProductsCapacity() != 0;
 
 		return res.getProductsCount() * this.productsCapacity / res.getProductsCapacity();

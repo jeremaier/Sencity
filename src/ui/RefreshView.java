@@ -29,51 +29,77 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import launcher.SimCityUI;
+import model.CityResources;
 import model.GameBoard;
 
 public class RefreshView extends JPanel {
 
-    // Constant
-    private static final long serialVersionUID = 1L;
+	// Constant
+	private static final long serialVersionUID = 1L;
 
-    // Creation
-    public RefreshView(JFrame frame, GameBoard game, MessagesView mv) {
-        super();
-        
-        JButton refresh = new JButton(MainFrame.getTexts().getRefreshButtonLabel());
-        JButton save = new JButton(MainFrame.getTexts().getSaveButtonLabel());
-        JButton newGame = new JButton(MainFrame.getTexts().getNewGameButtonLabel());
-        JButton load = new JButton(MainFrame.getTexts().getLoadButtonLabel());
-        JButton options = new JButton("Options");
-        JButton[] buttons = {refresh, save, newGame, load, options};
+	// Creation
+	public RefreshView(JFrame frame, GameBoard game, MessagesView mv) {
+		super();
+
+		CityResources res = game.getResources();
+		JLabel label = new JLabel(game.getTexts().getVatLabel() + " : " + res.getVat()); 
+		JSlider slider = new JSlider();
+
+		slider.setMinimum(10);
+		slider.setMaximum(60);
+		slider.setValue(res.getVat());
+		slider.setPaintTicks(true);
+		slider.setPaintLabels(true);
+		slider.setMinorTickSpacing(5);
+		slider.setMajorTickSpacing(10);
+		slider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent event) {
+				final int vat = ((JSlider)event.getSource()).getValue();
+				label.setText(game.getTexts().getVatLabel() + " : " + vat);
+				res.setVat(vat);
+			}
+		});      
+
+		JButton refresh = new JButton(MainFrame.getTexts().getRefreshButtonLabel());
+		JButton save = new JButton(MainFrame.getTexts().getSaveButtonLabel());
+		JButton newGame = new JButton(MainFrame.getTexts().getNewGameButtonLabel());
+		JButton load = new JButton(MainFrame.getTexts().getLoadButtonLabel());
+		JButton options = new JButton("Options");
+		JButton[] buttons = {refresh, save, newGame, load, options};
 
 		this.setLayout(new GridLayout(0, 1, 0, 10));
 		this.actions(buttons, (SimCityUI)frame, game, mv, game.getHeight(), game.getWidth());
-        
-        for(JButton button : buttons)
-        	this.add(button);
-    }
+
+		this.add(label);
+		this.add(slider);
+		for(JButton button : buttons)
+			this.add(button);
+	}
 
 	private void actions(JButton[] buttons, SimCityUI frame, GameBoard game, MessagesView mv, int height, int width) {		
 		buttons[0].addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                game.nextState();
-            }
-        });
-        
-        buttons[1].addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int fileNbr = game.saveGame(game.getResources());
-                mv.savePrint(MainFrame.getTexts().getSaveMessage(fileNbr));
-            }
-        });
-		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				game.nextState();
+			}
+		});
+
+		buttons[1].addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int fileNbr = game.saveGame(game.getResources());
+				mv.savePrint(MainFrame.getTexts().getSaveMessage(fileNbr));
+			}
+		});
+
 		buttons[2].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -81,19 +107,19 @@ public class RefreshView extends JPanel {
 				frame.dispose();
 			}
 		});
-        
+
 		buttons[3].addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	frame.setNewPanel(new LoadView(frame, game, height, width));
-            }
-        });
-        
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.setNewPanel(new LoadView(frame, game, height, width));
+			}
+		});
+
 		buttons[4].addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	frame.setNewPanel(new OptionsView(frame, game, height, width));
-            }
-        });
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.setNewPanel(new OptionsView(frame, game, height, width));
+			}
+		});
 	}
 }

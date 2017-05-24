@@ -29,31 +29,31 @@ import model.CityResources;
 public class AirportTile extends TransportTile {
 	private static final long serialVersionUID = 1L;
 
-	// Constants  
-    /**
-     * Default value of {@link TransportTile#getProductsPrice()}
-     */
-    public final static int DEFAULT_PRODUCTS_PRICE = 4;
+    // Constants
+	/**
+	 * Default value of {@link TransportTile#getMaintenanceCost()}
+	 */
+	public final static int DEFAULT_MAINTENANCE_COST = 10;
     
     /**
      * Default value of {@link TransportTile#getMaxNeededEnergy()}
      */
-    public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
+    public final static int DEFAULT_MAX_NEEDED_ENERGY = 80;
     
-    /**
-     * Default value of {@link TransportTile#getMaxNeededProducts()}
-     */
-    public final static int DEFAULT_MAX_NEEDED_PRODUCTS = 30;
+	/**
+	 * Default value of {@link TransportTile#getMaxSoldProducts()}
+	 */
+	public final static int DEFAULT_MAX_SOLD_PRODUCTS = 30;
 
     /**
-     * Default value of {@link TransportTile#getNeededInhabitants()}
+     * Default value of {@link TransportTile#getMaxNeededInhabitants()}
      */
     public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 30;
-    
+	
     /**
-     * Default value of {@link TransportTile#getProductsCapacity()}
+     * Default value of {@link TransportTile#getProductsPrice()}
      */
-    protected final static int DEFAULT_PRODUCTS_CAPACITY = 10;
+    public final static int DEFAULT_PRODUCTS_PRICE = 10;
     
     /**
      * Default value of {@link TransportTile#getSatisfactionValue()}
@@ -65,20 +65,23 @@ public class AirportTile extends TransportTile {
      */
     public static boolean alreadyBuild = false;
 
-    public AirportTile(int capacity) {
+	public AirportTile() {
 		super(DEFAULT_PRODUCTS_PRICE);
 		
         this.maxNeededEnergy = AirportTile.DEFAULT_MAX_NEEDED_ENERGY;
-        this.maxNeededProducts = AirportTile.DEFAULT_MAX_NEEDED_PRODUCTS;
-        this.maxNeededInhabitants= AirportTile.DEFAULT_MAX_NEEDED_INHABITANTS;
+        this.maxSoldProducts = AirportTile.DEFAULT_MAX_SOLD_PRODUCTS;
+        this.maxNeededInhabitants = AirportTile.DEFAULT_MAX_NEEDED_INHABITANTS;
         this.satisfactionValue = AirportTile.DEFAULT_SATISFACTION_VALUE;
-		AirportTile.alreadyBuild = true;
-		this.productsCapacity = capacity;
+        this.maintenanceCost = AirportTile.DEFAULT_MAINTENANCE_COST;
+        AirportTile.alreadyBuild = true;
 	}
 	
-    public AirportTile() {
-        this(AirportTile.DEFAULT_PRODUCTS_CAPACITY);
-    }
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+        result = result * 17 + Boolean.hashCode(StadiumTile.alreadyBuild);
+        return result;
+	}
     
     @Override
     public boolean equals(Object o) {
@@ -88,7 +91,6 @@ public class AirportTile extends TransportTile {
     @Override
     public void disassemble(CityResources res) {
         if (!this.isDestroyed) {
-        	res.decreaseProductsCapacity(this.productsCapacity);
             this.isDestroyed = true;
             AirportTile.alreadyBuild = false;
         }

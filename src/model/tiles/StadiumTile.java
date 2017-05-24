@@ -25,155 +25,182 @@
 package model.tiles;
 
 import model.CityResources;
+import model.GameBoard;
 
 public class StadiumTile extends Tile implements Destroyable {
 	private static final long serialVersionUID = 1L;
-	
-    // Constants
-    /**
-     * Default value of {@link #getProductsPrice()}
-     */
-    public final static int DEFAULT_NEEDED_ENERGY = 100;
-    
-    /**
-     * Default value of {@link #getProductsPrice()}
-     */
-    public final static int DEFAULT_INCOME = 100;
-    
-    /**
-     * Default value of {@link #getSatisfactionValue()}
-     */
-    public final static int DEFAULT_SATISFACTION_VALUE = 10;
-    
-    /**
-     * {@link #getMaxNeededEnergy()}
-     */
-    private final int neededEnergy;
-    
+
+	// Constants
 	/**
-     * Evolution state
-     */
-    private boolean isDestroyed;
-    
-    /**
-     * {@link #isEnergyMissing()}
-     */
-    private boolean isEnergyMissing;
-    
+	 * Default value of {@link #getMaintenanceCost()}
+	 */
+	public final static int DEFAULT_MAINTENANCE_COST = 10;
+
 	/**
-    * {@link #getProductsPrice()}
-    */
-    private final int income;
-   
-    /**
-     * This building is already build?
-     */
-    public static boolean alreadyBuild = false;
-    
-    /**
-     * {@link #getSatisfactionValue()}
-     */
-    private int satisfactionValue;
+	 * Default value of {@link #getNeededEnergy()}
+	 */
+	public final static int DEFAULT_NEEDED_ENERGY = 80;
+
+	/**
+	 * Default value of {@link #getIncome()}
+	 */
+	public final static int DEFAULT_INCOME = 100;
+
+	/**
+	 * Default value of {@link #getSatisfactionValue()}
+	 */
+	public final static int DEFAULT_SATISFACTION_VALUE = 10;
+
+	/**
+	 * {@link #getMaxNeededEnergy()}
+	 */
+	private final int neededEnergy;
+
+	/**
+	 * Evolution state
+	 */
+	private boolean isDestroyed;
+
+	/**
+	 * {@link #isEnergyMissing()}
+	 */
+	private boolean isEnergyMissing;
+
+	/**
+	 * {@link #getProductsPrice()}
+	 */
+	private final int income;
+
+	/**
+	 * This building is already build?
+	 */
+	public static boolean alreadyBuild = false;
+
+	/**
+	 * {@link #getSatisfactionValue()}
+	 */
+	private int satisfactionValue;
+
+	/**
+	 * {@link #getMaintenanceCost()}
+	 */
+	protected int maintenanceCost;
 
 	public StadiumTile() {
-        this.neededEnergy = StadiumTile.DEFAULT_NEEDED_ENERGY;
-        this.income = StadiumTile.DEFAULT_INCOME;
-        this.satisfactionValue = StadiumTile.DEFAULT_SATISFACTION_VALUE;
+		this.neededEnergy = StadiumTile.DEFAULT_NEEDED_ENERGY;
+		this.income = StadiumTile.DEFAULT_INCOME;
+		this.satisfactionValue = StadiumTile.DEFAULT_SATISFACTION_VALUE;
+		this.maintenanceCost = StadiumTile.DEFAULT_MAINTENANCE_COST;
 		StadiumTile.alreadyBuild = true;
-        this.isEnergyMissing = false;
+		this.isEnergyMissing = false;
 	}
-	
+
 	// Access
-    /**
-     * @return Energy units to consume by default.
-     */
+	/**
+	 * @return Energy units to consume by default.
+	 */
 	public int getNeededEnergy() {
 		return neededEnergy;
 	}
-	
-    /**
-     * @return Income per round.
-     */
-    public final int getIncome() {
-        return this.income;
-    }
-	
-    /**
-     * @return Is energy missing in order to evolve or to update?
-     */
-    public final boolean isEnergyMissing() {
-        return this.isEnergyMissing;
-    }
-    
-    /**
-     * @return Increase or decrease value of satisfaction
-     */
-    public final int getSatisfaction() {
-    	return this.satisfactionValue;
-    }
-    
-    @Override
-    public void disassemble(CityResources res) {
-        if (!this.isDestroyed) {
-        	this.isDestroyed = true;
-        	StadiumTile.alreadyBuild = false;
-        }
-    }
+
+	/**
+	 * @return Income per round.
+	 */
+	public final int getIncome() {
+		return this.income;
+	}
+
+	/**
+	 * @return Is energy missing in order to evolve or to update?
+	 */
+	public final boolean isEnergyMissing() {
+		return this.isEnergyMissing;
+	}
+
+	/**
+	 * @return Increase or decrease value of satisfaction
+	 */
+	public final int getSatisfactionValue() {
+		return this.satisfactionValue;
+	}
+
+	/**
+	 * @return Maintenance cost.
+	 */
+	public int getMaintenanceCost() {
+		return this.maintenanceCost;
+	}
+
+	@Override
+	public void disassemble(CityResources res) {
+		if (!this.isDestroyed) {
+			this.isDestroyed = true;
+			StadiumTile.alreadyBuild = false;
+		}
+	}
 
 	@Override
 	public boolean isDestroyed() {
 		return this.isDestroyed;
 	}
-	
-    @Override
-    public int hashCode() {
-        int result = 1;
-        result = result * 17 + this.neededEnergy;
-        result = result * 17 + this.income;
-        result = result * 17 + Boolean.hashCode(this.isDestroyed);
-        result = result * 17 + Boolean.hashCode(this.isEnergyMissing);
-        return result;
-    }
 
-    // Status
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof StadiumTile && this.equals((StadiumTile) o);
-    }
+	@Override
+	public int hashCode() {
+		int result = 1;
+		result = result * 17 + this.neededEnergy;
+		result = result * 17 + this.income;
+		result = result * 17 + this.maintenanceCost;
+		result = result * 17 + this.satisfactionValue;
+		result = result * 17 + Boolean.hashCode(StadiumTile.alreadyBuild);
+		result = result * 17 + Boolean.hashCode(this.isDestroyed);
+		result = result * 17 + Boolean.hashCode(this.isEnergyMissing);
+		return result;
+	}
 
-    /**
-     * @param o
-     * @return Is {@value o} equals to this?
-     */
-    public boolean equals(StadiumTile o) {
-        return this == o || super.equals(o)
-                && o.neededEnergy == this.neededEnergy
-                && o.income == this.income
-                && o.isDestroyed == this.isDestroyed
-                && o.isEnergyMissing == this.isEnergyMissing;
-    }
+	// Status
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof StadiumTile && this.equals((StadiumTile) o);
+	}
+
+	/**
+	 * @param o
+	 * @return Is {@value o} equals to this?
+	 */
+	public boolean equals(StadiumTile o) {
+		return this == o || super.equals(o)
+				&& o.neededEnergy == this.neededEnergy
+				&& o.income == this.income
+				&& o.isDestroyed == this.isDestroyed
+				&& o.isEnergyMissing == this.isEnergyMissing
+				&& o.satisfactionValue == this.satisfactionValue
+				&& o.isDestroyed == this.isDestroyed
+				&& o.maintenanceCost == this.maintenanceCost;
+	}
 
 	@Override
 	public void update(CityResources res) {
-        if (!this.isDestroyed) {
-            int vacantPercentage = 100;
-            int energyAvailable = this.neededEnergy;
-            
-            if(res.getUnconsumedEnergy() >= this.neededEnergy) {
-                this.isEnergyMissing = false;
-            } else {
-            	energyAvailable = res.getUnconsumedEnergy();
-                vacantPercentage -= energyAvailable / this.neededEnergy * 100;
-            	this.isEnergyMissing = true;
-            }
-            
-            res.consumeEnergy(energyAvailable);
-            res.creditWithTaxes(vacantPercentage * this.income / 100);
-            this.updateSatisfaction(res);
-        }
+		if(!this.isDestroyed) {
+			final double fluctuation = (5 + (Math.random() * 10)) / 10;
+			int busyPercentage = 100;
+			int consumedEnergy = this.neededEnergy;
+
+			if(res.getUnconsumedEnergy() >= consumedEnergy)
+				this.isEnergyMissing = false;
+			else {
+				consumedEnergy = res.getUnconsumedEnergy();
+				busyPercentage -= consumedEnergy / this.neededEnergy * 100.0;
+				this.isEnergyMissing = true;
+			}
+
+			res.consumeEnergy(Math.max(15, consumedEnergy));
+			res.creditWithTaxes((int)(fluctuation * busyPercentage * this.income / 100.0));
+			res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
+			this.updateSatisfaction(res, busyPercentage);
+		}
 	}
-	
-    private void updateSatisfaction(CityResources res) {
-		res.increaseSatisfaction(this.satisfactionValue);
+
+	private void updateSatisfaction(CityResources res, int percentage) {
+		res.increaseSatisfaction((int)(this.satisfactionValue * percentage / 100.0));
 	}
 }

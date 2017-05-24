@@ -242,6 +242,13 @@ public class CityResources implements Serializable {
 
     // Change (Currency)
     /**
+     * @return Set the Value-Added-Tax in percentage.
+     */
+    public void setVat(int vat) {
+        this.vat = vat;
+    }
+    
+    /**
      * Decrease {@link #getCurrency()} by {@value amount}.
      *
      * @param amount
@@ -390,20 +397,21 @@ public class CityResources implements Serializable {
      */
     public void storeProducts(int amount) {
         assert amount >= 0;
-
+        
         this.productsCount = Math.min(this.productsCapacity, this.productsCount + amount);
     }
 
     /**
      * Decrease {@link #getProductsCapacity()} by {@value amount}.
-     *
+     * 
+     * @param products 
      * @param amount
      */
-    public void decreaseProductsCapacity(int amount) {
+    public void decreaseProductsCapacity(int products, int amount) {
         assert 0 <= amount && amount <= this.getProductsCapacity();
 
-        this.productsCapacity = this.productsCapacity - amount;
-        this.productsCount = Math.min(this.productsCount, this.productsCapacity);
+        this.productsCapacity -= amount;
+        this.productsCount -= products;
     }
 
     /**
