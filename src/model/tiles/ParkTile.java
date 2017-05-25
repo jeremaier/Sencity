@@ -30,7 +30,7 @@ import model.GameBoard;
 /**
  * Enable to reduce pollution in a certain area.
  */
-public class ParkLabel extends Tile implements Destroyable {
+public class ParkTile extends Tile implements Destroyable {
 	private static final long serialVersionUID = 1L;
 
 	// Constants
@@ -40,10 +40,15 @@ public class ParkLabel extends Tile implements Destroyable {
 	public final static int DEFAULT_MAINTENANCE_COST = 3;
 
 	/**
-	 * Default value of {@link ParkLabel#getNeededInhabitants()}
+	 * Default value of {@link #getNeededInhabitants()}
 	 */
 	public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 5;
 
+	/**
+	 * Default value of {@link #getSatisfactionValue()}
+	 */
+	public final static int DEFAULT_SATISFACTION_VALUE = 5;
+	
 	// Implementation
 	/**
 	 * {@link #getMaxWorkingInhabitants()}
@@ -75,10 +80,11 @@ public class ParkLabel extends Tile implements Destroyable {
     /**
      * Create with default settings.
      */
-	public ParkLabel() {
+	public ParkTile() {
 		super();
-		this.maxNeededInhabitants = ParkLabel.DEFAULT_MAX_NEEDED_INHABITANTS;
-		this.maintenanceCost = ParkLabel.DEFAULT_MAINTENANCE_COST;
+		this.maxNeededInhabitants = ParkTile.DEFAULT_MAX_NEEDED_INHABITANTS;
+		this.maintenanceCost = ParkTile.DEFAULT_MAINTENANCE_COST;
+		this.satisfactionValue = ParkTile.DEFAULT_SATISFACTION_VALUE;
 	}
 
 	// Access
@@ -95,6 +101,13 @@ public class ParkLabel extends Tile implements Destroyable {
      */
     public final int getSatisfactionValue() {
     	return this.satisfactionValue;
+    }
+    
+    /**
+     * @return Maintenance cost.
+     */
+    public int getMaintenanceCost() {
+    	return this.maintenanceCost;
     }
 	
     /**
@@ -115,17 +128,17 @@ public class ParkLabel extends Tile implements Destroyable {
 	// Status
 	@Override
 	public boolean equals(Object o) {
-		return o instanceof ParkLabel && this.equals((ParkLabel) o);
+		return o instanceof ParkTile && this.equals((ParkTile) o);
 	}
 
 	/**
 	 * @param o
 	 * @return Is {@value o} equals to this?
 	 */
-	public boolean equals(ParkLabel o) {
-		return this == o || super.equals(o)
-				&& o.maxNeededInhabitants == this.maxNeededInhabitants
-				&& o.maintenanceCost == this.maintenanceCost;
+	public boolean equals(ParkTile o) {
+		return this == o || o.maxNeededInhabitants == this.maxNeededInhabitants
+				&& o.maintenanceCost == this.maintenanceCost
+				&& o.satisfactionValue == this.satisfactionValue;
 	}
 
 	@Override

@@ -142,7 +142,7 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
 
     @Override
     public void evolve(CityResources res) {
-        if (canEvolve() && this.state == ConstructionState.UNDER_CONSTRUCTION && !(this instanceof PowerPlantTile)) {
+        if (this.canEvolve() && !(this instanceof PowerPlantTile)) {
             if (res.getUnconsumedEnergy() >= evolutionEnergyConsumption) {
                 this.isEnergyMissing = false;
 
@@ -151,5 +151,4 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
             } else this.isEnergyMissing = true;
         }
     }
-
 }

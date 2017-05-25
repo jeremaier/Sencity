@@ -35,13 +35,10 @@ public class CommercialTileTest {
 		final int neededEnergy = Math.max(2, ct.getMaxNeededEnergy());
 		final int meanPrice = ct.getMaxSoldProducts() * ct.getProductsPrice();
 		final long meanEarn = initialCurrency + meanPrice * resources.getVat() / 100 - Math.round(ct.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff());
-		final int minPrice = (int)(meanEarn * 0.7);
-		final int maxPrice = (int)(meanEarn * 1.3);
 		Assert.assertEquals(ct.isEnergyMissing(), false);
 		Assert.assertEquals(ct.isPopulationMissing(), false);
 		Assert.assertEquals(initialEnergy - neededEnergy, resources.getUnconsumedEnergy());
-		Assert.assertEquals(true, minPrice <= resources.getCurrency());
-		Assert.assertEquals(true, maxPrice >= resources.getCurrency());
+		Assert.assertEquals(resources.getCurrency(), meanEarn, meanEarn * 0.3);
 		Assert.assertEquals(initialProducts - ct.getMaxSoldProducts(), resources.getProductsCount());		
 	}
 	
@@ -57,7 +54,9 @@ public class CommercialTileTest {
         at.update(resources);
         final int initialEnergy = resources.getUnconsumedEnergy();
 		final int initialProducts = resources.getProductsCount();
+        final int initialPopulation = resources.getUnworkingPopulation();
         at.disassemble(resources);
+        Assert.assertEquals(Math.max(0, initialPopulation), resources.getUnworkingPopulation());
         Assert.assertEquals(Math.max(0, initialEnergy), resources.getUnconsumedEnergy());
         Assert.assertEquals(Math.max(0, initialProducts), resources.getProductsCount());
         Assert.assertEquals(AirportTile.alreadyBuild, false);

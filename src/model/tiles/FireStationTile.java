@@ -36,36 +36,40 @@ public class FireStationTile extends BuildableTile {
 
 	// Constants
 	/**
-	 * Default value of {@link FireStationTile#getMaintenanceCost()}
+	 * Default value of {@link #getMaintenanceCost()}
 	 */
 	public final static int DEFAULT_MAINTENANCE_COST = 4;
 
 	/**
-	 * Default value of {@link FireStationTile#getEvolutionEnergyConsumption()}
+	 * Default value of {@link #getEvolutionEnergyConsumption()}
 	 */
 	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
 	/**
-	 * Default value of {@link FireStationTile#getMaxNeededEnergy()}
+	 * Default value of {@link #getMaxNeededInhabitants()}
+	 */
+	public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 15;
+	
+	/**
+	 * Default value of {@link #getMaxNeededEnergy()}
 	 */
 	public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
 
 	/**
-	 * Default value of {@link FireStationTile#getSatisfactionValue()}
+	 * Default value of {@link #getSatisfactionValue()}
 	 */
 	public final static int DEFAULT_SATISFACTION_VALUE = 5;
 
 	// Implementation
+	/**
+	 * {@link #getMaxWorkingInhabitants()}
+	 */
+	private final int maxNeededInhabitants;
 
 	/**
 	 * {@link #getMaxNeededEnergy()}
 	 */
 	private final int maxNeededEnergy;
-
-	/**
-	 * {@link #getMaintenanceCost()}
-	 */
-	private final int maintenanceCost;
 
 	/**
 	 * {@link #getSatisfactionValue()}
@@ -82,6 +86,7 @@ public class FireStationTile extends BuildableTile {
 		this.satisfactionValue = FireStationTile.DEFAULT_SATISFACTION_VALUE;
 		this.maintenanceCost = FireStationTile.DEFAULT_MAINTENANCE_COST;
 		this.maxNeededEnergy = FireStationTile.DEFAULT_MAX_NEEDED_ENERGY;
+		this.maxNeededInhabitants = PoliceStationTile.DEFAULT_MAX_NEEDED_INHABITANTS;
 	}
 
 	// Access
@@ -99,6 +104,14 @@ public class FireStationTile extends BuildableTile {
 	 */
 	public final int getSatisfactionValue() {
 		return this.satisfactionValue;
+	}
+
+	/**
+	 * @return Maximum number of inhabitants at work. This maximum is working
+	 * 		   if the commerce is full.
+	 */
+	public final int getMaxNeededInhabitants() {
+		return this.maxNeededInhabitants;
 	}
 
 	@Override
@@ -141,29 +154,48 @@ public class FireStationTile extends BuildableTile {
 
 	@Override
 	public void evolve(CityResources res) {
-		this.update(res);
-
 		super.evolve(res);
+
+		this.update(res);
 	}
 
 	@Override
 	public void update(CityResources res) {
 		if (this.state == ConstructionState.BUILT) {
-			int vacantPercentage = 100;
-			int neededEnergy = Math.max(1,this.maxNeededEnergy / 100);
+			int busyPercentage = 100;
+			int consumedEnergy = this.maxNeededEnergy;
+			int workingPopulation = this.maxNeededInhabitants;
+			final boolean enoughEnergy = res.getUnconsumedEnergy() >= consumedEnergy;
+			final boolean enoughPopulation = res.getUnworkingPopulation() > workingPopulation;
 
-			if (res.getUnconsumedEnergy() >= neededEnergy) {
-				res.consumeEnergy(neededEnergy);
+			if(enoughEnergy && enoughPopulation)
 				this.isEnergyMissing = false;
-			} else {
-				final int consumedEnergy = res.getUnconsumedEnergy();
-				vacantPercentage -= consumedEnergy / neededEnergy * 100;
-				res.consumeEnergy(consumedEnergy);
+			else {
+				if(!enoughEnergy) {
+					consumedEnergy = res.getUnconsumedEnergy();
+					this.isEnergyMissing = true;
+				} else this.isEnergyMissing = false;
+
+				if(!enoughPopulation) {
+					workingPopulation = res.getUnworkingPopulation();
+					this.isPopulationMissing = true;
+				} else this.isPopulationMissing = false;
+				
+				final float energyPercentage = (float)consumedEnergy / this.maxNeededEnergy;
+				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
+				
+				busyPercentage -= energyPercentage * workersPercentage;
 				this.isEnergyMissing = true;
 			}
 
+			res.consumeEnergy(Math.max(3, consumedEnergy));
+			res.hireWorkers(workingPopulation);
 			res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
-			res.increaseSatisfaction(satisfactionValue * vacantPercentage);
+			this.updateSatisfaction(res, busyPercentage);
 		}
+	}
+
+	private void updateSatisfaction(CityResources res, int percentage) {
+		res.increaseSatisfaction((int)(this.satisfactionValue * percentage / 100.0));
 	}
 }

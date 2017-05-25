@@ -35,13 +35,10 @@ public class HarborTileTest {
 		final int neededEnergy = Math.max(10, ht.getMaxNeededEnergy());
 		final int meanPrice = ht.getMaxSoldProducts() * ht.getProductsPrice();
 		final long meanEarn = initialCurrency + meanPrice * resources.getVat() / 100 - Math.round(ht.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff());
-		final int minPrice = (int)(meanEarn * 0.6);
-		final int maxPrice = (int)(meanEarn * 1.4);
 		Assert.assertEquals(ht.isEnergyMissing(), false);
 		Assert.assertEquals(ht.isPopulationMissing(), false);
 		Assert.assertEquals(initialEnergy - neededEnergy, resources.getUnconsumedEnergy());
-		Assert.assertEquals(true, minPrice <= resources.getCurrency());
-		Assert.assertEquals(true, maxPrice >= resources.getCurrency());
+		Assert.assertEquals(resources.getCurrency(), meanEarn, meanEarn * 0.4);
 		Assert.assertEquals(initialProduhts - ht.getMaxSoldProducts(), resources.getProductsCount());		
 	}
 	

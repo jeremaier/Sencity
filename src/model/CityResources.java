@@ -447,10 +447,7 @@ public class CityResources implements Serializable {
      * @param amount
      */
 	public void increaseSatisfaction(int amount) {
-		final int totalSatisfaction = this.satisfaction + amount;
-		
-		if(totalSatisfaction <= 100)
-			this.satisfaction = totalSatisfaction;
+		Math.max(100, this.satisfaction + amount);
 	}
 
     /**
