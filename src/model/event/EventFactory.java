@@ -26,7 +26,6 @@ package model.event;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import localization.LocalizedTexts;
 import model.CityResources;
 import model.GameBoard;
-import model.tiles.WaterTile;
+import model.difficulty.DifficultyLevel;
 
 /**
  * The EventFactory generates Events according to their probabilities.
@@ -45,8 +44,8 @@ public class EventFactory extends Event{
     /**
      * Default Constructor.
      */
-	public EventFactory(){
-		super();
+	public EventFactory(GameBoard world){
+		super(world);
 	}
     public static enum eventType {
         NOTHING,
@@ -62,60 +61,71 @@ public class EventFactory extends Event{
     /**
      * Probabilities bound to a specific event. The sum of all probabilities
      * must be equal to 100
+     * 
+     * {@link #getEvent_probabilities}
      */
-    private static final Map<eventType, Integer> event_probabilities = Collections.unmodifiableMap(new HashMap<eventType, Integer>() {
-        /**
-         *
-         */
+    
+    
+    private Map<eventType, Integer> event_probabilities = new HashMap<eventType, Integer>() {
         private static final long serialVersionUID = -6805412774816642699L;
 
-        {
-        	
-        /*	
-        if( world.getTilesArea(startingTile, 4).contains(WaterTile.getDefault()) ){
-                this.put(eventType.STEAL, 100);
-                this.put(eventType.NOTHING, 0);
-                this.put(eventType.INVESTMENT, 0);
-            	this.put(eventType.MATCH, 0);
-                this.put(eventType.FIRE, 0);
-                this.put(eventType.DISEASE, 0);
-                this.put(eventType.FESTIVAL, 0);
-                this.put(eventType.EARTHQUAKE, 0);
-        	}else{
-                this.put(eventType.STEAL, 0);
-                this.put(eventType.NOTHING, 100);
-                this.put(eventType.INVESTMENT, 0);
-            	this.put(eventType.MATCH, 0);
-                this.put(eventType.FIRE, 0);
-                this.put(eventType.DISEASE, 0);
-                this.put(eventType.FESTIVAL, 0);
-                this.put(eventType.EARTHQUAKE, 0);
-        	}
-        */
-        
-        this.put(eventType.STEAL, 100);
-        this.put(eventType.NOTHING, 0);
-        this.put(eventType.INVESTMENT, 0);
-    	this.put(eventType.MATCH, 0);
-        this.put(eventType.FIRE, 0);
-        this.put(eventType.DISEASE, 0);
-        this.put(eventType.FESTIVAL, 0);
-        this.put(eventType.EARTHQUAKE, 0);
-        	
-        	
+        {    	
         }
-    });
+    };
+    
+	public Map<eventType, Integer> getEvent_probabilities() {
+		return event_probabilities;
+	}
 
-    private static final List<eventType> probalisticEventsList = new ArrayList<>(100);
-    static {
-        int probaSum = EventFactory.event_probabilities.values().stream().mapToInt(Number::intValue).sum();
-        assert probaSum == 100 : MessageFormat.format("The sum of events probabilities must be equal to 100 (currently {0})", probaSum);
-        for (Map.Entry<eventType, Integer> event_entry : EventFactory.event_probabilities.entrySet()) {
-            for (int i = 0; i < event_entry.getValue(); i++) {
-                EventFactory.probalisticEventsList.add(event_entry.getKey());
-            }
-        }
-    }
+	public void setEvent_probabilities(Map<eventType, Integer> event_probabilities,GameBoard world) {
+		
+		if(GameBoard.getDifficulty()==DifficultyLevel.EASY_LEVEL){
+			
+			event_probabilities.put(eventType.NOTHING, 40);
+			
+			event_probabilities.put(eventType.MATCH, 10);
+			event_probabilities.put(eventType.INVESTMENT, 10);
+			event_probabilities.put(eventType.FESTIVAL, 10);
+			
+			
+			event_probabilities.put(eventType.DISEASE, 5);
+			event_probabilities.put(eventType.STEAL, 10);
+			event_probabilities.put(eventType.FIRE, 10);
+			event_probabilities.put(eventType.EARTHQUAKE, 5);
+			
+		}else if(GameBoard.getDifficulty()==DifficultyLevel.STANDARD_LEVEL){
+			
+			event_probabilities.put(eventType.NOTHING, 15);
+			
+			event_probabilities.put(eventType.MATCH, 5);
+			event_probabilities.put(eventType.INVESTMENT, 10);
+			event_probabilities.put(eventType.FESTIVAL, 10);
+			
+			
+			
+			event_probabilities.put(eventType.DISEASE, 10);
+			event_probabilities.put(eventType.STEAL, 20);
+			event_probabilities.put(eventType.FIRE, 20);
+			event_probabilities.put(eventType.EARTHQUAKE, 10);
+			
+		}else if(GameBoard.getDifficulty()==DifficultyLevel.HARD_LEVEL){
+			
+			event_probabilities.put(eventType.NOTHING, 15);
+			
+			event_probabilities.put(eventType.MATCH, 5);
+			event_probabilities.put(eventType.INVESTMENT, 5);
+			event_probabilities.put(eventType.FESTIVAL, 5);
+			
+			event_probabilities.put(eventType.DISEASE, 10);
+			event_probabilities.put(eventType.STEAL, 25);
+			event_probabilities.put(eventType.FIRE, 25);
+			event_probabilities.put(eventType.EARTHQUAKE, 10);
+			
+		}
+		
+		this.event_probabilities = event_probabilities;
+		
+	}
 
     /**
      * Generates a random Event according to the probability set in
@@ -123,9 +133,22 @@ public class EventFactory extends Event{
      *
      * @return
      */
-    public static Event generateEvent(GameBoard world) {
-        int index = ThreadLocalRandom.current().nextInt(0, EventFactory.probalisticEventsList.size());
-        eventType type = EventFactory.probalisticEventsList.get(index);
+    public Event generateEvent(GameBoard world) {
+    	
+    	setEvent_probabilities(getEvent_probabilities(),world);
+    	
+    	List<eventType> probalisticEventsList = new ArrayList<>(100);{
+            int probaSum = this.getEvent_probabilities().values().stream().mapToInt(Number::intValue).sum();
+            assert probaSum == 100 : MessageFormat.format("The sum of events probabilities must be equal to 100 (currently {0})", probaSum);
+            for (Map.Entry<eventType, Integer> event_entry : this.getEvent_probabilities().entrySet()) {
+                for (int i = 0; i < event_entry.getValue(); i++) {
+                    probalisticEventsList.add(event_entry.getKey());
+                }
+            }
+        }
+    	
+        int index = ThreadLocalRandom.current().nextInt(0, probalisticEventsList.size());
+        eventType type = probalisticEventsList.get(index);
         Event result;
         switch (type) {
         	case MATCH:

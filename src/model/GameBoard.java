@@ -489,7 +489,7 @@ public class GameBoard extends Observable implements Serializable {
 	 * Generates a new event and applies its effects.
 	 */
 	private void applyNewEvent() {
-		Event event = EventFactory.generateEvent(this);
+		Event event = (new EventFactory(this)).generateEvent(this);
 		List<Event> resultingEvents = event.applyEffects(this.resources);
 		assert resultingEvents != null;
 		String eventMessage = event.getMessage(this.texts);

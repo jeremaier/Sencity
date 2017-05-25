@@ -26,6 +26,9 @@ public class EarthquakeEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
+		System.out.println("Un tremblement de terre a fait des dégâts");
+		System.out.println("("+ startingTile.getRow() +" , " + startingTile.getColumn() +" ).");
+		
 		if( !(world.tiles[startingTile.getRow()][startingTile.getColumn()] instanceof WaterTile) ){
 			world.tiles[startingTile.getRow()][startingTile.getColumn()] = GrassTile.getDefault();
 		}
