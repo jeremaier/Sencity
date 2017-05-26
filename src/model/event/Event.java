@@ -40,7 +40,7 @@ public abstract class Event {
 
     protected static TilePosition startingTile;
     protected Set<TilePosition> appearanceCoordinates;
-    protected static GameBoard world;
+    public static GameBoard world;
     
     /**
      * Default Constructor.
@@ -56,6 +56,7 @@ public abstract class Event {
         int startingRow = ThreadLocalRandom.current().nextInt(0, world.getHeight());
         int startingColumn = ThreadLocalRandom.current().nextInt(0, world.getWidth());
         startingTile = new TilePosition(startingRow, startingColumn);
+		System.out.println(world.tiles[0][0]);
     }
 
     /**

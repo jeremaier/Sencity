@@ -6,12 +6,15 @@ import java.util.List;
 import localization.LocalizedTexts;
 import model.CityResources;
 
-
 /**
- * The CriminalEvent make you loose money.
+ * The StealEvent make you loose money.
  */
 public class StealEvent extends Event {
-
+	/**
+	 * Money lost during the steal.
+	 */
+	public final static int MONEY_LOOSE = 150;
+	
     /**
      * Default Constructor.
      */
@@ -24,7 +27,7 @@ public class StealEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        resources.spend(5);
+        resources.spend(StealEvent.MONEY_LOOSE);
         return new ArrayList<>(0);
     }
 
@@ -33,14 +36,8 @@ public class StealEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		if(texts.getLangageName()=="Français"){
-			return "Vos commerces ont étés pillés";
-		}
-		else{
-			return "Your shops have been stealed";
-		}
+		return texts.getStealEventMessage();
     }
-
 }
 
 

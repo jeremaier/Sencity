@@ -1,5 +1,5 @@
-
 package model.event;
+
 import java.util.ArrayList;
 import java.util.List;
 import localization.LocalizedTexts;
@@ -9,6 +9,10 @@ import model.CityResources;
  * The MatchEvent give you some money.
  */
 public class MatchEvent extends Event {
+	/**
+	 * Money earn for a match.
+	 */
+	public final static int MONEY = 200;
 
     /**
      * Default Constructor.
@@ -17,13 +21,12 @@ public class MatchEvent extends Event {
         super();
     }
 
-
     /**
      * Apply no effects.
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        resources.credit(5);
+        resources.credit(MatchEvent.MONEY);
         return new ArrayList<>(0);
     }
 
@@ -32,13 +35,6 @@ public class MatchEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		if(texts.getLangageName()=="Français"){
-			return "Un grand match s'est déroulé dans votre stade";
-		}
-		else{
-			return "A great match took place in your stadium";
-		}
+		return texts.getMatchEventMessage();
     }
-
 }
-

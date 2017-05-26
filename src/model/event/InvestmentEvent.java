@@ -11,6 +11,7 @@ import model.tiles.IndustrialTile;
  * The InvestmentEvent make you earn more money.
  */
 public class InvestmentEvent extends Event {
+	public static final int PRODUCTION_INCREASMENT = 2;
 
     /**
      * Default Constructor.
@@ -19,13 +20,12 @@ public class InvestmentEvent extends Event {
         super();
     }
 
-
     /**
      * Apply no effects.
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        IndustrialTile.maxProduction+=3;
+        IndustrialTile.maxProduction += InvestmentEvent.PRODUCTION_INCREASMENT;
         return new ArrayList<>(0);
     }
 
@@ -34,13 +34,6 @@ public class InvestmentEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		if(texts.getLangageName()=="Français"){
-			return "Des investisseurs ont cru en votre industrie";
-		}
-		else{
-			return "Investors believed in your industry";
-		}
+		return texts.getInvestmentEventMessage();
     }
-
 }
-

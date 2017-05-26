@@ -6,11 +6,19 @@ import java.util.List;
 import localization.LocalizedTexts;
 import model.CityResources;
 
-
 /**
- * The CriminalEvent make you loose money.
+ * The FestivalEvent make you earn money.
  */
 public class FestivalEvent extends Event {
+	/**
+	 * Amount of money gain.
+	 */
+	public final static int MONEY = 50;
+	
+	/**
+	 * Amount of money gain.
+	 */
+	public final static int EXTRA_SATISFACTION = 5;
 
     /**
      * Default Constructor.
@@ -24,8 +32,8 @@ public class FestivalEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        resources.credit(5);
-        resources.increaseSatisfaction(5);
+        resources.credit(FestivalEvent.MONEY);
+        resources.increaseSatisfaction(FestivalEvent.EXTRA_SATISFACTION);
         return new ArrayList<>(0);
     }
 
@@ -34,13 +42,7 @@ public class FestivalEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		if(texts.getLangageName()=="Français"){
-			return "Un festival a été organisé";
-		}
-		else{
-			return "A festival was organized";
-		}
+		return texts.getFestivalEventMessage();
     }
-
 }
 

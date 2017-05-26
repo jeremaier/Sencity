@@ -117,7 +117,7 @@ public class IndustrialTile extends BuildableTile {
 	/**
 	 * @return Maximum number of production per round.
 	 */
-	public final int getMaxProduction() {
+	public static final int getMaxProduction() {
 		return maxProduction;
 	}
 

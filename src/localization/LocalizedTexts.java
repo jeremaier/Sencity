@@ -192,4 +192,39 @@ public abstract class LocalizedTexts implements Serializable {
 	 * @return Vat Label.
 	 */
 	public abstract String getVatLabel();
+
+	/**
+	 * @return Disease event message.
+	 */
+	public abstract String getDiseaseEventMessage();
+
+	/**
+	 * @return Earthquake event message.
+	 */
+	public abstract String getEarthquakeEventMessage(int row, int column);
+
+	/**
+	 * @return Festival event message.
+	 */
+	public abstract String getFestivalEventMessage();
+
+	/**
+	 * @return Fire event message.
+	 */
+	public abstract String getFireEventMessage();
+
+	/**
+	 * @return Investment event message.
+	 */
+	public abstract String getInvestmentEventMessage();
+
+	/**
+	 * @return Match event message.
+	 */
+	public abstract String getMatchEventMessage();
+
+	/**
+	 * @return Steal event message.
+	 */
+	public abstract String getStealEventMessage();
 }

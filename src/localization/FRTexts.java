@@ -185,4 +185,39 @@ public class FRTexts extends LocalizedTexts implements Serializable {
 	public String getVatLabel() {
 		return "Taxe sur les produits";
 	}
+	
+	@Override
+	public String getDiseaseEventMessage() {
+		return "Une maladie a fait des victimes";
+	}
+	
+	@Override
+	public String getEarthquakeEventMessage(int row, int column) {
+		return "Un tremblement de terre a fait des dégâts en (" + row + ", " + column + ")";
+	}
+	
+	@Override
+	public String getFestivalEventMessage() {
+		return "Un festival a été organisé";
+	}
+	
+	@Override
+	public String getFireEventMessage() {
+		return "Les réserves d'une industrie ont brulés";
+	}
+	
+	@Override
+	public String getInvestmentEventMessage() {
+		return "Des investisseurs ont cru en votre industrie";
+	}
+	
+	@Override
+	public String getMatchEventMessage() {
+		return "Un grand match s'est déroulé dans votre stade";
+	}
+	
+	@Override
+	public String getStealEventMessage() {
+		return "Vos commerces ont étés pillés";
+	}
 }

@@ -6,11 +6,14 @@ import java.util.List;
 import localization.LocalizedTexts;
 import model.CityResources;
 
-
 /**
- * The CriminalEvent make you loose money.
+ * The FireEvent make you loose products.
  */
 public class FireEvent extends Event {
+	/**
+	 * Number of products lost during the fire.
+	 */
+	public final static int PRODUCTS_LOOSE = 20;
 
     /**
      * Default Constructor.
@@ -24,7 +27,7 @@ public class FireEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        resources.consumeProducts(2);
+        resources.consumeProducts(FireEvent.PRODUCTS_LOOSE);
         return new ArrayList<>(0);
     }
 
@@ -33,13 +36,6 @@ public class FireEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		if(texts.getLangageName()=="Français"){
-			return "Les réserves d'une industrie ont brulés";
-		}
-		else{
-			return "Reserves of an industry burned";
-		}
+		return texts.getFireEventMessage();
     }
-
 }
-

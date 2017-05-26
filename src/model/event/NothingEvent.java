@@ -30,7 +30,6 @@ import java.util.List;
 import localization.LocalizedTexts;
 import model.CityResources;
 
-
 /**
  * The NothingEvent does nothing.
  */
@@ -58,5 +57,4 @@ public class NothingEvent extends Event {
     public String getMessage(LocalizedTexts texts) {
         return "";
     }
-
 }

@@ -6,12 +6,16 @@ import java.util.List;
 import localization.LocalizedTexts;
 import model.CityResources;
 
-
 /**
- * The CriminalEvent make you loose money.
+ * The DiseaseEvent make you loose money.
  */
 public class DiseaseEvent extends Event {
 
+	/**
+	 * Number of death.
+	 */
+	public final static int DEADS = 50;
+	
     /**
      * Default Constructor.
      */
@@ -24,22 +28,15 @@ public class DiseaseEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        resources.decreasePopulation(5);
+        resources.decreasePopulation(DiseaseEvent.DEADS);
         return new ArrayList<>(0);
     }
 
     /**
-     * Return an empty message.
+     * Return a disease event message.
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		if(texts.getLangageName()=="Français"){
-			return "Une maladie a fait des victimes";
-		}
-		else{
-			return "A disease killed people";
-		}
+		return texts.getDiseaseEventMessage();
     }
-
 }
-

@@ -14,40 +14,30 @@ import model.tiles.WaterTile;
  */
 public class EarthquakeEvent extends Event {
 
-    /**
-     * Constructor.
-     */
+	/**
+	 * Constructor.
+	 */
 	public EarthquakeEvent(GameBoard world) {
-        super(world);
-    }
-	
-    /**
-     * Apply no effects.
-     */
-	@Override
-    public List<Event> applyEffects(CityResources resources) {
-		System.out.println("Un tremblement de terre a fait des dégâts");
-		System.out.println("("+ startingTile.getRow() +" , " + startingTile.getColumn() +" ).");
-		
-		if( !(world.tiles[startingTile.getRow()][startingTile.getColumn()] instanceof WaterTile) ){
-			world.tiles[startingTile.getRow()][startingTile.getColumn()] = GrassTile.getDefault();
-		}
-        return new ArrayList<>(0);
-    }
+		super(world);
+	}
 
 	/**
-     * Return an empty message.
-     */
+	 * Apply no effects.
+	 */
 	@Override
-    public String getMessage(LocalizedTexts texts) {
-		if(texts.getLangageName()=="Français"){
-			return "Un tremblement de terre a fait des dégâts en ("+ startingTile.getRow() +" , " + startingTile.getColumn() +" ).";
-		}
-		else{
-			return "Earthquake occured at ("+ startingTile.getRow() +" , " + startingTile.getColumn() +" ).";
-		}
+	public List<Event> applyEffects(CityResources resources) {
+		System.out.println(world);
+		if(!(world.tiles[startingTile.getRow()][startingTile.getColumn()] instanceof WaterTile))
+			world.tiles[startingTile.getRow()][startingTile.getColumn()] = GrassTile.getDefault();
+
+		return new ArrayList<>(0);
+	}
+
+	/**
+	 * Return an empty message.
+	 */
+	@Override
+	public String getMessage(LocalizedTexts texts) {
+		return texts.getEarthquakeEventMessage(startingTile.getRow(), startingTile.getColumn());
 	}
 }
-
-
-

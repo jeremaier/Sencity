@@ -185,4 +185,39 @@ public class UKTexts extends LocalizedTexts implements Serializable {
 	public String getVatLabel() {
 		return "Tax on products";
 	}
+	
+	@Override
+	public String getDiseaseEventMessage() {
+		return "A disease killed people";
+	}
+	
+	@Override
+	public String getEarthquakeEventMessage(int row, int column) {
+		return "Earthquake occured at (" + row + ", " + column + ")";
+	}
+	
+	@Override
+	public String getFestivalEventMessage() {
+		return "A festival was organized";
+	}
+	
+	@Override
+	public String getFireEventMessage() {
+		return "Reserves of an industry burned";
+	}
+	
+	@Override
+	public String getInvestmentEventMessage() {
+		return "Investors believed in your industry";
+	}
+	
+	@Override
+	public String getMatchEventMessage() {
+		return "A great match took place in your stadium";
+	}
+	
+	@Override
+	public String getStealEventMessage() {
+		return "Your shops have been stealed";
+	}
 }
