@@ -101,6 +101,11 @@ public class FRTexts extends LocalizedTexts implements Serializable {
 		return "Satisfaction actuelle";
 	}
 
+	@Override
+	public String getPollutionLabel() {
+		return "Pollution actuelle";
+	}
+
     @Override
 	public String getNextToMsg(Tile tile) {
 		return "Ce batiment doit être posé à côté de l'eau";
@@ -192,6 +197,11 @@ public class FRTexts extends LocalizedTexts implements Serializable {
 	}
 	
 	@Override
+	public String getStoppedDiseaseEventMessage() {
+		return "Une maladie a été arrêtée à temps avant de tuer trop de population";
+	}
+	
+	@Override
 	public String getEarthquakeEventMessage(int row, int column) {
 		return "Un tremblement de terre a fait des dégâts en (" + row + ", " + column + ")";
 	}
@@ -207,6 +217,11 @@ public class FRTexts extends LocalizedTexts implements Serializable {
 	}
 	
 	@Override
+	public String getExtinctFireEventMessage() {
+		return "Un feu a été éteint par les pompiers";
+	}
+	
+	@Override
 	public String getInvestmentEventMessage() {
 		return "Des investisseurs ont cru en votre industrie";
 	}
@@ -217,7 +232,17 @@ public class FRTexts extends LocalizedTexts implements Serializable {
 	}
 	
 	@Override
+	public String getCancelledMatchEventMessage() {
+		return "Un match n'a pas pu être organisé dans votre ville";
+	}
+	
+	@Override
 	public String getStealEventMessage() {
 		return "Vos commerces ont étés pillés";
+	}
+
+	@Override
+	public String getFoilStealEventMessage() {
+		return "Un voleur a été arrêté par la police";
 	}
 }

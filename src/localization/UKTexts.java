@@ -101,6 +101,11 @@ public class UKTexts extends LocalizedTexts implements Serializable {
 		return "Actual satisfaction";
 	}
 
+	@Override
+	public String getPollutionLabel() {
+		return "Actual pollution";
+	}
+
     @Override
 	public String getNextToMsg(Tile tile) {
 		return "This building need to be build next to water";
@@ -192,6 +197,11 @@ public class UKTexts extends LocalizedTexts implements Serializable {
 	}
 	
 	@Override
+	public String getStoppedDiseaseEventMessage() {
+		return "A disease was arrested in time before killing too many people";
+	}
+	
+	@Override
 	public String getEarthquakeEventMessage(int row, int column) {
 		return "Earthquake occured at (" + row + ", " + column + ")";
 	}
@@ -207,6 +217,11 @@ public class UKTexts extends LocalizedTexts implements Serializable {
 	}
 	
 	@Override
+	public String getExtinctFireEventMessage() {
+		return "A fire has been extinguished";
+	}
+	
+	@Override
 	public String getInvestmentEventMessage() {
 		return "Investors believed in your industry";
 	}
@@ -217,7 +232,17 @@ public class UKTexts extends LocalizedTexts implements Serializable {
 	}
 	
 	@Override
+	public String getCancelledMatchEventMessage() {
+		return "A match could not be organized in your city";
+	}
+	
+	@Override
 	public String getStealEventMessage() {
 		return "Your shops have been stealed";
+	}
+
+	@Override
+	public String getFoilStealEventMessage() {
+		return "A thief was arrested by the police";
 	}
 }

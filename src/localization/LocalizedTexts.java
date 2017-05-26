@@ -109,6 +109,11 @@ public abstract class LocalizedTexts implements Serializable {
     public abstract String getSatisfactionLabel();
     
     /**
+     * @return Pollution label.
+     */
+	public abstract String getPollutionLabel();
+
+    /**
      * @return Message that indicates that the tool need to be next to a certain tile.
      */
 	public abstract String getNextToMsg(Tile tile);
@@ -199,6 +204,11 @@ public abstract class LocalizedTexts implements Serializable {
 	public abstract String getDiseaseEventMessage();
 
 	/**
+	 * @return Stopped disease event message.
+	 */
+	public abstract String getStoppedDiseaseEventMessage();
+	
+	/**
 	 * @return Earthquake event message.
 	 */
 	public abstract String getEarthquakeEventMessage(int row, int column);
@@ -214,6 +224,11 @@ public abstract class LocalizedTexts implements Serializable {
 	public abstract String getFireEventMessage();
 
 	/**
+	 * @return Extinct fire event message.
+	 */
+	public abstract String getExtinctFireEventMessage();
+
+	/**
 	 * @return Investment event message.
 	 */
 	public abstract String getInvestmentEventMessage();
@@ -224,7 +239,17 @@ public abstract class LocalizedTexts implements Serializable {
 	public abstract String getMatchEventMessage();
 
 	/**
+	 * @return Cancelled match event message.
+	 */
+	public abstract String getCancelledMatchEventMessage();
+
+	/**
 	 * @return Steal event message.
 	 */
 	public abstract String getStealEventMessage();
+
+	/**
+	 * @return Foil steal event message.
+	 */
+	public abstract String getFoilStealEventMessage();
 }

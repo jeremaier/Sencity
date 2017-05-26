@@ -30,7 +30,7 @@ public class InvestmentEvent extends Event {
     }
 
 	/**
-     * Return an empty message.
+     * Return an investment event message.
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {

@@ -28,7 +28,7 @@ package model.tiles;
  * FireStation increase satisfaction and reduce probability of FireEvent
  *
  */
-public class FireStationTile extends ServiceTile {
+public class HospitalTile extends ServiceTile {
 	private static final long serialVersionUID = 1L;
 
 	// Constants
@@ -59,26 +59,26 @@ public class FireStationTile extends ServiceTile {
 
 	// Implementation
 	/**
-	 * Default value of {@link ServiceTile#getFireStationNumber()}
+	 * Default value of {@link #getHospitalNumber()}
 	 */
-	private static int fireStationNumber = 0;
+	private static int hospitalStationNumber = 0;
 
 	// Creation
 
 	/**
 	 * Create with default settings.
 	 */
-	public FireStationTile() {
-		super(FireStationTile.DEFAULT_SATISFACTION_VALUE, FireStationTile.DEFAULT_MAINTENANCE_COST, FireStationTile.DEFAULT_MAX_NEEDED_ENERGY, FireStationTile.DEFAULT_MAX_NEEDED_INHABITANTS);
-		FireStationTile.fireStationNumber++;
+	public HospitalTile() {
+		super(HospitalTile.DEFAULT_SATISFACTION_VALUE, HospitalTile.DEFAULT_MAINTENANCE_COST, HospitalTile.DEFAULT_MAX_NEEDED_ENERGY, HospitalTile.DEFAULT_MAX_NEEDED_INHABITANTS);
+		HospitalTile.hospitalStationNumber++;
 	}
 
 	// Access
 	/**
-	 * @return Number of fire station builded.
+	 * @return Number of hospital builded.
 	 */
-	public static final int getFireStationNumber() {
-		return FireStationTile.fireStationNumber;
+	public static final int getHospitalNumber() {
+		return HospitalTile.hospitalStationNumber;
 	}
 
 	@Override
@@ -93,14 +93,14 @@ public class FireStationTile extends ServiceTile {
 	// Status
 	@Override
 	public boolean equals(Object o) {
-		return o instanceof FireStationTile && this.equals((FireStationTile) o);
+		return o instanceof HospitalTile && this.equals((HospitalTile) o);
 	}
 
 	/**
 	 * @param o
 	 * @return Is {@value o} equals to this?
 	 */
-	public boolean equals(FireStationTile o) {
+	public boolean equals(HospitalTile o) {
 		return this == o || super.equals(o)
 				&& o.maxNeededEnergy == this.maxNeededEnergy 
 				&& o.maintenanceCost == this.maintenanceCost

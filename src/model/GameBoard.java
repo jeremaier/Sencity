@@ -44,16 +44,26 @@ import model.difficulty.Difficulties;
 import model.difficulty.DifficultyLevel;
 import model.event.Event;
 import model.event.EventFactory;
+import model.tiles.AirportTile;
+import model.tiles.CommercialTile;
 import model.tiles.Evolvable;
 import model.tiles.GrassTile;
+import model.tiles.IndustrialTile;
+import model.tiles.ParkTile;
+import model.tiles.PowerPlantTile;
+import model.tiles.ResidentialTile;
+import model.tiles.StadiumTile;
 import model.tiles.Tile;
 import model.tiles.WaterTile;
 import model.tools.AirportZoneDelimiterTool;
 import model.tools.BulldozerTool;
 import model.tools.CommercialZoneDelimiterTool;
 import model.tools.EvolveTool;
+import model.tools.FireStationZoneDelimiterTool;
 import model.tools.HarborZoneDelimiterTool;
+import model.tools.HospitalZoneDelimiterTool;
 import model.tools.IndustrialZoneDelimiterTool;
+import model.tools.PoliceStationZoneDelimiterTool;
 import model.tools.PowerPlantConstructionTool;
 import model.tools.ResidentialZoneDelimiterTool;
 import model.tools.StadiumZoneDelimiterTool;
@@ -158,7 +168,10 @@ public class GameBoard extends Observable implements Serializable {
 		this.tools.add(new HarborZoneDelimiterTool());
 		this.tools.add(new StadiumZoneDelimiterTool());
 		this.tools.add(new WaterZoneDelimiterTool());
-
+		this.tools.add(new FireStationZoneDelimiterTool());
+		this.tools.add(new PoliceStationZoneDelimiterTool());
+		this.tools.add(new HospitalZoneDelimiterTool());
+		
 		this.selectedTool = this.tools.get(GameBoard.DEFAULT_SELECTED_TOOL);
 
 		this.pendingEvolutions = new LinkedList<>();
@@ -318,6 +331,10 @@ public class GameBoard extends Observable implements Serializable {
 		return this.resources.getSatisfaction();
 	}
 
+	public int getPollution() {
+		return this.resources.getPollution();
+	}
+
 	// Access (Status)
 	/**
 	 * @return Status message.
@@ -335,7 +352,7 @@ public class GameBoard extends Observable implements Serializable {
 	public void setDifficulty(Difficulties difficulty) {
 		GameBoard.difficulty = difficulty.getLevel();
 	}
-	
+
 	/**
 	 *
 	 * @param tool
@@ -387,7 +404,7 @@ public class GameBoard extends Observable implements Serializable {
 		Set<TilePosition> tilesArea = new HashSet<>();
 		int beginningRow = startingTile.getRow() != 0 ? -1 : 0;
 		int beginningColumn = startingTile.getColumn() != 0 ? -1 : 0;
-		
+
 		for (int i = beginningRow; i < areaSize; i++) {
 			for (int j = beginningColumn; j < areaSize; j++) {
 				int newRow = startingTile.getRow() + i < this.getHeight() ? startingTile.getRow() + i : this.getHeight() - 1;
@@ -396,10 +413,10 @@ public class GameBoard extends Observable implements Serializable {
 				tilesArea.add(newTile);
 			}
 		}
-		
+
 		return tilesArea;
 	}
-	
+
 	/**
 	 * @param row
 	 * @param column
@@ -411,16 +428,36 @@ public class GameBoard extends Observable implements Serializable {
 	public boolean isInTileArea(int row, int column, int areaSize, Tile tile, int tilesNeeded) {
 		int number = 0;
 		Set<TilePosition> tilesArea = this.getTilesArea(new TilePosition(row, column), areaSize);
-		
+
 		for(TilePosition tilePos : tilesArea)
 			if(tiles[tilePos.getRow()][tilePos.getColumn()].equals(tile)) {
 				number++;
-				
+
 				if(number >= tilesNeeded)
 					return true;
 			}
-		
+
 		return false;
+	}
+
+	/**
+	 * @param row
+	 * @param column
+	 * @param areaSize
+	 * @return the number of clean buildings in an area.
+	 */
+	public int cleanBuildingsNumber(int row, int column, int areaSize) {
+		int number = 0;
+		Set<TilePosition> tilesArea = this.getTilesArea(new TilePosition(row, column), areaSize);
+
+		for(TilePosition tilePos : tilesArea) {
+			if(this.tiles[tilePos.getRow()][tilePos.getColumn()] instanceof CommercialTile || this.tiles[tilePos.getRow()][tilePos.getColumn()] instanceof ResidentialTile || this.tiles[tilePos.getRow()][tilePos.getColumn()] instanceof StadiumTile)
+				number++;
+			else if(this.tiles[tilePos.getRow()][tilePos.getColumn()] instanceof ParkTile)
+				number -= 2;
+		}
+
+		return Math.max(0, number);
 	}
 
 	// Change (World)
@@ -469,6 +506,8 @@ public class GameBoard extends Observable implements Serializable {
 		this.applyPendingEvents();
 		this.applyNewEvent();
 		this.applyEvolutions();
+		this.updateSatisfaction();
+		this.updatePollution();
 		this.updateTiles();
 		this.notifyViews();
 	}
@@ -534,6 +573,37 @@ public class GameBoard extends Observable implements Serializable {
 				t.update(this.resources);
 			}
 		}
+	}
+
+	/**
+	 * Update the pollution effect.
+	 */
+	private void updatePollution() {
+		for(int row = 0; row < tiles.length; row++) {
+			for(int column = 0; column < tiles[0].length; column++) {
+				Tile tile = tiles[row][column];
+
+				if(tile instanceof IndustrialTile || tile instanceof AirportTile || tile instanceof PowerPlantTile)
+					this.getResources().increasePollution(2 * this.cleanBuildingsNumber(row, column, 3));
+			}
+		}
+	}
+	
+	/**
+	 * Update the satisfaction effect.
+	 */
+	private void updateSatisfaction() {
+		CityResources resources = this.getResources();
+		this.updateEventEffects(resources);
+		resources.decreaseSatisfaction((resources.getVat() - 10) / 3);
+	}
+	
+	/**
+	 * Apply event effects on satisfaction and pollution.
+	 */
+	private void updateEventEffects(CityResources resources) {
+		resources.increaseSatisfaction(resources.getGoodEventOccurrence() * CityResources.getExtraEventSatisfaction());
+		resources.decreaseSatisfaction(resources.getBadEventOccurrence() * CityResources.getDecreaseEventSatisfaction());
 	}
 
 	/**

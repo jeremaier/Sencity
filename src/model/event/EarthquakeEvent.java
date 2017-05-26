@@ -26,15 +26,16 @@ public class EarthquakeEvent extends Event {
 	 */
 	@Override
 	public List<Event> applyEffects(CityResources resources) {
-		System.out.println(world);
 		if(!(world.tiles[startingTile.getRow()][startingTile.getColumn()] instanceof WaterTile))
 			world.tiles[startingTile.getRow()][startingTile.getColumn()] = GrassTile.getDefault();
 
+        resources.increaseBadEventOccurrence();
+        
 		return new ArrayList<>(0);
 	}
 
 	/**
-	 * Return an empty message.
+	 * Return an earthquake event message.
 	 */
 	@Override
 	public String getMessage(LocalizedTexts texts) {

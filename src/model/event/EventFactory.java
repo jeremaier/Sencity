@@ -77,39 +77,30 @@ public class EventFactory extends Event{
 		return event_probabilities;
 	}
 
-	public void setEvent_probabilities(Map<eventType, Integer> event_probabilities,GameBoard world) {
-		
-		if(GameBoard.getDifficulty()==DifficultyLevel.EASY_LEVEL){
-			
+	public void setEvent_probabilities(Map<eventType, Integer> event_probabilities, GameBoard world) {
+		if(GameBoard.getDifficulty() == DifficultyLevel.EASY_LEVEL) {
 			event_probabilities.put(eventType.NOTHING, 40);
 			
 			event_probabilities.put(eventType.MATCH, 10);
 			event_probabilities.put(eventType.INVESTMENT, 10);
 			event_probabilities.put(eventType.FESTIVAL, 10);
 			
-			
 			event_probabilities.put(eventType.DISEASE, 5);
 			event_probabilities.put(eventType.STEAL, 10);
 			event_probabilities.put(eventType.FIRE, 10);
 			event_probabilities.put(eventType.EARTHQUAKE, 5);
-			
-		}else if(GameBoard.getDifficulty()==DifficultyLevel.STANDARD_LEVEL){
-			
+		} else if(GameBoard.getDifficulty() == DifficultyLevel.STANDARD_LEVEL) {
 			event_probabilities.put(eventType.NOTHING, 15);
 			
 			event_probabilities.put(eventType.MATCH, 5);
 			event_probabilities.put(eventType.INVESTMENT, 10);
 			event_probabilities.put(eventType.FESTIVAL, 10);
 			
-			
-			
 			event_probabilities.put(eventType.DISEASE, 10);
 			event_probabilities.put(eventType.STEAL, 20);
 			event_probabilities.put(eventType.FIRE, 20);
 			event_probabilities.put(eventType.EARTHQUAKE, 10);
-			
-		}else if(GameBoard.getDifficulty()==DifficultyLevel.HARD_LEVEL){
-			
+		} else if(GameBoard.getDifficulty() == DifficultyLevel.HARD_LEVEL) {
 			event_probabilities.put(eventType.NOTHING, 15);
 			
 			event_probabilities.put(eventType.MATCH, 5);
@@ -120,11 +111,9 @@ public class EventFactory extends Event{
 			event_probabilities.put(eventType.STEAL, 25);
 			event_probabilities.put(eventType.FIRE, 25);
 			event_probabilities.put(eventType.EARTHQUAKE, 10);
-			
 		}
 		
 		this.event_probabilities = event_probabilities;
-		
 	}
 
     /**

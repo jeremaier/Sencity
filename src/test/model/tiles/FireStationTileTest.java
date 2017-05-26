@@ -15,6 +15,7 @@ public class FireStationTileTest {
 		Assert.assertEquals(FireStationTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION, fst.getEvolutionEnergyConsumption());
 		Assert.assertEquals(FireStationTile.DEFAULT_MAX_NEEDED_ENERGY, fst.getMaxNeededEnergy());
 		Assert.assertEquals(FireStationTile.DEFAULT_SATISFACTION_VALUE, fst.getSatisfactionValue());
+		Assert.assertEquals(5, FireStationTile.getFireStationNumber());
 	}
 	
 	@Test
