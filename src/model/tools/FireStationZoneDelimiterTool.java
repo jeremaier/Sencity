@@ -1,5 +1,5 @@
-/*
-* TNCity
+/**
+ * TNCity
  * Copyright (c) 2017
  *  Jean-Philippe Eisenbarth,
  *  Victorien Elvinger
@@ -32,7 +32,7 @@ import model.tiles.Tile;
 
 public final class FireStationZoneDelimiterTool extends Tool {
 	// Constant
-	private final static int CURRENCY_COST = 100;
+	private final static int CURRENCY_COST = 300;
 
 	// Status
 	/**
@@ -49,17 +49,12 @@ public final class FireStationZoneDelimiterTool extends Tool {
 	}
 
 	/**
-     * isAfordable returns true if the user can apply the FireStation Tool, false
+     * isAfordable returns true if the user can apply the Stadium Tool, false
      * otherwise.
      */
 	@Override
 	public boolean isAfordable(Tile aTarget, CityResources r) {
 		return FireStationZoneDelimiterTool.CURRENCY_COST <= r.getCurrency();
-	}
-	
-	@Override
-	public boolean isAleadyBuild() {
-		return false;
 	}
 
 	@Override
@@ -79,7 +74,7 @@ public final class FireStationZoneDelimiterTool extends Tool {
 	}
 
 	/**
-     * innerEffect apply the FireStation tool to the given tile and update the
+     * innerEffect apply the Stadium tool to the given tile and update the
      * given CityResources.
      */
 	@Override

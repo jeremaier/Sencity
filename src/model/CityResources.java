@@ -38,6 +38,16 @@ public class CityResources implements Serializable {
      * Default value for {@link CityResources#getVat()}.
      */
     public final static int DEFAULT_VAT = 20;
+	
+	/**
+	 * Amount of satisfaction gain for a good event.
+	 */
+	public final static int EXTRA_EVENT_SATISFACTION = 3;
+	
+	/**
+	 * Amount of satisfaction gain for a bad event.
+	 */
+	private static final int DECREASE_EVENT_SATISFACTION = 1;
 
     // Implementation (Currency)
     /**
@@ -88,10 +98,26 @@ public class CityResources implements Serializable {
      */
     private int productsCapacity;
     
+    // Implementation (Satisfaction / Pollution)
     /**
      * {@link #increaseSatisfaction() #decreaseSatisfaction()}
      */
-    private int satisfaction = 100;
+    private int satisfaction;
+    
+    /**
+     * {@link #increasePollution() #decreasePollution()}
+     */
+    private int pollution;
+    
+    /**
+     * {@link #increaseGoodEventOccurrence() #getGoodEventOccurrence()}
+     */
+    private int goodEventOccurence;
+    
+    /**
+     * {@link #increaseBadEventOccurrence() #getBadEventOccurrence()}
+     */
+    private int badEventOccurence;
     
     // Creation
     /**
@@ -137,7 +163,7 @@ public class CityResources implements Serializable {
     public boolean equals(CityResources o) {
         return this == o || super.equals(o) && o.currency == this.currency && o.vat == this.vat && o.unconsumedEnergy == this.unconsumedEnergy && o.energyProduction == this.energyProduction
                 && o.unworkingPopulation == this.unworkingPopulation && o.population == this.population && o.populationCapacity == this.populationCapacity && o.productsCount == this.productsCount
-                && o.productsCapacity == this.productsCapacity;
+                && o.productsCapacity == this.productsCapacity && o.satisfaction == this.satisfaction && o.pollution == this.pollution;
     }
 
     // Access
@@ -153,6 +179,8 @@ public class CityResources implements Serializable {
         result = result * 17 + this.populationCapacity;
         result = result * 17 + this.productsCount;
         result = result * 17 + this.productsCapacity;
+        result = result * 17 + this.satisfaction;
+        result = result * 17 + this.pollution;
         return result;
     }
 
@@ -432,6 +460,8 @@ public class CityResources implements Serializable {
     public void resetEphemerals() {
         this.unworkingPopulation = this.population;
         this.unconsumedEnergy = this.energyProduction;
+        this.satisfaction = 100;
+        this.pollution = 0;
     }
 	
     /**
@@ -455,7 +485,74 @@ public class CityResources implements Serializable {
      *
      * @param amount
      */
-	public void decreaseSatisfation(int amount) {
+	public void decreaseSatisfaction(int amount) {
 		this.satisfaction = Math.max(0, this.satisfaction - amount);
+	}
+	
+    /**
+     * @return Actual satisfaction of the population.
+     */
+	public int getPollution() {
+		return this.pollution;
+	}
+
+    /**
+     * Increase {@link #getPollution()} by {@value amount}.
+     *
+     * @param amount
+     */
+	public void increasePollution(int amount) {
+		this.pollution = Math.min(100, this.pollution + amount);
+	}
+
+    /**
+     * Decrease {@link #getPollution()} by {@value amount}.
+     *
+     * @param amount
+     */
+	public void decreasePollution(int amount) {
+		this.pollution = Math.max(0, this.pollution - amount);
+	}
+
+    /**
+     * Increase {@link #getGoodEventOccurrence()}.
+     */
+	public void increaseGoodEventOccurrence() {
+		this.goodEventOccurence++;
+	}
+	
+    /**
+     * @return Total good event occurrence during the game.
+     */
+	public int getGoodEventOccurrence() {
+		return this.goodEventOccurence;
+	}
+
+    /**
+     * Increase {@link #getBadEventOccurrence()}.
+     */
+	public void increaseBadEventOccurrence() {
+		this.badEventOccurence++;
+	}
+	
+    /**
+     * @return Total bad event occurrence during the game.
+     */
+	public int getBadEventOccurrence() {
+		return this.badEventOccurence;
+	}
+	
+	/**
+	 * @return The extra satisfaction earn for each good event.
+	 */
+	public static int getExtraEventSatisfaction() {
+		return EXTRA_EVENT_SATISFACTION;
+	}
+
+	/**
+	 * @return The decrease amount of satisfaction for each bad event.
+	 */
+	public static int getDecreaseEventSatisfaction() {
+		return DECREASE_EVENT_SATISFACTION;
 	}
 }

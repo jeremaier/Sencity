@@ -24,92 +24,60 @@
 
 package model.tiles;
 
-import model.CityResources;
-import model.GameBoard;
-
 /**
  * PoliceStation increase satisfaction and reduce probability of PoliceEvent
  *
  */
-public class PoliceStationTile extends BuildableTile {
+public class PoliceStationTile extends ServiceTile {
 	private static final long serialVersionUID = 1L;
 
 	// Constants
 	/**
-	 * Default value of {@link #getMaintenanceCost()}
+	 * Default value of {@link ServiceTile#getMaintenanceCost()}
 	 */
 	public final static int DEFAULT_MAINTENANCE_COST = 4;
 
 	/**
-	 * Default value of {@link #getEvolutionEnergyConsumption()}
+	 * Default value of {@link ServiceTile#getEvolutionEnergyConsumption()}
 	 */
 	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
 	/**
-	 * Default value of {@link #getMaxNeededInhabitants()}
+	 * Default value of {@link ServiceTile#getMaxNeededInhabitants()}
 	 */
 	public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 15;
 
 	/**
-	 * Default value of {@link #getMaxNeededEnergy()}
+	 * Default value of {@link ServiceTile#getMaxNeededEnergy()}
 	 */
 	public final static int DEFAULT_MAX_NEEDED_ENERGY = 20;
 
 	/**
-	 * Default value of {@link #getSatisfactionValue()}
+	 * Default value of {@link ServiceTile#getSatisfactionValue()}
 	 */
-	public final static int DEFAULT_SATISFACTION_VALUE = 5;
+	public final static int DEFAULT_SATISFACTION_VALUE = 3;
 
 	// Implementation
 	/**
-	 * {@link #getMaxWorkingInhabitants()}
+	 * Default value of {@link #getPoliceStationNumber()}
 	 */
-	private final int maxNeededInhabitants;
-
-	/**
-	 * {@link #getMaxNeededEnergy()}
-	 */
-	private final int maxNeededEnergy;
-
-	/**
-	 * {@link #getSatisfactionValue()}
-	 */
-	private final int satisfactionValue;
+	private static int policeStationNumber = 0;
 
 	// Creation
 	/**
 	 * Create with default settings.
 	 */
 	public PoliceStationTile() {
-		super(PoliceStationTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
-		this.satisfactionValue = PoliceStationTile.DEFAULT_SATISFACTION_VALUE;
-		this.maintenanceCost = PoliceStationTile.DEFAULT_MAINTENANCE_COST;
-		this.maxNeededEnergy = PoliceStationTile.DEFAULT_MAX_NEEDED_ENERGY;
-		this.maxNeededInhabitants = PoliceStationTile.DEFAULT_MAX_NEEDED_INHABITANTS;
+		super(PoliceStationTile.DEFAULT_SATISFACTION_VALUE, PoliceStationTile.DEFAULT_MAINTENANCE_COST, PoliceStationTile.DEFAULT_MAX_NEEDED_ENERGY, PoliceStationTile.DEFAULT_MAX_NEEDED_INHABITANTS);
+		PoliceStationTile.policeStationNumber++;
 	}
 
 	// Access
 	/**
-	 * @return Maximum number of energy units to consume. This maximum is
-	 *         consumed if the Police station is full.
+	 * @return Number of police station builded.
 	 */
-	public final int getMaxNeededEnergy() {
-		return this.maxNeededEnergy;
-	}
-	
-	/**
-	 * @return Increase or decrease value of satisfaction
-	 */
-	public final int getSatisfactionValue() {
-		return this.satisfactionValue;
-	}
-
-	/**
-	 * @return Maximum number of inhabitants at work. This maximum is working
-	 * 		   if the police station is full.
-	 */
-	public final int getMaxNeededInhabitants() {
-		return this.maxNeededInhabitants;
+	public static final int getPoliceStationNumber() {
+		return PoliceStationTile.policeStationNumber;
 	}
 	
 	@Override
@@ -136,64 +104,5 @@ public class PoliceStationTile extends BuildableTile {
 				&& o.maxNeededEnergy == this.maxNeededEnergy 
 				&& o.maintenanceCost == this.maintenanceCost
 				&& o.satisfactionValue == this.satisfactionValue;
-	}
-
-	@Override
-	public boolean isDestroyed() {
-		return this.state == ConstructionState.DESTROYED;
-	}
-
-	// Change
-	@Override
-	public void disassemble(CityResources res) {
-		if (this.state == ConstructionState.BUILT)
-			super.disassemble(res);
-	}
-
-	@Override
-	public void evolve(CityResources res) {
-		super.evolve(res);
-
-		this.update(res);
-	}
-
-	@Override
-	public void update(CityResources res) {
-		if (this.state == ConstructionState.BUILT) {
-			int busyPercentage = 100;
-			int consumedEnergy = this.maxNeededEnergy;
-			int workingPopulation = this.maxNeededInhabitants;
-			final boolean enoughEnergy = res.getUnconsumedEnergy() >= consumedEnergy;
-			final boolean enoughPopulation = res.getUnworkingPopulation() > workingPopulation;
-
-			if(enoughEnergy && enoughPopulation)
-				this.isEnergyMissing = false;
-			else {
-				if(!enoughEnergy) {
-					consumedEnergy = res.getUnconsumedEnergy();
-					this.isEnergyMissing = true;
-				} else this.isEnergyMissing = false;
-
-				if(!enoughPopulation) {
-					workingPopulation = res.getUnworkingPopulation();
-					this.isPopulationMissing = true;
-				} else this.isPopulationMissing = false;
-				
-				final float energyPercentage = (float)consumedEnergy / this.maxNeededEnergy;
-				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
-				
-				busyPercentage -= energyPercentage * workersPercentage;
-				this.isEnergyMissing = true;
-			}
-
-			res.consumeEnergy(Math.max(3, consumedEnergy));
-			res.hireWorkers(workingPopulation);
-			res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
-			this.updateSatisfaction(res, busyPercentage);
-		}
-	}
-
-	private void updateSatisfaction(CityResources res, int percentage) {
-		res.increaseSatisfaction((int)(this.satisfactionValue * percentage / 100.0));
 	}
 }

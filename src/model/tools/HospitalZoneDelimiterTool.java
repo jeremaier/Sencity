@@ -1,4 +1,4 @@
-/*
+/**
  * TNCity
  * Copyright (c) 2017
  *  Jean-Philippe Eisenbarth,
@@ -26,13 +26,13 @@ package model.tools;
 
 import model.CityResources;
 import model.GameBoard;
-import model.tiles.HospitalTile;
 import model.tiles.GrassTile;
+import model.tiles.HospitalTile;
 import model.tiles.Tile;
 
 public final class HospitalZoneDelimiterTool extends Tool {
 	// Constant
-	private final static int CURRENCY_COST = 100;
+	private final static int CURRENCY_COST = 300;
 
 	// Status
 	/**
@@ -49,17 +49,12 @@ public final class HospitalZoneDelimiterTool extends Tool {
 	}
 
 	/**
-     * isAfordable returns true if the user can apply the Hospital Tool, false
+     * isAfordable returns true if the user can apply the Stadium Tool, false
      * otherwise.
      */
 	@Override
 	public boolean isAfordable(Tile aTarget, CityResources r) {
 		return HospitalZoneDelimiterTool.CURRENCY_COST <= r.getCurrency();
-	}
-	
-	@Override
-	public boolean isAleadyBuild() {
-		return false;
 	}
 
 	@Override
@@ -79,7 +74,7 @@ public final class HospitalZoneDelimiterTool extends Tool {
 	}
 
 	/**
-     * innerEffect apply the Hospital tool to the given tile and update the
+     * innerEffect apply the Stadium tool to the given tile and update the
      * given CityResources.
      */
 	@Override

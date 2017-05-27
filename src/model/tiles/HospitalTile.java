@@ -24,57 +24,44 @@
 
 package model.tiles;
 
-import model.CityResources;
-import model.GameBoard;
-
 /**
- * Hospital increase satisfaction and reduce probability of DiseaseEvent
+ * FireStation increase satisfaction and reduce probability of FireEvent
  *
  */
-public class HospitalTile extends BuildableTile {
+public class HospitalTile extends ServiceTile {
 	private static final long serialVersionUID = 1L;
 
 	// Constants
 	/**
-	 * Default value of {@link #getMaintenanceCost()}
+	 * Default value of {@link ServiceTile#getMaintenanceCost()}
 	 */
 	public final static int DEFAULT_MAINTENANCE_COST = 4;
 
 	/**
-	 * Default value of {@link #getEvolutionEnergyConsumption()}
+	 * Default value of {@link ServiceTile#getEvolutionEnergyConsumption()}
 	 */
 	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
 	/**
-	 * Default value of {@link #getMaxNeededInhabitants()}
+	 * Default value of {@link ServiceTile#getMaxNeededInhabitants()}
 	 */
 	public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 15;
 	
 	/**
-	 * Default value of {@link #getMaxNeededEnergy()}
+	 * Default value of {@link ServiceTile#getMaxNeededEnergy()}
 	 */
 	public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
 
 	/**
-	 * Default value of {@link #getSatisfactionValue()}
+	 * Default value of {@link ServiceTile#getSatisfactionValue()}
 	 */
-	public final static int DEFAULT_SATISFACTION_VALUE = 5;
+	public final static int DEFAULT_SATISFACTION_VALUE = 3;
 
 	// Implementation
 	/**
-	 * {@link #getMaxWorkingInhabitants()}
+	 * Default value of {@link #getHospitalNumber()}
 	 */
-	private final int maxNeededInhabitants;
-
-	/**
-	 * {@link #getMaxNeededEnergy()}
-	 */
-	private final int maxNeededEnergy;
-
-	/**
-	 * {@link #getSatisfactionValue()}
-	 */
-	private final int satisfactionValue;
+	private static int hospitalStationNumber = 0;
 
 	// Creation
 
@@ -82,36 +69,16 @@ public class HospitalTile extends BuildableTile {
 	 * Create with default settings.
 	 */
 	public HospitalTile() {
-		super(HospitalTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
-		this.satisfactionValue = HospitalTile.DEFAULT_SATISFACTION_VALUE;
-		this.maintenanceCost = HospitalTile.DEFAULT_MAINTENANCE_COST;
-		this.maxNeededEnergy = HospitalTile.DEFAULT_MAX_NEEDED_ENERGY;
-		this.maxNeededInhabitants = PoliceStationTile.DEFAULT_MAX_NEEDED_INHABITANTS;
+		super(HospitalTile.DEFAULT_SATISFACTION_VALUE, HospitalTile.DEFAULT_MAINTENANCE_COST, HospitalTile.DEFAULT_MAX_NEEDED_ENERGY, HospitalTile.DEFAULT_MAX_NEEDED_INHABITANTS);
+		HospitalTile.hospitalStationNumber++;
 	}
 
 	// Access
-
 	/**
-	 * @return Maximum number of energy units to consume. This maximum is
-	 *         consumed if the fire station is full.
+	 * @return Number of hospital builded.
 	 */
-	public final int getMaxNeededEnergy() {
-		return this.maxNeededEnergy;
-	}
-
-	/**
-	 * @return Increase or decrease value of satisfaction
-	 */
-	public final int getSatisfactionValue() {
-		return this.satisfactionValue;
-	}
-
-	/**
-	 * @return Maximum number of inhabitants at work. This maximum is working
-	 * 		   if the hospital is full.
-	 */
-	public final int getMaxNeededInhabitants() {
-		return this.maxNeededInhabitants;
+	public static final int getHospitalNumber() {
+		return HospitalTile.hospitalStationNumber;
 	}
 
 	@Override
@@ -138,64 +105,5 @@ public class HospitalTile extends BuildableTile {
 				&& o.maxNeededEnergy == this.maxNeededEnergy 
 				&& o.maintenanceCost == this.maintenanceCost
 				&& o.satisfactionValue == this.satisfactionValue;
-	}
-
-	@Override
-	public boolean isDestroyed() {
-		return this.state == ConstructionState.DESTROYED;
-	}
-
-	// Change
-	@Override
-	public void disassemble(CityResources res) {
-		if (this.state == ConstructionState.BUILT)
-			super.disassemble(res);
-	}
-
-	@Override
-	public void evolve(CityResources res) {
-		super.evolve(res);
-
-		this.update(res);
-	}
-
-	@Override
-	public void update(CityResources res) {
-		if (this.state == ConstructionState.BUILT) {
-			int busyPercentage = 100;
-			int consumedEnergy = this.maxNeededEnergy;
-			int workingPopulation = this.maxNeededInhabitants;
-			final boolean enoughEnergy = res.getUnconsumedEnergy() >= consumedEnergy;
-			final boolean enoughPopulation = res.getUnworkingPopulation() > workingPopulation;
-
-			if(enoughEnergy && enoughPopulation)
-				this.isEnergyMissing = false;
-			else {
-				if(!enoughEnergy) {
-					consumedEnergy = res.getUnconsumedEnergy();
-					this.isEnergyMissing = true;
-				} else this.isEnergyMissing = false;
-
-				if(!enoughPopulation) {
-					workingPopulation = res.getUnworkingPopulation();
-					this.isPopulationMissing = true;
-				} else this.isPopulationMissing = false;
-				
-				final float energyPercentage = (float)consumedEnergy / this.maxNeededEnergy;
-				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
-				
-				busyPercentage -= energyPercentage * workersPercentage;
-				this.isEnergyMissing = true;
-			}
-
-			res.consumeEnergy(Math.max(3, consumedEnergy));
-			res.hireWorkers(workingPopulation);
-			res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
-			this.updateSatisfaction(res, busyPercentage);
-		}
-	}
-
-	private void updateSatisfaction(CityResources res, int percentage) {
-		res.increaseSatisfaction((int)(this.satisfactionValue * percentage / 100.0));
 	}
 }

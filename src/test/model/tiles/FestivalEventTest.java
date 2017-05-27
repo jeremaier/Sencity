@@ -11,11 +11,11 @@ public class FestivalEventTest {
 	public void testUpdate() {
         CityResources resources = new CityResources(100, 100);
 		FestivalEvent event = new FestivalEvent();
-		resources.decreaseSatisfation(50);
+		resources.decreaseSatisfaction(50);
         final int initialCurrency = resources.getCurrency();
-        final int initialSatisfaction = resources.getSatisfaction();
+        final int initialGoodEventOccurrence = resources.getGoodEventOccurrence();
 		event.applyEffects(resources);
 		Assert.assertEquals(initialCurrency + FestivalEvent.MONEY, resources.getCurrency());
-		Assert.assertEquals(Math.min(100, initialSatisfaction + FestivalEvent.EXTRA_SATISFACTION), resources.getSatisfaction());
+		Assert.assertEquals(initialGoodEventOccurrence + 1, resources.getGoodEventOccurrence());
 	}
 }

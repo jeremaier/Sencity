@@ -15,6 +15,7 @@ public class PoliceStationTileTest {
 		Assert.assertEquals(PoliceStationTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION, pst.getEvolutionEnergyConsumption());
 		Assert.assertEquals(PoliceStationTile.DEFAULT_MAX_NEEDED_ENERGY, pst.getMaxNeededEnergy());
 		Assert.assertEquals(PoliceStationTile.DEFAULT_SATISFACTION_VALUE, pst.getSatisfactionValue());
+		Assert.assertEquals(5, PoliceStationTile.getPoliceStationNumber());
 	}
 	
 	@Test

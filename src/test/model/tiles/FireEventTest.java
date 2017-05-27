@@ -14,7 +14,9 @@ public class FireEventTest {
 		resources.increaseProductsCapacity(50);
 		resources.storeProducts(50);
         final int initialProducts = resources.getProductsCount();
+        final int initialBadEventOccurrence = resources.getBadEventOccurrence();
 		event.applyEffects(resources);
 		Assert.assertEquals(initialProducts - FireEvent.PRODUCTS_LOOSE, resources.getProductsCount());
+		Assert.assertEquals(initialBadEventOccurrence + 1, resources.getBadEventOccurrence());
 	}
 }

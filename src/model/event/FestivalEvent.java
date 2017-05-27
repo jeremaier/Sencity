@@ -14,11 +14,6 @@ public class FestivalEvent extends Event {
 	 * Amount of money gain.
 	 */
 	public final static int MONEY = 50;
-	
-	/**
-	 * Amount of money gain.
-	 */
-	public final static int EXTRA_SATISFACTION = 5;
 
     /**
      * Default Constructor.
@@ -33,12 +28,12 @@ public class FestivalEvent extends Event {
 	@Override
     public List<Event> applyEffects(CityResources resources) {
         resources.credit(FestivalEvent.MONEY);
-        resources.increaseSatisfaction(FestivalEvent.EXTRA_SATISFACTION);
+        resources.increaseGoodEventOccurrence();
         return new ArrayList<>(0);
     }
 
     /**
-     * Return an empty message.
+     * Return an festival event message.
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
