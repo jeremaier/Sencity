@@ -6,7 +6,6 @@ import org.junit.Test;
 import localization.UKTexts;
 import model.CityResources;
 import model.GameBoard;
-import model.tiles.AirportTile;
 import model.tiles.HarborTile;
 
 public class HarborTileTest {
@@ -19,27 +18,6 @@ public class HarborTileTest {
         Assert.assertEquals(HarborTile.DEFAULT_MAX_NEEDED_INHABITANTS, ht.getMaxNeededInhabitants());
         Assert.assertEquals(HarborTile.DEFAULT_PRODUCTS_PRICE, ht.getProductsPrice());
         Assert.assertEquals(HarborTile.DEFAULT_SATISFACTION_VALUE, ht.getSatisfactionValue());
-	}
-	
-	@Test
-	public void testUpdate() {
-		HarborTile ht = new HarborTile();
-        CityResources resources = new CityResources(100, 40);
-        resources.increaseEnergyProduction(100);
-        resources.increaseProductsCapacity(40);
-        resources.storeProducts(40);
-        final int initialEnergy = resources.getUnconsumedEnergy();
-		final int initialCurrency = resources.getCurrency();
-		final int initialProduhts = resources.getProductsCount();
-		ht.update(resources);
-		final int neededEnergy = Math.max(10, ht.getMaxNeededEnergy());
-		final int meanPrice = ht.getMaxSoldProducts() * ht.getProductsPrice();
-		final long meanEarn = initialCurrency + meanPrice * resources.getVat() / 100 - Math.round(ht.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff());
-		Assert.assertEquals(ht.isEnergyMissing(), false);
-		Assert.assertEquals(ht.isPopulationMissing(), false);
-		Assert.assertEquals(initialEnergy - neededEnergy, resources.getUnconsumedEnergy());
-		Assert.assertEquals(resources.getCurrency(), meanEarn, meanEarn * 0.4);
-		Assert.assertEquals(initialProduhts - ht.getMaxSoldProducts(), resources.getProductsCount());		
 	}
 	
     @Test
@@ -57,7 +35,7 @@ public class HarborTileTest {
         at.disassemble(resources);
         Assert.assertEquals(Math.max(0, initialEnergy), resources.getUnconsumedEnergy());
         Assert.assertEquals(Math.max(0, initialProducts), resources.getProductsCount());
-        Assert.assertEquals(AirportTile.alreadyBuild, false);
+        Assert.assertEquals(HarborTile.alreadyBuild, false);
     }
 	
 	@Test

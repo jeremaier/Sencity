@@ -31,36 +31,25 @@ import model.GameBoard;
  * FireStation increase satisfaction and reduce probability of FireEvent
  *
  */
-public class ServiceTile extends BuildableTile {
+public abstract class ServiceTile extends Tile implements Destroyable {
 	private static final long serialVersionUID = 1L;
-
-	// Constants
-	/**
-	 * Default value of {@link #getMaintenanceCost()}
-	 */
-	public final static int DEFAULT_MAINTENANCE_COST = 4;
-
-	/**
-	 * Default value of {@link #getEvolutionEnergyConsumption()}
-	 */
-	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
-
-	/**
-	 * Default value of {@link #getMaxNeededInhabitants()}
-	 */
-	public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 15;
 	
-	/**
-	 * Default value of {@link #getMaxNeededEnergy()}
-	 */
-	public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
-
-	/**
-	 * Default value of {@link #getSatisfactionValue()}
-	 */
-	public final static int DEFAULT_SATISFACTION_VALUE = 3;
-
 	// Implementation
+	/**
+	 * Evolution state
+	 */
+	protected boolean isDestroyed;
+
+	/**
+	 * {@link #isEnergyMissing()}
+	 */
+	protected boolean isEnergyMissing;
+
+	/**
+	 * {@link #isPopulationMissing()}
+	 */
+	protected boolean isPopulationMissing;
+	
 	/**
 	 * {@link #getMaxWorkingInhabitants()}
 	 */
@@ -75,18 +64,23 @@ public class ServiceTile extends BuildableTile {
 	 * {@link #getSatisfactionValue()}
 	 */
 	protected final int satisfactionValue;
+    
+    /**
+     * {@link #getMaintenanceCost()}
+     */
+    protected int maintenanceCost;
 
 	// Creation
 
 	/**
 	 * Create with default settings.
-	 * @param maxNeededInhabitants 
-	 * @param maxNeededEnergy 
-	 * @param maintenanceCost 
-	 * @param satisfactionValue 
+	 * @param maxNeededInhabitants
+	 * @param maxNeededEnergy
+	 * @param maintenanceCost
+	 * @param satisfactionValue
 	 */
 	public ServiceTile(int satisfactionValue, int maintenanceCost, int maxNeededEnergy, int maxNeededInhabitants) {
-		super(ServiceTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
+		super();
 		this.satisfactionValue = satisfactionValue;
 		this.maintenanceCost = maintenanceCost;
 		this.maxNeededEnergy = maxNeededEnergy;
@@ -117,13 +111,24 @@ public class ServiceTile extends BuildableTile {
 	public final int getMaxNeededInhabitants() {
 		return this.maxNeededInhabitants;
 	}
+    
+    /**
+     * @return Maintenance cost.
+     */
+    public int getMaintenanceCost() {
+    	return this.maintenanceCost;
+    }
 
 	@Override
 	public int hashCode() {
-		int result = super.hashCode();
+		int result = 1;
 		result = result * 17 + this.maxNeededEnergy;
 		result = result * 17 + this.maintenanceCost;
 		result = result * 17 + this.satisfactionValue;
+		result = result * 17 + this.maintenanceCost;
+		result = result * 17 + Boolean.hashCode(this.isDestroyed);
+		result = result * 17 + Boolean.hashCode(this.isEnergyMissing);
+		result = result * 17 + Boolean.hashCode(this.isPopulationMissing);
 		return result;
 	}
 
@@ -138,34 +143,27 @@ public class ServiceTile extends BuildableTile {
 	 * @return Is {@value o} equals to this?
 	 */
 	public boolean equals(ServiceTile o) {
-		return this == o || super.equals(o)
-				&& o.maxNeededEnergy == this.maxNeededEnergy 
+		return this == o || o.maxNeededEnergy == this.maxNeededEnergy 
+				&& o.maintenanceCost == this.maintenanceCost
+				&& o.isDestroyed == this.isDestroyed
+				&& o.isEnergyMissing == this.isEnergyMissing
+				&& o.isPopulationMissing == this.isPopulationMissing
 				&& o.maintenanceCost == this.maintenanceCost
 				&& o.satisfactionValue == this.satisfactionValue;
 	}
 
 	@Override
 	public boolean isDestroyed() {
-		return this.state == ConstructionState.DESTROYED;
+		return this.isDestroyed;
 	}
 
+    @Override
+    public abstract void disassemble(CityResources res);
+    
 	// Change
 	@Override
-	public void disassemble(CityResources res) {
-		if (this.state == ConstructionState.BUILT)
-			super.disassemble(res);
-	}
-
-	@Override
-	public void evolve(CityResources res) {
-		super.evolve(res);
-
-		this.update(res);
-	}
-
-	@Override
 	public void update(CityResources res) {
-		if (this.state == ConstructionState.BUILT) {
+		if(!this.isDestroyed) {
 			int busyPercentage = 100;
 			int consumedEnergy = this.maxNeededEnergy;
 			int workingPopulation = this.maxNeededInhabitants;

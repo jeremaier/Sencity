@@ -183,11 +183,9 @@ public class IconFactory {
 				// lower-case
 
 				final String energyPostId;
-				if (t.isEnergyMissing()) {
+				if (t.isEnergyMissing())
 					energyPostId = '-' + IconFactory.MISSING_ENERGY_POSTID;
-				} else {
-					energyPostId = "";
-				}
+				else energyPostId = "";
 
 				final String populationPostId;
 				if (t.isPopulationMissing())
@@ -195,9 +193,7 @@ public class IconFactory {
 				else populationPostId = "";
 
 				return id + statePostId + energyPostId + populationPostId;
-			} else {
-				return id;
-			}
+			} else return id;
 		}
 	}
 

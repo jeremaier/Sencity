@@ -35,8 +35,7 @@ public class DiseaseEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-		int random = new Random().nextInt(HospitalTile.getHospitalNumber());
-		System.out.println(random);
+		int random = new Random().nextInt(HospitalTile.getHospitalNumber() + 1);
 		
 		if(random == 0) {
 	        resources.decreasePopulation(DiseaseEvent.DEADS);

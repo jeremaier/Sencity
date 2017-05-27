@@ -47,7 +47,7 @@ public final class SimCityUI extends JFrame {
     // Constants
     private final static long serialVersionUID = 1L;
 
-    private final static int DEFAULT_HEIGHT = 10;
+    private final static int DEFAULT_HEIGHT = 12;
 
     private final static int DEFAULT_WIDTH = 20;
 

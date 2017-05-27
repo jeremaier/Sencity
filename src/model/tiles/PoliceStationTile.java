@@ -24,6 +24,8 @@
 
 package model.tiles;
 
+import model.CityResources;
+
 /**
  * PoliceStation increase satisfaction and reduce probability of PoliceEvent
  *
@@ -36,11 +38,6 @@ public class PoliceStationTile extends ServiceTile {
 	 * Default value of {@link ServiceTile#getMaintenanceCost()}
 	 */
 	public final static int DEFAULT_MAINTENANCE_COST = 4;
-
-	/**
-	 * Default value of {@link ServiceTile#getEvolutionEnergyConsumption()}
-	 */
-	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
 	/**
 	 * Default value of {@link ServiceTile#getMaxNeededInhabitants()}
@@ -80,29 +77,17 @@ public class PoliceStationTile extends ServiceTile {
 		return PoliceStationTile.policeStationNumber;
 	}
 	
-	@Override
-	public int hashCode() {
-		int result = super.hashCode();
-		result = result * 17 + this.maxNeededEnergy;
-		result = result * 17 + this.maintenanceCost;
-		result = result * 17 + this.satisfactionValue;
-		return result;
-	}
-
 	// Status
 	@Override
 	public boolean equals(Object o) {
 		return o instanceof PoliceStationTile && this.equals((PoliceStationTile) o);
 	}
-
-	/**
-	 * @param o
-	 * @return Is {@value o} equals to this?
-	 */
-	public boolean equals(PoliceStationTile o) {
-		return this == o || super.equals(o)
-				&& o.maxNeededEnergy == this.maxNeededEnergy 
-				&& o.maintenanceCost == this.maintenanceCost
-				&& o.satisfactionValue == this.satisfactionValue;
-	}
+	
+    @Override
+    public void disassemble(CityResources res) {
+        if (!this.isDestroyed) {
+            this.isDestroyed = true;
+            PoliceStationTile.policeStationNumber--;
+        }
+    }
 }

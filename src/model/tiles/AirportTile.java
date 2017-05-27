@@ -79,7 +79,7 @@ public class AirportTile extends TransportTile {
 	@Override
 	public int hashCode() {
 		int result = super.hashCode();
-        result = result * 17 + Boolean.hashCode(StadiumTile.alreadyBuild);
+        result = result * 17 + Boolean.hashCode(AirportTile.alreadyBuild);
         return result;
 	}
     

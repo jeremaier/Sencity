@@ -24,6 +24,8 @@
 
 package model.tiles;
 
+import model.CityResources;
+
 /**
  * FireStation increase satisfaction and reduce probability of FireEvent
  *
@@ -36,11 +38,6 @@ public class HospitalTile extends ServiceTile {
 	 * Default value of {@link ServiceTile#getMaintenanceCost()}
 	 */
 	public final static int DEFAULT_MAINTENANCE_COST = 4;
-
-	/**
-	 * Default value of {@link ServiceTile#getEvolutionEnergyConsumption()}
-	 */
-	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
 	/**
 	 * Default value of {@link ServiceTile#getMaxNeededInhabitants()}
@@ -81,29 +78,17 @@ public class HospitalTile extends ServiceTile {
 		return HospitalTile.hospitalStationNumber;
 	}
 
-	@Override
-	public int hashCode() {
-		int result = super.hashCode();
-		result = result * 17 + this.maxNeededEnergy;
-		result = result * 17 + this.maintenanceCost;
-		result = result * 17 + this.satisfactionValue;
-		return result;
-	}
-
 	// Status
 	@Override
 	public boolean equals(Object o) {
 		return o instanceof HospitalTile && this.equals((HospitalTile) o);
 	}
-
-	/**
-	 * @param o
-	 * @return Is {@value o} equals to this?
-	 */
-	public boolean equals(HospitalTile o) {
-		return this == o || super.equals(o)
-				&& o.maxNeededEnergy == this.maxNeededEnergy 
-				&& o.maintenanceCost == this.maintenanceCost
-				&& o.satisfactionValue == this.satisfactionValue;
-	}
+	
+    @Override
+    public void disassemble(CityResources res) {
+        if (!this.isDestroyed) {
+            this.isDestroyed = true;
+            HospitalTile.hospitalStationNumber--;
+        }
+    }
 }

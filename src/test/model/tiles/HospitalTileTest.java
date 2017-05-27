@@ -10,12 +10,13 @@ import model.tiles.*;
 public class HospitalTileTest {
 	@Test
 	public void testInit() {
+		final int initialHospitalNumber = HospitalTile.getHospitalNumber();
 		HospitalTile ht = new HospitalTile();
 		Assert.assertEquals(HospitalTile.DEFAULT_MAINTENANCE_COST, ht.getMaintenanceCost());
-		Assert.assertEquals(HospitalTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION, ht.getEvolutionEnergyConsumption());
+		Assert.assertEquals(PoliceStationTile.DEFAULT_MAX_NEEDED_INHABITANTS, ht.getMaxNeededInhabitants());
 		Assert.assertEquals(HospitalTile.DEFAULT_MAX_NEEDED_ENERGY, ht.getMaxNeededEnergy());
 		Assert.assertEquals(HospitalTile.DEFAULT_SATISFACTION_VALUE, ht.getSatisfactionValue());
-		Assert.assertEquals(5, HospitalTile.getHospitalNumber());
+		Assert.assertEquals(initialHospitalNumber + 1, HospitalTile.getHospitalNumber());
 	}
 	
 	@Test
@@ -27,9 +28,9 @@ public class HospitalTileTest {
         final int initialCurrency = resources.getCurrency();
         final int initialPopulation = resources.getUnworkingPopulation();
         final int initialEnergy = resources.getUnconsumedEnergy();
-        ht.evolve(resources);
+        ht.update(resources);
         Assert.assertEquals(initialPopulation - ht.getMaxNeededInhabitants(), resources.getUnworkingPopulation());
-        Assert.assertEquals(initialEnergy - ht.getMaxNeededEnergy() - ht.getEvolutionEnergyConsumption(), resources.getUnconsumedEnergy());
+        Assert.assertEquals(initialEnergy - ht.getMaxNeededEnergy(), resources.getUnconsumedEnergy());
         Assert.assertEquals(initialCurrency - (int)(Math.round(ht.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff())), resources.getCurrency()); 
         Assert.assertEquals(Math.max(initialSatisfaction, ht.getSatisfactionValue()), resources.getSatisfaction());
 	}
@@ -38,7 +39,8 @@ public class HospitalTileTest {
 	public void testDisassemble() {
 		HospitalTile ht = new HospitalTile();
 		CityResources resources = new CityResources(100, 100);
-		ht.evolve(resources);
+        resources.increaseEnergyProduction(100);
+		ht.update(resources);
 		final int initialSatisfaction = resources.getSatisfaction();
         final int initialPopulation = resources.getUnworkingPopulation();
         final int initialEnergy = resources.getUnconsumedEnergy();
@@ -55,10 +57,7 @@ public class HospitalTileTest {
 		HospitalTile ht = new HospitalTile();
 		CityResources resources = new CityResources(100);
         resources.increaseEnergyProduction(100);
-		ht.disassemble(resources);
-		Assert.assertEquals(false, ht.isDestroyed());
-		ht.evolve(resources);
-		ht.disassemble(resources);
+        ht.disassemble(resources);
 		Assert.assertEquals(true, ht.isDestroyed());
 	}
 	
@@ -66,6 +65,7 @@ public class HospitalTileTest {
 	public void testEqual() {
 		HospitalTile ht1 = new HospitalTile();
 		CityResources resources = new CityResources(100);
+        resources.increaseEnergyProduction(100);
 		ht1.update(resources);
 		ht1.disassemble(resources);
 		HospitalTile ht2 = new HospitalTile();

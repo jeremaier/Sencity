@@ -34,8 +34,7 @@ public class FireEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-		int random = new Random().nextInt(FireStationTile.getFireStationNumber());
-		System.out.println(random);
+		int random = new Random().nextInt(FireStationTile.getFireStationNumber() + 1);
 		
 		if(random == 0) {
 	        resources.consumeProducts(FireEvent.PRODUCTS_LOOSE);

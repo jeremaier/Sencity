@@ -46,7 +46,7 @@ public class ToolUI extends JButton {
      */
     public ToolUI(GameBoard world, Tool target) {
         super();
-        this.setMargin(new Insets(1, 1, 1, 15));
+        this.setMargin(new Insets(1, 1, 1, 1));
         this.setContentAreaFilled(false);
 
         this.setIcon(IconFactory.getInstance().getToolIcon(target));
