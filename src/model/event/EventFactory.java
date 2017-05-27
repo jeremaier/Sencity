@@ -35,6 +35,12 @@ import localization.LocalizedTexts;
 import model.CityResources;
 import model.GameBoard;
 import model.difficulty.DifficultyLevel;
+import model.tiles.CommercialTile;
+import model.tiles.FireStationTile;
+import model.tiles.HospitalTile;
+import model.tiles.IndustrialTile;
+import model.tiles.PoliceStationTile;
+import model.tiles.StadiumTile;
 
 /**
  * The EventFactory generates Events according to their probabilities.
@@ -79,49 +85,119 @@ public class EventFactory extends Event{
 
 	public void setEvent_probabilities(Map<eventType, Integer> event_probabilities,GameBoard world) {
 		
+		
+		
 		if(GameBoard.getDifficulty()==DifficultyLevel.EASY_LEVEL){
 			
-			event_probabilities.put(eventType.NOTHING, 40);
+			int nothingProb = 60;
 			
-			event_probabilities.put(eventType.MATCH, 10);
-			event_probabilities.put(eventType.INVESTMENT, 10);
-			event_probabilities.put(eventType.FESTIVAL, 10);
+			event_probabilities.put(eventType.NOTHING, nothingProb);
+			
+			event_probabilities.put(eventType.MATCH, 8);
+			event_probabilities.put(eventType.INVESTMENT, 8);
+			event_probabilities.put(eventType.FESTIVAL, 8);
 			
 			
-			event_probabilities.put(eventType.DISEASE, 5);
-			event_probabilities.put(eventType.STEAL, 10);
-			event_probabilities.put(eventType.FIRE, 10);
-			event_probabilities.put(eventType.EARTHQUAKE, 5);
+			event_probabilities.put(eventType.DISEASE,4);
+			event_probabilities.put(eventType.STEAL, 4);
+			event_probabilities.put(eventType.FIRE, 4);
+			event_probabilities.put(eventType.EARTHQUAKE, 4);
+			
+			if( world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 8 ,new PoliceStationTile() , 1) ){
+				nothingProb +=2;
+				event_probabilities.put(eventType.NOTHING, nothingProb);
+				event_probabilities.put(eventType.STEAL, 2);
+			}
+			if( world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 8 ,new FireStationTile() , 1) ){
+				nothingProb += 2;
+				event_probabilities.put(eventType.NOTHING, nothingProb);
+				event_probabilities.put(eventType.STEAL, 2);
+			}
+			if( world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 8 ,new HospitalTile() , 1) ){
+				nothingProb += 2;
+				event_probabilities.put(eventType.NOTHING, nothingProb);
+				event_probabilities.put(eventType.DISEASE, 2);
+			}
 			
 		}else if(GameBoard.getDifficulty()==DifficultyLevel.STANDARD_LEVEL){
 			
-			event_probabilities.put(eventType.NOTHING, 15);
+			int nothingProb = 60;
 			
-			event_probabilities.put(eventType.MATCH, 5);
-			event_probabilities.put(eventType.INVESTMENT, 10);
-			event_probabilities.put(eventType.FESTIVAL, 10);
+			event_probabilities.put(eventType.NOTHING, nothingProb);
+			
+			event_probabilities.put(eventType.MATCH, 6);
+			event_probabilities.put(eventType.INVESTMENT, 6);
+			event_probabilities.put(eventType.FESTIVAL, 6);
 			
 			
 			
-			event_probabilities.put(eventType.DISEASE, 10);
-			event_probabilities.put(eventType.STEAL, 20);
-			event_probabilities.put(eventType.FIRE, 20);
-			event_probabilities.put(eventType.EARTHQUAKE, 10);
+			event_probabilities.put(eventType.DISEASE, 4);
+			event_probabilities.put(eventType.STEAL, 6);
+			event_probabilities.put(eventType.FIRE, 6);
+			event_probabilities.put(eventType.EARTHQUAKE, 6);
+			
+			if( world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 8 ,new PoliceStationTile() , 1) ){
+				nothingProb += 3;
+				event_probabilities.put(eventType.NOTHING, nothingProb);
+				event_probabilities.put(eventType.STEAL, 3);
+			}
+			if( world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 8 ,new FireStationTile() , 1) ){
+				nothingProb += 3;
+				event_probabilities.put(eventType.NOTHING, nothingProb);
+				event_probabilities.put(eventType.FIRE, 3);
+			}
+			if( world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 8 ,new HospitalTile() , 1) ){
+				nothingProb += 3;
+				event_probabilities.put(eventType.NOTHING, nothingProb);
+				event_probabilities.put(eventType.DISEASE, 3);
+			}
 			
 		}else if(GameBoard.getDifficulty()==DifficultyLevel.HARD_LEVEL){
 			
-			event_probabilities.put(eventType.NOTHING, 15);
+			int nothingProb = 60;
 			
-			event_probabilities.put(eventType.MATCH, 5);
-			event_probabilities.put(eventType.INVESTMENT, 5);
-			event_probabilities.put(eventType.FESTIVAL, 5);
+			event_probabilities.put(eventType.NOTHING, 60);
 			
-			event_probabilities.put(eventType.DISEASE, 10);
-			event_probabilities.put(eventType.STEAL, 25);
-			event_probabilities.put(eventType.FIRE, 25);
-			event_probabilities.put(eventType.EARTHQUAKE, 10);
+			event_probabilities.put(eventType.MATCH, 4);
+			event_probabilities.put(eventType.INVESTMENT, 4);
+			event_probabilities.put(eventType.FESTIVAL, 4);
+			
+			event_probabilities.put(eventType.DISEASE, 6);
+			event_probabilities.put(eventType.STEAL, 8);
+			event_probabilities.put(eventType.FIRE, 8);
+			event_probabilities.put(eventType.EARTHQUAKE, 6);
+			
+			if( world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 8 ,new PoliceStationTile() , 1) ){
+				nothingProb += 4;
+				event_probabilities.put(eventType.NOTHING, nothingProb);
+				event_probabilities.put(eventType.STEAL, 4);
+			}
+			if( world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 8 ,new FireStationTile() , 1) ){
+				nothingProb += 4;
+				event_probabilities.put(eventType.NOTHING, nothingProb);
+				event_probabilities.put(eventType.STEAL, 4);
+			}
+			if( world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 8 ,new HospitalTile() , 1) ){
+				nothingProb += 3;
+				event_probabilities.put(eventType.NOTHING, nothingProb);
+				event_probabilities.put(eventType.DISEASE, 3);
+			}
 			
 		}
+		
+		
+		if( !world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 100 ,new IndustrialTile() , 1) ){
+			event_probabilities.put(eventType.INVESTMENT, 0);
+			event_probabilities.put(eventType.FIRE, 0);
+		}
+		
+		if( !world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 100 ,new CommercialTile() , 1) ){
+			event_probabilities.put(eventType.STEAL, 0);
+		}
+		if( !world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 100 ,new StadiumTile() , 1) ){
+			event_probabilities.put(eventType.MATCH, 0);
+		}
+		
 		
 		this.event_probabilities = event_probabilities;
 		

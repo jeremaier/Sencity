@@ -108,7 +108,7 @@ public class FireStationTile extends BuildableTile {
 
 	/**
 	 * @return Maximum number of inhabitants at work. This maximum is working
-	 * 		   if the commerce is full.
+	 * 		   if the fire station is full.
 	 */
 	public final int getMaxNeededInhabitants() {
 		return this.maxNeededInhabitants;

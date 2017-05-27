@@ -28,10 +28,10 @@ import model.CityResources;
 import model.GameBoard;
 
 /**
- * PoliceStation increase satisfaction and reduce probability of PoliceEvent
+ * Hospital increase satisfaction and reduce probability of DiseaseEvent
  *
  */
-public class PoliceStationTile extends BuildableTile {
+public class HospitalTile extends BuildableTile {
 	private static final long serialVersionUID = 1L;
 
 	// Constants
@@ -49,11 +49,11 @@ public class PoliceStationTile extends BuildableTile {
 	 * Default value of {@link #getMaxNeededInhabitants()}
 	 */
 	public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 15;
-
+	
 	/**
 	 * Default value of {@link #getMaxNeededEnergy()}
 	 */
-	public final static int DEFAULT_MAX_NEEDED_ENERGY = 20;
+	public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;
 
 	/**
 	 * Default value of {@link #getSatisfactionValue()}
@@ -77,26 +77,28 @@ public class PoliceStationTile extends BuildableTile {
 	private final int satisfactionValue;
 
 	// Creation
+
 	/**
 	 * Create with default settings.
 	 */
-	public PoliceStationTile() {
-		super(PoliceStationTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
-		this.satisfactionValue = PoliceStationTile.DEFAULT_SATISFACTION_VALUE;
-		this.maintenanceCost = PoliceStationTile.DEFAULT_MAINTENANCE_COST;
-		this.maxNeededEnergy = PoliceStationTile.DEFAULT_MAX_NEEDED_ENERGY;
+	public HospitalTile() {
+		super(HospitalTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
+		this.satisfactionValue = HospitalTile.DEFAULT_SATISFACTION_VALUE;
+		this.maintenanceCost = HospitalTile.DEFAULT_MAINTENANCE_COST;
+		this.maxNeededEnergy = HospitalTile.DEFAULT_MAX_NEEDED_ENERGY;
 		this.maxNeededInhabitants = PoliceStationTile.DEFAULT_MAX_NEEDED_INHABITANTS;
 	}
 
 	// Access
+
 	/**
 	 * @return Maximum number of energy units to consume. This maximum is
-	 *         consumed if the Police station is full.
+	 *         consumed if the fire station is full.
 	 */
 	public final int getMaxNeededEnergy() {
 		return this.maxNeededEnergy;
 	}
-	
+
 	/**
 	 * @return Increase or decrease value of satisfaction
 	 */
@@ -106,12 +108,12 @@ public class PoliceStationTile extends BuildableTile {
 
 	/**
 	 * @return Maximum number of inhabitants at work. This maximum is working
-	 * 		   if the police station is full.
+	 * 		   if the hospital is full.
 	 */
 	public final int getMaxNeededInhabitants() {
 		return this.maxNeededInhabitants;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		int result = super.hashCode();
@@ -124,14 +126,14 @@ public class PoliceStationTile extends BuildableTile {
 	// Status
 	@Override
 	public boolean equals(Object o) {
-		return o instanceof PoliceStationTile && this.equals((PoliceStationTile) o);
+		return o instanceof HospitalTile && this.equals((HospitalTile) o);
 	}
 
 	/**
 	 * @param o
 	 * @return Is {@value o} equals to this?
 	 */
-	public boolean equals(PoliceStationTile o) {
+	public boolean equals(HospitalTile o) {
 		return this == o || super.equals(o)
 				&& o.maxNeededEnergy == this.maxNeededEnergy 
 				&& o.maintenanceCost == this.maintenanceCost

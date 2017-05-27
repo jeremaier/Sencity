@@ -52,8 +52,11 @@ import model.tools.AirportZoneDelimiterTool;
 import model.tools.BulldozerTool;
 import model.tools.CommercialZoneDelimiterTool;
 import model.tools.EvolveTool;
+import model.tools.FireStationZoneDelimiterTool;
 import model.tools.HarborZoneDelimiterTool;
+import model.tools.HospitalZoneDelimiterTool;
 import model.tools.IndustrialZoneDelimiterTool;
+import model.tools.PoliceStationZoneDelimiterTool;
 import model.tools.PowerPlantConstructionTool;
 import model.tools.ResidentialZoneDelimiterTool;
 import model.tools.StadiumZoneDelimiterTool;
@@ -158,6 +161,9 @@ public class GameBoard extends Observable implements Serializable {
 		this.tools.add(new HarborZoneDelimiterTool());
 		this.tools.add(new StadiumZoneDelimiterTool());
 		this.tools.add(new WaterZoneDelimiterTool());
+		this.tools.add(new PoliceStationZoneDelimiterTool());
+		this.tools.add(new FireStationZoneDelimiterTool());
+		this.tools.add(new HospitalZoneDelimiterTool());
 
 		this.selectedTool = this.tools.get(GameBoard.DEFAULT_SELECTED_TOOL);
 
