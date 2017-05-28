@@ -81,8 +81,8 @@ public abstract class TransportTile extends Tile implements Destroyable {
 
 	// Creation
 	/**
-	 * @param capacity
-	 *            - {@link #getProductsCapacity()}
+	 * @param productsPrice
+	 *            - {@link #getProductsPrice()}
 	 */
 	public TransportTile(int productsPrice) {
 		this.productsPrice = productsPrice;
@@ -175,7 +175,8 @@ public abstract class TransportTile extends Tile implements Destroyable {
 
 	/**
 	 * @param o
-	 * @return Is {@value o} equals to this?
+	 *            - Object
+	 * @return Is o equals to this?
 	 */
 	public boolean equals(TransportTile o) {
 		return this == o || o.productsPrice == this.productsPrice

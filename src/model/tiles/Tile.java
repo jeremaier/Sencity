@@ -40,6 +40,7 @@ public abstract class Tile implements Serializable {
      * Go to the next state.
      *
      * @param res
+     *            - Resources
      */
     public abstract void update(CityResources res);
 

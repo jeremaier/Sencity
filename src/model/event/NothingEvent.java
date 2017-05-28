@@ -35,26 +35,26 @@ import model.CityResources;
  */
 public class NothingEvent extends Event {
 
-    /**
-     * Default Constructor.
-     */
+	/**
+	 * Default Constructor.
+	 */
 	public NothingEvent() {
-        super();
-    }
+		super();
+	}
 
-    /**
-     * Apply no effects.
-     */
+	/**
+	 * Apply no effects.
+	 */
 	@Override
-    public List<Event> applyEffects(CityResources resources) {
-        return new ArrayList<>(0);
-    }
+	public List<Event> applyEffects(CityResources resources) {
+		return new ArrayList<>(0);
+	}
 
-    /**
-     * Return an empty message.
-     */
+	/**
+	 * Return an empty message.
+	 */
 	@Override
-    public String getMessage(LocalizedTexts texts) {
-        return "";
-    }
+	public String getMessage(LocalizedTexts texts) {
+		return "";
+	}
 }

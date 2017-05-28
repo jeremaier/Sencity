@@ -41,27 +41,27 @@ public class IndustrialTile extends BuildableTile {
 	public final static int DEFAULT_MAINTENANCE_COST = 4;
 	
 	/**
-	 * Default value of {@link IndustrialTile#getEvolutionEnergyConsumption()}
+	 * Default value of {@link #getEvolutionEnergyConsumption()}
 	 */
 	public final static int DEFAULT_EVOLUTION_ENERGY_CONSUMPTION = 5;
 
 	/**
-	 * Default value of {@link IndustrialTile#getProductionCapacity}
+	 * Default value of {@link #getProductsCapacity}
 	 */
 	public final static int DEFAULT_PRODUCTS_CAPACITY = 200;
 
 	/**
-	 * Default value of {@link IndustrialTile#getMaxProduction}
+	 * Default value of {@link #getMaxProduction}
 	 */
 	public final static int DEFAULT_MAX_PRODUCTION = 20;
 
 	/**
-	 * Default value of {@link IndustrialTile#getNeededEnergy()}
+	 * Default value of {@link #getMaxNeededEnergy()}
 	 */
 	public final static int DEFAULT_MAX_NEEDED_ENERGY = 30;  
 
 	/**
-	 * Default value of {@link IndustrialTile#getNeededInhabitants()}
+	 * Default value of {@link #getMaxNeededInhabitants()}
 	 */
 	public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 30;
 
@@ -93,7 +93,7 @@ public class IndustrialTile extends BuildableTile {
 	// Creation
 	/**
 	 * @param capacity
-	 *            - {@link #getProduction()}
+	 *            - {@link #getProductsCapacity()}
 	 */
 	public IndustrialTile(int capacity) {
 		super(IndustrialTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION);
@@ -124,7 +124,7 @@ public class IndustrialTile extends BuildableTile {
 	/**
 	 * @return Maximum products capacity.
 	 */
-	public final int getProductionCapacity() {
+	public final int getProductsCapacity() {
 		return this.productsCapacity;
 	}
 
@@ -147,7 +147,7 @@ public class IndustrialTile extends BuildableTile {
 	 * @return Maximum number of inhabitants at work. This maximum is working
 	 * 		   if the industry is full.
 	 */
-	public final int getMaxWorkingInhabitants() {
+	public final int getMaxNeededInhabitants() {
 		return this.maxNeededInhabitants;
 	}
 
@@ -168,7 +168,8 @@ public class IndustrialTile extends BuildableTile {
 
 	/**
 	 * @param o
-	 * @return Is {@value o} equals to this?
+	 *            - Object
+	 * @return Is o equals to this?
 	 */
 	public boolean equals(IndustrialTile o) {
 		return this == o || super.equals(o)
@@ -262,6 +263,7 @@ public class IndustrialTile extends BuildableTile {
 	// Implementation
 	/**
 	 * @param res
+	 *            - Resources
 	 * @return The number of products in the current industry.
 	 *
 	 *         e.g. if the industry capacity is X = 50, the city capacity is Y

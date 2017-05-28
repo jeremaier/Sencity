@@ -25,7 +25,6 @@
 package model.tiles;
 
 import model.CityResources;
-import model.GameBoard;
 
 /**
  * State-less tile that represents grass tiles.
@@ -60,12 +59,9 @@ public final class WaterTile extends Tile {
     public int hashCode() {
         return 1;
     }
-
-    /**
-     * @param gb
-     * @return the class name.
-     */
-    public String toString(GameBoard gb) {
+    
+    @Override
+    public String toString() {
     	return this.getClass().getSimpleName();
     }
 

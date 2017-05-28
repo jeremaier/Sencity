@@ -5,21 +5,27 @@ import model.tiles.Tile;
 
 public interface EvolveTool {
 	/**
+	 * Evolve aTarget and spend needed resources from resources.
+	 * 
 	 * @param aTarget
-	 * @param r
-	 * @return Evolve {@value aTarget} and spend needed resources from {@value r}.
+	 *            - Target tile
+	 * @param resources
+	 *            - Resources
 	 */
-	abstract void evolve(Tile currentTile, CityResources resources);
+	abstract void evolve(Tile aTarget, CityResources resources);
 	
 	/**
 	 * @param aTarget
+	 *            - Target tile
 	 * @return Evolve cost function regarding actual state.
 	 */
 	abstract int getEvolveCost(Tile aTarget);
 	
 	/**
 	 * @param aTarget
+	 *            - Target tile
 	 * @param r
+	 *            - Resources
 	 */
 	abstract void spend(Tile aTarget, CityResources r);
 }

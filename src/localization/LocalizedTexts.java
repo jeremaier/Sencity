@@ -114,6 +114,8 @@ public abstract class LocalizedTexts implements Serializable {
 	public abstract String getPollutionLabel();
 
     /**
+     * @param tile
+     *            - Next to this tile
      * @return Message that indicates that the tool need to be next to a certain tile.
      */
 	public abstract String getNextToMsg(Tile tile);
@@ -189,6 +191,8 @@ public abstract class LocalizedTexts implements Serializable {
 	public abstract String getSaveButtonLabel();
 	
 	/**
+	 * @param nbr
+	 *            - Save number
 	 * @return Save message.
 	 */
 	public abstract String getSaveMessage(int nbr);
@@ -209,6 +213,10 @@ public abstract class LocalizedTexts implements Serializable {
 	public abstract String getStoppedDiseaseEventMessage();
 	
 	/**
+	 * @param row
+	 *            - Row number of the earthquake
+	 * @param column
+	 *            - Column number of the earthquake
 	 * @return Earthquake event message.
 	 */
 	public abstract String getEarthquakeEventMessage(int row, int column);

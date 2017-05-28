@@ -113,7 +113,8 @@ public class IconFactory {
 
 	/**
 	 * @param aTool
-	 * @return Icon associated to {@value aTool}.
+	 *            - Tool to have icon
+	 * @return Icon associated to aTool.
 	 */
 	public ImageIcon getToolIcon(Tool aTool) {
 		final String toolId = this.dashSeparatedWordsFromCamelCase(aTool.getClass().getSimpleName());
@@ -122,7 +123,8 @@ public class IconFactory {
 
 	/**
 	 * @param aTile
-	 * @return Icon associated to {@value aTile}.
+	 *            - Tile to have icon
+	 * @return Icon associated to aTile.
 	 */
 	public ImageIcon getTileIcon(Tile aTile) {
 		return this.getIcon(this.getTileId(aTile), IconFactory.NO_ICON_TILE_ID);

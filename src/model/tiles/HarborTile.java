@@ -58,7 +58,7 @@ public class HarborTile extends TransportTile {
     /**
      * Default value of {@link TransportTile#getSatisfactionValue()}
      */
-    public final static int DEFAULT_SATISFACTION_VALUE = 10;
+    public final static int DEFAULT_SATISFACTION_VALUE = 4;
     
     /**
      * This building is already build?

@@ -40,9 +40,10 @@ public class ToolUI extends JButton {
 
     // Creation
     /**
-     *
      * @param world
+     *            - World
      * @param target
+     *            - Tool to UI
      */
     public ToolUI(GameBoard world, Tool target) {
         super();

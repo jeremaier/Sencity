@@ -72,7 +72,7 @@ public class CommercialTile extends BuildableTile {
 	public static int CommerceNumber = 0;
 	
 	/**
-	 * {@link #getMaxWorkingInhabitants()}
+	 * {@link #getMaxNeededInhabitants()}
 	 */
 	private final int maxNeededInhabitants;
 
@@ -159,7 +159,8 @@ public class CommercialTile extends BuildableTile {
 
 	/**
 	 * @param o
-	 * @return Is {@value o} equals to this?
+	 *            - Object
+	 * @return Is o equals to this?
 	 */
 	public boolean equals(CommercialTile o) {
 		return this == o || super.equals(o) 
@@ -177,9 +178,10 @@ public class CommercialTile extends BuildableTile {
 	// Change
 	@Override
 	public void disassemble(CityResources res) {
-		if(this.state == ConstructionState.BUILT || this.state == ConstructionState.BUILTLVL2 || this.state == ConstructionState.BUILTLVL3)
+		if(this.state == ConstructionState.BUILT || this.state == ConstructionState.BUILTLVL2 || this.state == ConstructionState.BUILTLVL3) {
 			CommerceNumber--;
 			super.disassemble(res);
+		}
 	}
 
 	@Override

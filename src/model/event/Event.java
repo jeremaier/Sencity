@@ -37,45 +37,45 @@ import model.TilePosition;
  * Abstract superclass for all events.
  */
 public abstract class Event {
+	protected static TilePosition startingTile;
+	protected Set<TilePosition> appearanceCoordinates;
+	public GameBoard world;
 
-    protected static TilePosition startingTile;
-    protected Set<TilePosition> appearanceCoordinates;
-    public GameBoard world;
-    
-    /**
-     * Default Constructor.
-     */
-    public Event() {
-    }
+	/**
+	 * Default Constructor.
+	 */
+	public Event() {
+	}
 
-    /**
-     * Constructor that randomly chooses a TilePosition to be affected by the event.
-     * @param the game board
-     */
-    public Event(GameBoard world) {
-        int startingRow = ThreadLocalRandom.current().nextInt(0, world.getHeight());
-        int startingColumn = ThreadLocalRandom.current().nextInt(0, world.getWidth());
-        startingTile = new TilePosition(startingRow, startingColumn);
-        this.world=world;
-    }
+	/**
+	 * Constructor that randomly chooses a TilePosition to be affected by the event.
+	 * @param world
+	 *            - World
+	 */
+	public Event(GameBoard world) {
+		int startingRow = ThreadLocalRandom.current().nextInt(0, world.getHeight());
+		int startingColumn = ThreadLocalRandom.current().nextInt(0, world.getWidth());
+		startingTile = new TilePosition(startingRow, startingColumn);
+		this.world=world;
+	}
 
-    /**
-     * Applies the effects of this event. Updates the given <code>resources
-     * <code>.
-     *
-     * @param resources
-     * @return The events that follow from the effects of this event. Must not
-     *         be null, if no event results from the current one then return an
-     *         empty List.
-     */
-    public abstract List<Event> applyEffects(CityResources resources);
+	/**
+	 * Applies the effects of this event. Updates the given resources.
+	 *
+	 * @param resources
+	 *            - Resources
+	 * @return The events that follow from the effects of this event. Must not
+	 *         be null, if no event results from the current one then return an
+	 *         empty List.
+	 */
+	public abstract List<Event> applyEffects(CityResources resources);
 
-    /**
-     * @param texts
-     *            - text localization.
-     * @return Message announcing this event. Must not be null, if no message
-     *         should be displayed then return an empty String.
-     */
-    public abstract String getMessage(LocalizedTexts texts);
+	/**
+	 * @param texts
+	 *            - text localization.
+	 * @return Message announcing this event. Must not be null, if no message
+	 *         should be displayed then return an empty String.
+	 */
+	public abstract String getMessage(LocalizedTexts texts);
 
 }

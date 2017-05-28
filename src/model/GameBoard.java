@@ -45,6 +45,7 @@ import model.difficulty.DifficultyLevel;
 import model.event.Event;
 import model.event.EventFactory;
 import model.tiles.AirportTile;
+import model.tiles.BuildableTile;
 import model.tiles.CommercialTile;
 import model.tiles.Evolvable;
 import model.tiles.GrassTile;
@@ -141,18 +142,14 @@ public class GameBoard extends Observable implements Serializable {
 
 	// Creation
 	/**
-	 * Create a rectangle world with {@value height * width} tiles.
-	 *
-	 * @param height
-	 *            - {@link #getHeight()}
-	 * @param width
-	 *            - {@link #getWidth()}
+	 * Create a new world.
+	 * 
 	 * @param tiles
 	 * 			  - Game tiles.
 	 * @param res
-	 * 			  - Game resources.
+	 * 			  - {@link #getResources()}
 	 * @param difficulty
-	 *            - Game difficulty level.
+	 *            - {@link #getDifficulty()}.
 	 * @param texts
 	 *            - {@link #getTexts()}
 	 */
@@ -174,7 +171,7 @@ public class GameBoard extends Observable implements Serializable {
 		this.tools.add(new PoliceStationZoneDelimiterTool());
 		this.tools.add(new HospitalZoneDelimiterTool());
 		this.tools.add(new ParkZoneDelimiterTool());
-		
+
 		this.selectedTool = this.tools.get(GameBoard.DEFAULT_SELECTED_TOOL);
 
 		this.pendingEvolutions = new LinkedList<>();
@@ -187,7 +184,7 @@ public class GameBoard extends Observable implements Serializable {
 	}
 
 	/**
-	 * Create a rectangle world with {@value height * width} tiles.
+	 * Create a rectangle world with height * width tiles.
 	 *
 	 * @param height
 	 *            - {@link #getHeight()}
@@ -203,7 +200,7 @@ public class GameBoard extends Observable implements Serializable {
 	}
 
 	/**
-	 * Create a rectangle world with {@value height * width} tiles.
+	 * Create a rectangle world with height * width tiles.
 	 *
 	 * @param height
 	 *            - {@link #getHeight()}
@@ -217,7 +214,7 @@ public class GameBoard extends Observable implements Serializable {
 	}
 
 	/**
-	 * Create a square world with {@value length * length} tiles.
+	 * Create a square world with length * length tiles.
 	 *
 	 * @param length
 	 *            - {@link #getWidth()} and {@link #getHeight()}
@@ -260,9 +257,8 @@ public class GameBoard extends Observable implements Serializable {
 	 *            - Row number
 	 * @param column
 	 *            - Column number
-	 * @return Cell with at location ({@value row}, {@value column}).
-	 * @exception AssertionError
-	 *                if {@value row} or {@value column} is invalid.
+	 * @return Cell with at a location.
+	 * @exception AssertionError if row or column is invalid.
 	 */
 	public Tile getTile(int row, int column) {
 		assert row >= 0 && row < this.getHeight() && column >= 0 && column < this.getWidth() : "Ligne/Colonne incorrecte";
@@ -351,6 +347,7 @@ public class GameBoard extends Observable implements Serializable {
 	 * Change the difficulty of the current gameBoard
 	 * 
 	 * @param difficulty
+	 *            - Difficulty level
 	 */
 	public void setDifficulty(Difficulties difficulty) {
 		GameBoard.difficulty = difficulty.getLevel();
@@ -367,10 +364,13 @@ public class GameBoard extends Observable implements Serializable {
 	}
 
 	/**
-	 * Setup whole tiles ({@value height}, {@value width}).
+	 * Setup whole tiles.
 	 *
 	 * @param height
+	 *            - Height size
 	 * @param width
+	 *            - Width size
+	 * @return the tab of tiles of the game
 	 */
 	public static Tile[][] setTiles(int height, int width) {
 		assert width > 0 && height > 0 : "Dimensions incorrectes";
@@ -385,10 +385,12 @@ public class GameBoard extends Observable implements Serializable {
 	}
 
 	/**
-	 * Select the tile at location ({@value row}, {@value column}).
+	 * Select the tile at a location.
 	 *
 	 * @param row
+	 *            - Row number
 	 * @param column
+	 *            - Column number
 	 */
 	public void setSelectedTile(int row, int column) {
 		this.selectedTile = this.getTile(row, column);
@@ -400,7 +402,9 @@ public class GameBoard extends Observable implements Serializable {
 	 * <code>startingTile</code> and the <code>areaSize</code>.
 	 *
 	 * @param startingTile
+	 *            - Starting tile position
 	 * @param areaSize
+	 *            - Size of the area
 	 * @return Set of TilePosition
 	 */
 	public Set<TilePosition> getTilesArea(TilePosition startingTile, int areaSize) {
@@ -422,10 +426,15 @@ public class GameBoard extends Observable implements Serializable {
 
 	/**
 	 * @param row
+	 *            - Row number
 	 * @param column
+	 *            - Column number
 	 * @param areaSize
+	 *            - Size of the area to test
 	 * @param tile
-	 * @param tilesNbr
+	 *            - Tile to test
+	 * @param tilesNeeded
+	 *            - Tile number needed in this area
 	 * @return if a certain tile is in certain area of the map.
 	 */
 	public boolean isInTileArea(int row, int column, int areaSize, Tile tile, int tilesNeeded) {
@@ -445,8 +454,11 @@ public class GameBoard extends Observable implements Serializable {
 
 	/**
 	 * @param row
+	 *            - Row number
 	 * @param column
+	 *            - Column number
 	 * @param areaSize
+	 *            - Size of the area to test
 	 * @return the number of clean buildings in an area.
 	 */
 	public int cleanBuildingsNumber(int row, int column, int areaSize) {
@@ -465,11 +477,12 @@ public class GameBoard extends Observable implements Serializable {
 
 	// Change (World)
 	/**
-	 * Effect the tile at location ({@value row}, {@value column}) with
-	 * {@link #getSelectedTool()} if possible.
+	 * Effect the tile at location with {@link #getSelectedTool()} if possible.
 	 *
 	 * @param row
+	 *            - Row number
 	 * @param column
+	 *            - Column number
 	 */
 	public void effectTile(int row, int column) {
 		assert row >= 0 && row < this.getHeight() && column >= 0 && column < this.getWidth() : "Ligne/Colonne incorrecte";
@@ -586,21 +599,40 @@ public class GameBoard extends Observable implements Serializable {
 			for(int column = 0; column < tiles[0].length; column++) {
 				Tile tile = tiles[row][column];
 
-				if(tile instanceof IndustrialTile || tile instanceof AirportTile || tile instanceof HarborTile || tile instanceof PowerPlantTile)
+				if(tile instanceof IndustrialTile || tile instanceof PowerPlantTile) {
+					switch(((BuildableTile)tile).getState()) {
+					case BUILTLVL3:
+						this.getResources().increasePollution(5 * this.cleanBuildingsNumber(row, column, 5));
+						break;
+
+					case BUILTLVL2:
+						this.getResources().increasePollution(5 * this.cleanBuildingsNumber(row, column, 4));
+						break;
+
+					case BUILT:
+						this.getResources().increasePollution(5 * this.cleanBuildingsNumber(row, column, 3));
+						break;
+
+					default: break;
+					}							
+				} else if(tile instanceof AirportTile || tile instanceof HarborTile)
 					this.getResources().increasePollution(5 * this.cleanBuildingsNumber(row, column, 3));
 			}
 		}
 	}
-	
+
 	/**
 	 * Update the satisfaction effect.
 	 */
 	private void updateSatisfaction() {
 		CityResources resources = this.getResources();
 		this.updateEventEffects(resources);
-		resources.decreaseSatisfaction((int)((resources.getVat() - 10) / 2.5));
+		final int tax = (int)((resources.getVat() - 10) / 2.5); // Tax
+		final int unemploymentRate = (int)(5 * resources.getUnworkingPopulation() / resources.getPopulation()); // Taux de chomage
+		resources.decreaseSatisfaction(tax);
+		resources.decreaseSatisfaction(unemploymentRate);
 	}
-	
+
 	/**
 	 * Apply event effects on satisfaction and pollution.
 	 */
@@ -610,10 +642,11 @@ public class GameBoard extends Observable implements Serializable {
 	}
 
 	/**
-	 * Save a game ({@value row}, {@value column}).
+	 * Save the current game.
 	 * 
 	 * @param res
-	 * @param path
+	 *            - Resources
+	 * @return the save number.
 	 */
 	public int saveGame(CityResources res) {
 		String directoryPath = System.getProperty("user.dir") + "\\saves";

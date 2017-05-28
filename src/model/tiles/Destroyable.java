@@ -42,6 +42,7 @@ public interface Destroyable {
      * Safely destroy the construction (for bulldozer).
      *
      * @param res
+     *            - Resources
      */
     public void disassemble(CityResources res);
 

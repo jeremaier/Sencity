@@ -40,6 +40,9 @@ public class GameBoardView extends JPanel implements Observer {
 
     /**
      * Constructor.
+     * 
+     * @param w
+     *            - World
      */
     public GameBoardView(GameBoard w) {
         super();

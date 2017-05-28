@@ -104,7 +104,8 @@ public class PowerPlantTile extends BuildableTile {
 
     /**
      * @param o
-     * @return Is {@value o} equals to this?
+     *            - Object
+     * @return Is o equals to this?
      */
     public boolean equals(PowerPlantTile o) {
         return this == o || o.production == this.production
@@ -134,6 +135,7 @@ public class PowerPlantTile extends BuildableTile {
     
     /**
      * @param res
+     *            - Resources
      */
     public void evolveLevel(CityResources res) {
 		switch(state) {

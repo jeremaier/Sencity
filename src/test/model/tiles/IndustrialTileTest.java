@@ -14,11 +14,11 @@ public class IndustrialTileTest {
 		Assert.assertEquals(IndustrialTile.DEFAULT_MAINTENANCE_COST, it.getMaintenanceCost());
 		Assert.assertEquals(IndustrialTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION, it.getEvolutionEnergyConsumption());
 		Assert.assertEquals(IndustrialTile.DEFAULT_MAX_NEEDED_ENERGY, it.getMaxNeededEnergy());
-		Assert.assertEquals(IndustrialTile.DEFAULT_MAX_NEEDED_INHABITANTS, it.getMaxWorkingInhabitants());
+		Assert.assertEquals(IndustrialTile.DEFAULT_MAX_NEEDED_INHABITANTS, it.getMaxNeededInhabitants());
 		Assert.assertEquals(IndustrialTile.DEFAULT_MAX_PRODUCTION, IndustrialTile.getMaxProduction());
-		Assert.assertEquals(IndustrialTile.DEFAULT_PRODUCTS_CAPACITY, it.getProductionCapacity());
+		Assert.assertEquals(IndustrialTile.DEFAULT_PRODUCTS_CAPACITY, it.getProductsCapacity());
 		it = new IndustrialTile(10);
-		Assert.assertEquals(10, it.getProductionCapacity());
+		Assert.assertEquals(10, it.getProductsCapacity());
 	}
 	
 	@Test
@@ -41,8 +41,8 @@ public class IndustrialTileTest {
 		IndustrialTile it = new IndustrialTile(10);
 		CityResources resources = new CityResources(100);
 		resources.increaseProductsCapacity(10);
-		final int product = resources.getProductsCount() * it.getProductionCapacity() / resources.getProductsCapacity();
-		final int busyPercentage = product * 100 / it.getProductionCapacity();
+		final int product = resources.getProductsCount() * it.getProductsCapacity() / resources.getProductsCapacity();
+		final int busyPercentage = product * 100 / it.getProductsCapacity();
 		final int vacantPercentage = 100 - busyPercentage;
 		it.update(resources);
 		final int initialProducts = resources.getProductsCount();

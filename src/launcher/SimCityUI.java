@@ -58,6 +58,7 @@ public final class SimCityUI extends JFrame {
      * First argument: height Second argument: width
      *
      * @param args
+     *            - Arguments
      */
     public static void main(String[] args) {
         final int height;

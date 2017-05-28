@@ -16,6 +16,9 @@ public class EarthquakeEvent extends Event {
 
 	/**
 	 * Constructor.
+	 * 
+	 * @param world
+	 *            - World
 	 */
 	public EarthquakeEvent(GameBoard world) {
 		super(world);
@@ -29,8 +32,8 @@ public class EarthquakeEvent extends Event {
 		if(!(world.tiles[startingTile.getRow()][startingTile.getColumn()] instanceof WaterTile))
 			world.tiles[startingTile.getRow()][startingTile.getColumn()] = GrassTile.getDefault();
 
-        resources.increaseBadEventOccurrence();
-        
+		resources.increaseBadEventOccurrence();
+
 		return new ArrayList<>(0);
 	}
 

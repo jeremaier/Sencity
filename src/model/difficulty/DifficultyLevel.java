@@ -89,10 +89,8 @@ public class DifficultyLevel implements Serializable {
      *
      * @param aCurrency
      *            - {@link #getInitialCurrency()}
-     * @param aBuildozerToolCost
-     *            - {@link #getBuildozerCost()}
-     * @param aZoneDelimiterCost
-     *            - {@link #getZoneDelimiterCost()}
+     * @param coeff
+     *            - {@link #getCoeff()}
      */
     public DifficultyLevel(int aCurrency, double coeff) {
         this.initialCurrency = aCurrency;
@@ -129,7 +127,8 @@ public class DifficultyLevel implements Serializable {
 
     /**
      * @param o
-     * @return Is {@value o} equals to this?
+     *             - Object
+     * @return Is o equals to this?
      */
     public boolean equals(DifficultyLevel o) {
         return this == o || o.initialCurrency == this.initialCurrency;

@@ -15,34 +15,34 @@ public class MatchEvent extends Event {
 	 */
 	public final static int MONEY = 300;
 
-    /**
-     * Default Constructor.
-     */
+	/**
+	 * Default Constructor.
+	 */
 	public MatchEvent() {
-        super();
-    }
-
-    /**
-     * Apply no effects.
-     */
-	@Override
-    public List<Event> applyEffects(CityResources resources) {
-		if(StadiumTile.alreadyBuild) {
-	        resources.credit(MatchEvent.MONEY);
-	        resources.increaseGoodEventOccurrence();
-		}
-		
-        return new ArrayList<>(0);
-    }
+		super();
+	}
 
 	/**
-     * Return an match event message.
-     */
+	 * Apply no effects.
+	 */
 	@Override
-    public String getMessage(LocalizedTexts texts) {
+	public List<Event> applyEffects(CityResources resources) {
+		if(StadiumTile.alreadyBuild) {
+			resources.credit(MatchEvent.MONEY);
+			resources.increaseGoodEventOccurrence();
+		}
+
+		return new ArrayList<>(0);
+	}
+
+	/**
+	 * Return an match event message.
+	 */
+	@Override
+	public String getMessage(LocalizedTexts texts) {
 		if(StadiumTile.alreadyBuild)
 			return texts.getMatchEventMessage();
-		
+
 		return texts.getCancelledMatchEventMessage();
-    }
+	}
 }

@@ -15,29 +15,29 @@ public class FestivalEvent extends Event {
 	 */
 	public final static int MONEY = 50;
 
-    /**
-     * Default Constructor.
-     */
+	/**
+	 * Default Constructor.
+	 */
 	public FestivalEvent() {
-        super();
-    }
+		super();
+	}
 
-    /**
-     * Apply no effects.
-     */
+	/**
+	 * Apply no effects.
+	 */
 	@Override
-    public List<Event> applyEffects(CityResources resources) {
-        resources.credit(FestivalEvent.MONEY);
-        resources.increaseGoodEventOccurrence();
-        return new ArrayList<>(0);
-    }
+	public List<Event> applyEffects(CityResources resources) {
+		resources.credit(FestivalEvent.MONEY);
+		resources.increaseGoodEventOccurrence();
+		return new ArrayList<>(0);
+	}
 
-    /**
-     * Return an festival event message.
-     */
+	/**
+	 * Return an festival event message.
+	 */
 	@Override
-    public String getMessage(LocalizedTexts texts) {
+	public String getMessage(LocalizedTexts texts) {
 		return texts.getFestivalEventMessage();
-    }
+	}
 }
 

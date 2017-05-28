@@ -40,7 +40,7 @@ public class ParkTile extends Tile implements Destroyable {
 	public final static int DEFAULT_MAINTENANCE_COST = 3;
 
 	/**
-	 * Default value of {@link #getNeededInhabitants()}
+	 * Default value of {@link #getMaxNeededInhabitants()}
 	 */
 	public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 5;
 
@@ -51,7 +51,7 @@ public class ParkTile extends Tile implements Destroyable {
 	
 	// Implementation
 	/**
-	 * {@link #getMaxWorkingInhabitants()}
+	 * {@link #getMaxNeededInhabitants()}
 	 */
 	private final int maxNeededInhabitants;
 
@@ -134,7 +134,8 @@ public class ParkTile extends Tile implements Destroyable {
 
 	/**
 	 * @param o
-	 * @return Is {@value o} equals to this?
+	 *            - Object
+	 * @return Is o equals to this?
 	 */
 	public boolean equals(ParkTile o) {
 		return this == o || o.maxNeededInhabitants == this.maxNeededInhabitants

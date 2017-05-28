@@ -33,7 +33,7 @@ import model.GameBoard;
  */
 public abstract class ServiceTile extends Tile implements Destroyable {
 	private static final long serialVersionUID = 1L;
-	
+
 	// Implementation
 	/**
 	 * Evolution state
@@ -49,9 +49,9 @@ public abstract class ServiceTile extends Tile implements Destroyable {
 	 * {@link #isPopulationMissing()}
 	 */
 	protected boolean isPopulationMissing;
-	
+
 	/**
-	 * {@link #getMaxWorkingInhabitants()}
+	 * {@link #getMaxNeededInhabitants()}
 	 */
 	protected final int maxNeededInhabitants;
 
@@ -64,20 +64,24 @@ public abstract class ServiceTile extends Tile implements Destroyable {
 	 * {@link #getSatisfactionValue()}
 	 */
 	protected final int satisfactionValue;
-    
-    /**
-     * {@link #getMaintenanceCost()}
-     */
-    protected int maintenanceCost;
+
+	/**
+	 * {@link #getMaintenanceCost()}
+	 */
+	protected int maintenanceCost;
 
 	// Creation
 
 	/**
 	 * Create with default settings.
 	 * @param maxNeededInhabitants
+	 *            - {@link #getMaxNeededEnergy()}
 	 * @param maxNeededEnergy
+	 *            - {@link #getMaxNeededEnergy()}
 	 * @param maintenanceCost
+	 *            - {@link #getMaintenanceCost()}
 	 * @param satisfactionValue
+	 *            - {@link #getSatisfactionValue()}
 	 */
 	public ServiceTile(int satisfactionValue, int maintenanceCost, int maxNeededEnergy, int maxNeededInhabitants) {
 		this.satisfactionValue = satisfactionValue;
@@ -90,7 +94,6 @@ public abstract class ServiceTile extends Tile implements Destroyable {
 	}
 
 	// Access
-
 	/**
 	 * @return Maximum number of energy units to consume. This maximum is
 	 *         consumed if the fire station is full.
@@ -113,13 +116,27 @@ public abstract class ServiceTile extends Tile implements Destroyable {
 	public final int getMaxNeededInhabitants() {
 		return this.maxNeededInhabitants;
 	}
-    
-    /**
-     * @return Maintenance cost.
-     */
-    public int getMaintenanceCost() {
-    	return this.maintenanceCost;
-    }
+
+	/**
+	 * @return Maintenance cost.
+	 */
+	public int getMaintenanceCost() {
+		return this.maintenanceCost;
+	}
+
+	/**
+	 * @return Is energy missing in order to evolve or to update?
+	 */
+	public final boolean isEnergyMissing() {
+		return this.isEnergyMissing;
+	}
+
+	/**
+	 * @return Is population missing in order to evolve or to update?
+	 */
+	public final boolean isPopulationMissing() {
+		return this.isPopulationMissing;
+	}
 
 	@Override
 	public int hashCode() {
@@ -142,7 +159,8 @@ public abstract class ServiceTile extends Tile implements Destroyable {
 
 	/**
 	 * @param o
-	 * @return Is {@value o} equals to this?
+	 *            - Object
+	 * @return Is o equals to this?
 	 */
 	public boolean equals(ServiceTile o) {
 		return this == o || o.maxNeededEnergy == this.maxNeededEnergy 
@@ -159,9 +177,9 @@ public abstract class ServiceTile extends Tile implements Destroyable {
 		return this.isDestroyed;
 	}
 
-    @Override
-    public abstract void disassemble(CityResources res);
-    
+	@Override
+	public abstract void disassemble(CityResources res);
+
 	// Change
 	@Override
 	public void update(CityResources res) {
@@ -184,10 +202,10 @@ public abstract class ServiceTile extends Tile implements Destroyable {
 					workingPopulation = res.getUnworkingPopulation();
 					this.isPopulationMissing = true;
 				} else this.isPopulationMissing = false;
-				
+
 				final float energyPercentage = (float)consumedEnergy / this.maxNeededEnergy;
 				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
-				
+
 				busyPercentage -= energyPercentage * workersPercentage;
 			}
 

@@ -36,24 +36,27 @@ public abstract class Tool {
 
 // Status
 	/**
-	 *
 	 * @param aTarget
-	 * @return Can current tool effect {@value aTarget}?
+	 *            - Target tile
+	 * @return Can current tool effect aTarget?
 	 */
 	public abstract boolean canEffect (Tile aTarget);
 
 	/**
-	 * 
+	 * @param aTarget
+	 *            - Target tile
 	 * @param r
-	 * @return Regarding {@value r}, is the tool usable?
+	 *            - Resources
+	 * @return Regarding  r, is the tool usable?
 	 */
 	public abstract boolean isAfordable (Tile aTarget, CityResources r);
 	
 	/**
-	 * @param currentTile
+	 * @param aTarget
+	 *            - Target tile
 	 * @return Can current tool evolve this building?
 	 */
-	public boolean canEvolve(Tile currentTile) {
+	public boolean canEvolve(Tile aTarget) {
 		return false;
 	}
 	
@@ -65,24 +68,28 @@ public abstract class Tool {
 	}
 	
 	/**
-	 * @return 
+	 * @param aTarget
+	 *            - Target tile
 	 * @return The target is the same building as the tool.
 	 */
 	public abstract boolean isCorrespondantTile(Tile aTarget);
 
 	// Access
 	/**
-	 * @return Cost of the use of the tool on {@value aTarget}.
+	 * @param aTarget
+	 *            - Target tile
+	 * @return Cost of the use of the tool on aTarget.
 	 */
 	public abstract int getCost (Tile aTarget);
 
 	/**
-	 * 
 	 * @param aTarget
+	 *            - Target tile
 	 * @param r
-	 * @return Effect {@value aTarget} and spend needed resources from {@value r}
-	 * 		if the tool can effect {@value aTarget} and
-	 * 		if it is affordable regarding {@value r}.
+	 *            - Resources
+	 * @return Effect aTarget and spend needed resources from  r
+	 * 		if the tool can effect aTarget and
+	 * 		if it is affordable regarding r.
 	 */
 	public Tile effect (Tile aTarget, CityResources r) {
 		if (canEffect(aTarget) && isAfordable(aTarget, r)) {
@@ -96,7 +103,9 @@ public abstract class Tool {
 	// Implementation
 	/**
 	 * @param aTarget
+	 *            - Target tile
 	 * @param r
+	 *            - Resources
 	 * @return Effect {@value aTarget} and spend needed resources from {@value r}.
 	 */
 	protected abstract Tile innerEffect (Tile aTarget, CityResources r);

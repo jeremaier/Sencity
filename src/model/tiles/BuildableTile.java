@@ -108,7 +108,8 @@ public abstract class BuildableTile extends Tile implements Evolvable, Destroyab
     // Status
     /**
      * @param o
-     * @return Is {@value o} equals to this?
+     *            - Object
+     * @return Is o equals to this?
      */
     public boolean equals(BuildableTile o) {
         return o.evolutionEnergyConsumption == this.evolutionEnergyConsumption && o.state == this.state && o.maintenanceCost == this.maintenanceCost;

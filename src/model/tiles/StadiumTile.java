@@ -37,7 +37,7 @@ public class StadiumTile extends Tile implements Destroyable {
 	public final static int DEFAULT_MAINTENANCE_COST = 20;
 
 	/**
-	 * Default value of {@link #getNeededEnergy()}
+	 * Default value of {@link #getMaxNeededEnergy()}
 	 */
 	public final static int DEFAULT_NEEDED_ENERGY = 80;
 
@@ -49,7 +49,7 @@ public class StadiumTile extends Tile implements Destroyable {
 	/**
 	 * Default value of {@link #getSatisfactionValue()}
 	 */
-	public final static int DEFAULT_SATISFACTION_VALUE = 10;
+	public final static int DEFAULT_SATISFACTION_VALUE = 5;
 
 	/**
 	 * {@link #getMaxNeededEnergy()}
@@ -67,7 +67,7 @@ public class StadiumTile extends Tile implements Destroyable {
 	private boolean isEnergyMissing;
 
 	/**
-	 * {@link #getProductsPrice()}
+	 * {@link #getIncome()}
 	 */
 	private final int income;
 
@@ -100,7 +100,7 @@ public class StadiumTile extends Tile implements Destroyable {
 	/**
 	 * @return Energy units to consume by default.
 	 */
-	public int getNeededEnergy() {
+	public int getMaxNeededEnergy() {
 		return neededEnergy;
 	}
 
@@ -165,7 +165,8 @@ public class StadiumTile extends Tile implements Destroyable {
 
 	/**
 	 * @param o
-	 * @return Is {@value o} equals to this?
+	 *            - Object
+	 * @return Is o equals to this?
 	 */
 	public boolean equals(StadiumTile o) {
 		return this == o || super.equals(o)

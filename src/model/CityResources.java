@@ -100,22 +100,22 @@ public class CityResources implements Serializable {
     
     // Implementation (Satisfaction / Pollution)
     /**
-     * {@link #increaseSatisfaction() #decreaseSatisfaction()}
+     * {@link #getSatisfaction()}
      */
     private int satisfaction;
     
     /**
-     * {@link #increasePollution() #decreasePollution()}
+     * {@link #getPollution()}
      */
     private int pollution;
     
     /**
-     * {@link #increaseGoodEventOccurrence() #getGoodEventOccurrence()}
+     * {@link #getGoodEventOccurrence()}
      */
     private int goodEventOccurence;
     
     /**
-     * {@link #increaseBadEventOccurrence() #getBadEventOccurrence()}
+     * {@link #getBadEventOccurrence()}
      */
     private int badEventOccurence;
     
@@ -158,7 +158,8 @@ public class CityResources implements Serializable {
 
     /**
      * @param o
-     * @return Is {@value o} equals to this?
+     *            - Object
+     * @return Is o equals to this?
      */
     public boolean equals(CityResources o) {
         return this == o || super.equals(o) && o.currency == this.currency && o.vat == this.vat && o.unconsumedEnergy == this.unconsumedEnergy && o.energyProduction == this.energyProduction
@@ -186,7 +187,6 @@ public class CityResources implements Serializable {
 
     // Access (Currency)
     /**
-     *
      * @return Accumulated currency.
      */
     public int getCurrency() {
@@ -270,16 +270,20 @@ public class CityResources implements Serializable {
 
     // Change (Currency)
     /**
-     * @return Set the Value-Added-Tax in percentage.
+     * Set the Value-Added-Tax in percentage.
+     * 
+     * @param vat
+     *            - VAT value
      */
     public void setVat(int vat) {
         this.vat = vat;
     }
     
     /**
-     * Decrease {@link #getCurrency()} by {@value amount}.
+     * Decrease {@link #getCurrency()} by an amount.
      *
      * @param amount
+     *            - Amount to credit
      */
     public void credit(int amount) {
         assert amount >= 0;
@@ -288,10 +292,11 @@ public class CityResources implements Serializable {
     }
 
     /**
-     * Get VAT on {@value currencyAmount} and {@link #credit(int)} with the
+     * Get VAT on a currencyAmount and {@link #credit(int)} with the
      * obtained result.
      *
      * @param currencyAmount
+     *            - Amount of currency to evaluate
      */
     public void creditWithTaxes(int currencyAmount) {
         assert currencyAmount >= 0;
@@ -300,9 +305,10 @@ public class CityResources implements Serializable {
     }
 
     /**
-     * Increase {@link #getCurrency()} by {@value amount}.
+     * Increase {@link #getCurrency()} by an amount.
      *
      * @param amount
+     *            - Amount to spend
      */
     public void spend(int amount) {
         assert amount >= 0;
@@ -312,9 +318,10 @@ public class CityResources implements Serializable {
 
     // Change (Energy)
     /***
-     * Increase {@link #getConsumedEnergy()} by {@value amount}.
+     * Increase {@link #getConsumedEnergy()} by an amount.
      *
      * @param amount
+     *            - Amount to consume
      */
     public void consumeEnergy(int amount) {
         assert 0 <= amount && amount <= this.getUnconsumedEnergy();
@@ -323,9 +330,10 @@ public class CityResources implements Serializable {
     }
 
     /**
-     * Decrease {@link #getEnergyProduction()} by {@value amount}.
+     * Decrease {@link #getEnergyProduction()} by an amount.
      *
      * @param amount
+     *            - Amount to decrease
      */
     public void decreaseEnergyProduction(int amount) {
         assert amount >= 0;
@@ -335,9 +343,10 @@ public class CityResources implements Serializable {
     }
 
     /**
-     * Increase {@link #getEnergyProduction()} by {@value amount}.
+     * Increase {@link #getEnergyProduction()} by an amount.
      *
      * @param amount
+     *            - Amount to increase
      */
     public void increaseEnergyProduction(int amount) {
         assert amount >= 0;
@@ -348,9 +357,10 @@ public class CityResources implements Serializable {
 
     // Change (Population)
     /**
-     * Increase {@link #getWorkingPopulation()} by {@value amount}.
+     * Increase {@link #getWorkingPopulation()} by an amount.
      *
      * @param amount
+     *            - Amount to hire
      */
     public void hireWorkers(int amount) {
         assert 0 <= amount && amount <= this.getUnworkingPopulation();
@@ -359,9 +369,10 @@ public class CityResources implements Serializable {
     }
 
     /**
-     * Increase {@link #getPopulation()} by {@value amount}.
+     * Increase {@link #getPopulation()} by an amount.
      *
      * @param amount
+     *            - Amount to increase
      */
     public void increasePopulation(int amount) {
         assert amount >= 0;
@@ -372,9 +383,10 @@ public class CityResources implements Serializable {
     }
 
     /**
-     * Decrease {@link #getPopulation()} by {@value amount}.
+     * Decrease {@link #getPopulation()} by an amount.
      *
      * @param amount
+     *            - Amount to decrease
      */
     public void decreasePopulation(int amount) {
         assert amount >= 0;
@@ -384,9 +396,10 @@ public class CityResources implements Serializable {
     }
 
     /**
-     * Increase {@link #getPopulationCapacity()} by {@value amount}.
+     * Increase {@link #getPopulationCapacity()} by an amount.
      *
      * @param amount
+     *            - Amount to increase
      */
     public void increasePopulationCapacity(int amount) {
         assert amount >= 0;
@@ -395,9 +408,10 @@ public class CityResources implements Serializable {
     }
 
     /**
-     * Decrease {@link #getPopulationCapacity()} by {@value amount}.
+     * Decrease {@link #getPopulationCapacity()} by an amount.
      *
      * @param amount
+     *            - Amount to decrease
      */
     public void decreasePopulationCapacity(int amount) {
         assert 0 <= amount && amount <= this.getPopulationCapacity();
@@ -408,9 +422,10 @@ public class CityResources implements Serializable {
 
     // Change (Product)
     /**
-     * Decrease {@link #getProductsCount()} by {@value amount}.
+     * Decrease {@link #getProductsCount()} by an amount.
      *
      * @param amount
+     *            - Amount to consume
      */
     public void consumeProducts(int amount) {
         assert amount >= 0;
@@ -419,9 +434,10 @@ public class CityResources implements Serializable {
     }
 
     /**
-     * Increase {@link #getProductsCount()} by {@value amount}.
+     * Increase {@link #getProductsCount()} by an amount.
      *
      * @param amount
+     *            - Amount to store
      */
     public void storeProducts(int amount) {
         assert amount >= 0;
@@ -430,10 +446,12 @@ public class CityResources implements Serializable {
     }
 
     /**
-     * Decrease {@link #getProductsCapacity()} by {@value amount}.
+     * Decrease {@link #getProductsCapacity()} by an amount.
      * 
-     * @param products 
+     * @param products
+     *            - Amount products to decrease
      * @param amount
+     *            - Amount capacity to decrease
      */
     public void decreaseProductsCapacity(int products, int amount) {
         assert 0 <= amount && amount <= this.getProductsCapacity();
@@ -443,9 +461,10 @@ public class CityResources implements Serializable {
     }
 
     /**
-     * Increase {@link #getProductsCapacity()} by {@value amount}.
+     * Increase {@link #getProductsCapacity()} by an amount.
      *
      * @param amount
+     *            - Amount to increase
      */
     public void increaseProductsCapacity(int amount) {
         assert amount >= 0;
@@ -472,18 +491,20 @@ public class CityResources implements Serializable {
 	}
 
     /**
-     * Increase {@link #getSatisfaction()} by {@value amount}.
+     * Increase {@link #getSatisfaction()} by an amount.
      *
      * @param amount
+     *            - Amount to increase
      */
 	public void increaseSatisfaction(int amount) {
 		this.satisfaction = Math.min(100, this.satisfaction + amount);
 	}
 
     /**
-     * Decrease {@link #getSatisfaction()} by {@value amount}.
+     * Decrease {@link #getSatisfaction()} by amount.
      *
      * @param amount
+     *            - Amount to decrease
      */
 	public void decreaseSatisfaction(int amount) {
 		this.satisfaction = Math.max(0, this.satisfaction - amount);
@@ -497,18 +518,20 @@ public class CityResources implements Serializable {
 	}
 
     /**
-     * Increase {@link #getPollution()} by {@value amount}.
+     * Increase {@link #getPollution()} by an amount.
      *
      * @param amount
+     *            - Amount to increase
      */
 	public void increasePollution(int amount) {
 		this.pollution = Math.min(100, this.pollution + amount);
 	}
 
     /**
-     * Decrease {@link #getPollution()} by {@value amount}.
+     * Decrease {@link #getPollution()} by an amount.
      *
      * @param amount
+     *            - Amount to decrease
      */
 	public void decreasePollution(int amount) {
 		this.pollution = Math.max(0, this.pollution - amount);

@@ -97,11 +97,11 @@ public class OptionsView extends JPanel {
 				int height = MainFrame.getGameHeight();
 
 				switch(height) {
-				case 10:
+				case 12:
 					MainFrame.setWidthHeight(17, 30);
 					break;
 
-				case 15:
+				case 17:
 					MainFrame.setWidthHeight(22, 40);
 					break;
 

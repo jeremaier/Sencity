@@ -144,7 +144,8 @@ public class ResidentialTile extends BuildableTile {
 
     /**
      * @param o
-     * @return Is {@value o} equals to this?
+     *            - Object
+     * @return Is o equals to this?
      */
     public boolean equals(ResidentialTile o) {
         return this == o || super.equals(o)
@@ -234,6 +235,7 @@ public class ResidentialTile extends BuildableTile {
     // Implementation
     /**
      * @param res
+     *            - Resources
      * @return Approximation of the number of inhabitants in the current
      *         residence if the population is uniformly distributed.
      *

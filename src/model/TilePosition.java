@@ -52,9 +52,6 @@ public class TilePosition implements Serializable {
 
     // Creation
     /**
-     *
-     * @param aType
-     *            - {@link #getType()}
      * @param aRow
      *            - {@link #getRow()}
      * @param aColumn
@@ -87,9 +84,9 @@ public class TilePosition implements Serializable {
 
     // Status
     /**
-     *
      * @param o
-     * @return Are current and {@value o} adjacent locations? Linear or diagonal
+     *            - Object
+     * @return Are current and o adjacent locations? Linear or diagonal
      *         adjacency.
      */
     public boolean isAdjacent(TilePosition o) {
@@ -103,7 +100,8 @@ public class TilePosition implements Serializable {
 
     /**
      * @param o
-     * @return Is {@value o} equals to the current location?
+     *            - Object
+     * @return Is o equals to the current location?
      */
     public boolean equals(TilePosition o) {
         return this.row == o.row && this.column == o.column;
