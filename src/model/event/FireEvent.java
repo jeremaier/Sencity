@@ -7,6 +7,7 @@ import java.util.Random;
 import localization.LocalizedTexts;
 import model.CityResources;
 import model.tiles.FireStationTile;
+import model.tiles.IndustrialTile;
 
 /**
  * The FireEvent make you loose products.
@@ -16,6 +17,12 @@ public class FireEvent extends Event {
 	 * Number of products lost during the fire.
 	 */
 	public final static int PRODUCTS_LOOSE = 20;
+	
+	/**
+	 * True if the event happened
+	 */
+	
+	private boolean happened = false;
 	
 	/**
 	 * True if the fire is extinguished.
@@ -30,20 +37,23 @@ public class FireEvent extends Event {
     }
 
     /**
-     * Apply no effects.
+     * Apply effects.
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-		int random = new Random().nextInt(FireStationTile.getFireStationNumber() + 1);
+		if(IndustrialTile.getIndustriesNumber() > 0){
+			int random = new Random().nextInt(FireStationTile.getFireStationNumber() +1 );
 		
-		if(random == 0) {
-	        resources.consumeProducts(FireEvent.PRODUCTS_LOOSE);
-	        resources.increaseBadEventOccurrence();
-	        extinct = false;
-		} else {
-			resources.consumeProducts(FireEvent.PRODUCTS_LOOSE / 5);
-			resources.increaseGoodEventOccurrence();
-			extinct = true;
+			if(random == 0) {
+				resources.consumeProducts(FireEvent.PRODUCTS_LOOSE);
+				resources.increaseBadEventOccurrence();
+				extinct = false;
+			} else {
+				resources.consumeProducts(FireEvent.PRODUCTS_LOOSE / 5);
+				resources.increaseGoodEventOccurrence();
+				extinct = true;
+			}
+			happened = true;
 		}
 
         return new ArrayList<>(0);
@@ -54,9 +64,15 @@ public class FireEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		if(extinct)
-			return texts.getExtinctFireEventMessage();
+		if(happened){
+			if(extinct){
+				return texts.getExtinctFireEventMessage();
+			}else{
+				return texts.getFireEventMessage();
+			}
+		}else{
+			return "";
+		}
 		
-		return texts.getFireEventMessage();
     }
 }

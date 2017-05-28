@@ -5,6 +5,7 @@ import java.util.List;
 
 import localization.LocalizedTexts;
 import model.CityResources;
+import model.GameBoard;
 import model.tiles.IndustrialTile;
 
 /**
@@ -12,12 +13,17 @@ import model.tiles.IndustrialTile;
  */
 public class InvestmentEvent extends Event {
 	public static final int PRODUCTION_INCREASMENT = 2;
+	/**
+	 * True if the event happened
+	 */
+
+	private boolean happened = false;
 
     /**
      * Default Constructor.
      */
-	public InvestmentEvent() {
-        super();
+	public InvestmentEvent(GameBoard world) {
+        super(world);
     }
 
     /**
@@ -25,7 +31,11 @@ public class InvestmentEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-        IndustrialTile.maxProduction += InvestmentEvent.PRODUCTION_INCREASMENT;
+		
+		if(IndustrialTile.getIndustriesNumber() > 0){
+			IndustrialTile.maxProduction += InvestmentEvent.PRODUCTION_INCREASMENT;
+			happened = true;
+		}
         return new ArrayList<>(0);
     }
 
@@ -34,6 +44,10 @@ public class InvestmentEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		return texts.getInvestmentEventMessage();
+		if(happened){
+			return texts.getInvestmentEventMessage();
+		}else{
+			return"";
+		}
     }
 }

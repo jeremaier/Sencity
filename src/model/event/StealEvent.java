@@ -6,6 +6,7 @@ import java.util.Random;
 
 import localization.LocalizedTexts;
 import model.CityResources;
+import model.tiles.CommercialTile;
 import model.tiles.PoliceStationTile;
 
 /**
@@ -28,22 +29,31 @@ public class StealEvent extends Event {
 	public StealEvent() {
         super();
     }
+	
+	/**
+	 * True if the event happened
+	 */
+	
+	private boolean happened = false;
 
     /**
-     * Apply no effects.
+     * Apply effects.
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-		int random = new Random().nextInt(PoliceStationTile.getPoliceStationNumber() + 1);
+		if(CommercialTile.getCommerceNumber() > 0){
+			int random = new Random().nextInt(PoliceStationTile.getPoliceStationNumber() +1 );
 		
-		if(random == 0) {
-	        resources.spend(StealEvent.MONEY_LOOSE);
-	        resources.increaseBadEventOccurrence();
-	        foil = false;
-		} else {
-	        resources.spend(StealEvent.MONEY_LOOSE / 5);
-			resources.increaseGoodEventOccurrence();
-			foil = true;
+			if(random == 0) {
+				resources.spend(StealEvent.MONEY_LOOSE);
+				resources.increaseBadEventOccurrence();
+				foil = false;
+			} else {
+				resources.spend(StealEvent.MONEY_LOOSE / 5);
+				resources.increaseGoodEventOccurrence();
+				foil = true;
+			}
+			happened = true;
 		}
 		
         return new ArrayList<>(0);
@@ -54,9 +64,14 @@ public class StealEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		if(foil)
-			return texts.getFoilStealEventMessage();
-		
-		return texts.getStealEventMessage();
+		if(happened){
+			if(foil){
+				return texts.getFoilStealEventMessage();
+			}else{
+			return texts.getStealEventMessage();
+			}
+		}else{
+			return "";
+		}
     }
 }
