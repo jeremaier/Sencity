@@ -85,8 +85,6 @@ public class EventFactory extends Event{
 
 	public void setEvent_probabilities(Map<eventType, Integer> event_probabilities,GameBoard world) {
 		
-		
-		
 		if(GameBoard.getDifficulty()==DifficultyLevel.EASY_LEVEL){
 			
 			int nothingProb = 60;
@@ -185,7 +183,7 @@ public class EventFactory extends Event{
 			
 		}
 		
-		
+		/*
 		if( !world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 100 ,new IndustrialTile() , 1) ){
 			event_probabilities.put(eventType.INVESTMENT, 0);
 			event_probabilities.put(eventType.FIRE, 0);
@@ -197,6 +195,7 @@ public class EventFactory extends Event{
 		if( !world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 100 ,new StadiumTile() , 1) ){
 			event_probabilities.put(eventType.MATCH, 0);
 		}
+		*/
 		
 		
 		this.event_probabilities = event_probabilities;
@@ -231,7 +230,7 @@ public class EventFactory extends Event{
         		result = new MatchEvent();
         		break;
         	case INVESTMENT:
-        		result = new InvestmentEvent();
+        		result = new InvestmentEvent(world);
         		break;
         	case EARTHQUAKE:
         		result = new EarthquakeEvent(world);

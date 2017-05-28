@@ -67,6 +67,11 @@ public class CommercialTile extends BuildableTile {
 
 	// Implementation
 	/**
+	 * Default value of {@link #getCommerceNumber()}
+	 */
+	private static int CommerceNumber = 0;
+	
+	/**
 	 * {@link #getMaxWorkingInhabitants()}
 	 */
 	private final int maxNeededInhabitants;
@@ -93,9 +98,17 @@ public class CommercialTile extends BuildableTile {
 		this.maxSoldProducts = CommercialTile.DEFAULT_MAX_SOLD_PRODUCTS;
 		this.maxNeededInhabitants = CommercialTile.DEFAULT_MAX_NEEDED_INHABITANTS;
 		this.maintenanceCost = CommercialTile.DEFAULT_MAINTENANCE_COST;
+		CommercialTile.CommerceNumber++;
 	}
 
 	// Access
+	
+	/**
+	 * @return Number of commerce builded.
+	 */
+	public static final int getCommerceNumber() {
+		return CommercialTile.CommerceNumber;
+	}
 
 	/**
 	 * @return Maximum number of energy units to consume. This maximum is
@@ -165,6 +178,7 @@ public class CommercialTile extends BuildableTile {
 	@Override
 	public void disassemble(CityResources res) {
 		if(this.state == ConstructionState.BUILT || this.state == ConstructionState.BUILTLVL2 || this.state == ConstructionState.BUILTLVL3)
+			CommerceNumber--;
 			super.disassemble(res);
 	}
 

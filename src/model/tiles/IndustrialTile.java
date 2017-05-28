@@ -84,6 +84,11 @@ public class IndustrialTile extends BuildableTile {
 	 * {@link #getMaxNeededInhabitants()}
 	 */
 	private final int maxNeededInhabitants;
+	
+	/**
+	 * Default value of {@link #getIndustriesNumber()}
+	 */
+	private static int IndustriesNumber = 0;
 
 	// Creation
 	/**
@@ -97,6 +102,7 @@ public class IndustrialTile extends BuildableTile {
 		this.maxNeededEnergy = IndustrialTile.DEFAULT_MAX_NEEDED_ENERGY;
 		this.maxNeededInhabitants = IndustrialTile.DEFAULT_MAX_NEEDED_INHABITANTS;
 		this.maintenanceCost = IndustrialTile.DEFAULT_MAINTENANCE_COST;
+		IndustrialTile.IndustriesNumber++;
 	}
 
 	/**
@@ -107,6 +113,14 @@ public class IndustrialTile extends BuildableTile {
 	}
 
 	// Access
+	
+	/**
+	 * @return Number of commerce builded.
+	 */
+	public static final int getIndustriesNumber() {
+		return IndustrialTile.IndustriesNumber;
+	}
+	
 	/**
 	 * @return Maximum products capacity.
 	 */
@@ -174,7 +188,7 @@ public class IndustrialTile extends BuildableTile {
 	public void disassemble(CityResources res) {
 		if (this.state == ConstructionState.BUILT || this.state == ConstructionState.BUILTLVL2 || this.state == ConstructionState.BUILTLVL3) {
 			res.decreaseProductsCapacity(this.getProducts(res), this.productsCapacity);
-
+			IndustriesNumber--;
 			super.disassemble(res);
 		}
 	}
