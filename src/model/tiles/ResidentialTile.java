@@ -42,12 +42,12 @@ public class ResidentialTile extends BuildableTile {
     /**
      * Default value of {@link #maxJoiningInhabitants}
      */
-    public final static int DEFAULT_MAX_JOINING_INHABITANTS = 15;
+    public final static int DEFAULT_MAX_JOINING_INHABITANTS = 10;
 
     /**
      * Default value of {@link #maxLeavingInhabitants}
      */
-    public final static int DEFAULT_MAX_LEAVING_INHABITANTS = 10;
+    public final static int DEFAULT_MAX_LEAVING_INHABITANTS = 15;
 
     /**
      * Default value of {@link #getMaxNeededEnergy()}

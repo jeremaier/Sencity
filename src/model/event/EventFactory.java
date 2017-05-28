@@ -99,19 +99,19 @@ public class EventFactory extends Event {
 			eventProbabilities.put(eventType.FIRE, 4);
 			eventProbabilities.put(eventType.EARTHQUAKE, 4);
 
-			if(world.isInTileArea( startingTile.getRow(), startingTile.getColumn(), 8, new PoliceStationTile(), 1)){
+			if(world.isInTileArea(startingTile.getRow(), startingTile.getColumn(), 8, new PoliceStationTile(), 1)) {
 				nothingProb +=2;
 				eventProbabilities.put(eventType.NOTHING, nothingProb);
 				eventProbabilities.put(eventType.STEAL, 2);
 			}
 			
-			if(world.isInTileArea( startingTile.getRow(), startingTile.getColumn(), 8, new FireStationTile(), 1)){
+			if(world.isInTileArea(startingTile.getRow(), startingTile.getColumn(), 8, new FireStationTile(), 1)) {
 				nothingProb += 2;
 				eventProbabilities.put(eventType.NOTHING, nothingProb);
 				eventProbabilities.put(eventType.STEAL, 2);
 			}
 			
-			if(world.isInTileArea( startingTile.getRow(), startingTile.getColumn(), 8, new HospitalTile(), 1)){
+			if(world.isInTileArea(startingTile.getRow(), startingTile.getColumn(), 8, new HospitalTile(), 1)) {
 				nothingProb += 2;
 				eventProbabilities.put(eventType.NOTHING, nothingProb);
 				eventProbabilities.put(eventType.DISEASE, 2);
@@ -163,19 +163,19 @@ public class EventFactory extends Event {
 			eventProbabilities.put(eventType.FIRE, 8);
 			eventProbabilities.put(eventType.EARTHQUAKE, 6);
 			
-			if(world.isInTileArea( startingTile.getRow(), startingTile.getColumn(), 8, new PoliceStationTile(), 1)) {
+			if(world.isInTileArea(startingTile.getRow(), startingTile.getColumn(), 8, new PoliceStationTile(), 1)) {
 				nothingProb += 4;
 				eventProbabilities.put(eventType.NOTHING, nothingProb);
 				eventProbabilities.put(eventType.STEAL, 4);
 			}
 			
-			if(world.isInTileArea( startingTile.getRow(), startingTile.getColumn(), 8, new FireStationTile(), 1)) {
+			if(world.isInTileArea(startingTile.getRow(), startingTile.getColumn(), 8, new FireStationTile(), 1)) {
 				nothingProb += 4;
 				eventProbabilities.put(eventType.NOTHING, nothingProb);
 				eventProbabilities.put(eventType.STEAL, 4);
 			}
 			
-			if(world.isInTileArea( startingTile.getRow(), startingTile.getColumn(), 8, new HospitalTile(), 1)) {
+			if(world.isInTileArea(startingTile.getRow(), startingTile.getColumn(), 8, new HospitalTile(), 1)) {
 				nothingProb += 3;
 				eventProbabilities.put(eventType.NOTHING, nothingProb);
 				eventProbabilities.put(eventType.DISEASE, 3);

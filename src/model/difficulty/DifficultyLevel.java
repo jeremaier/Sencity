@@ -37,19 +37,19 @@ public class DifficultyLevel implements Serializable {
     /**
      * Initial currency of the standard difficulty.
      */
-    private final static int STANDARD_CURRENCY = 500;
+    private final static int STANDARD_CURRENCY = 1000;
     private final static double STANDARD_COEFF = 1.25;
     
     /**
      * Initial currency of easy.
      */
-    private final static int EASY_CURRENCY = 100000;
+    private final static int EASY_CURRENCY = 2000;
     private final static double EASY_COEFF = 1.0;
     
     /**
      * Initial currency of difficult.
      */
-    private final static int HARD_CURRENCY = 200;
+    private final static int HARD_CURRENCY = 500;
     private final static double HARD_COEFF = 1.5;
 
     /**

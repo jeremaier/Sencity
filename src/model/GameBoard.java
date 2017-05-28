@@ -48,10 +48,13 @@ import model.tiles.AirportTile;
 import model.tiles.BuildableTile;
 import model.tiles.CommercialTile;
 import model.tiles.Evolvable;
+import model.tiles.FireStationTile;
 import model.tiles.GrassTile;
 import model.tiles.HarborTile;
+import model.tiles.HospitalTile;
 import model.tiles.IndustrialTile;
 import model.tiles.ParkTile;
+import model.tiles.PoliceStationTile;
 import model.tiles.PowerPlantTile;
 import model.tiles.ResidentialTile;
 import model.tiles.StadiumTile;
@@ -438,6 +441,13 @@ public class GameBoard extends Observable implements Serializable {
 	 * @return if a certain tile is in certain area of the map.
 	 */
 	public boolean isInTileArea(int row, int column, int areaSize, Tile tile, int tilesNeeded) {
+		if(tile instanceof FireStationTile)
+			FireStationTile.fireStationNumber--;
+		else if(tile instanceof PoliceStationTile)
+			PoliceStationTile.policeStationNumber--;
+		else if(tile instanceof HospitalTile)
+			HospitalTile.hospitalStationNumber--;
+
 		int number = 0;
 		Set<TilePosition> tilesArea = this.getTilesArea(new TilePosition(row, column), areaSize);
 
@@ -626,9 +636,13 @@ public class GameBoard extends Observable implements Serializable {
 	 */
 	private void updateSatisfaction() {
 		CityResources resources = this.getResources();
+		int unemploymentRate = 0;
 		this.updateEventEffects(resources);
 		final int tax = (int)((resources.getVat() - 10) / 2.5); // Tax
-		final int unemploymentRate = (int)(5 * resources.getUnworkingPopulation() / resources.getPopulation()); // Taux de chomage
+		
+		if(resources.getPopulation() > 0)
+			unemploymentRate = (int)(5 * resources.getUnworkingPopulation() / resources.getPopulation()); // Taux de chomage
+		
 		resources.decreaseSatisfaction(tax);
 		resources.decreaseSatisfaction(unemploymentRate);
 	}

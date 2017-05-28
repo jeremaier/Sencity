@@ -33,7 +33,7 @@ import model.tiles.Tile;
 public final class AirportZoneDelimiterTool extends Tool {
 
 	// Constant
-	private final static int CURRENCY_COST = 500;
+	private final static int CURRENCY_COST = 2500;
 
 	// Status
 	/**

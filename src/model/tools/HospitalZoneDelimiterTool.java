@@ -32,7 +32,7 @@ import model.tiles.Tile;
 
 public final class HospitalZoneDelimiterTool extends Tool {
 	// Constant
-	private final static int CURRENCY_COST = 300;
+	private final static int CURRENCY_COST = 800;
 
 	// Status
 	/**

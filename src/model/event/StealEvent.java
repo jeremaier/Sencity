@@ -34,8 +34,8 @@ public class StealEvent extends Event {
 	 */
 	@Override
 	public List<Event> applyEffects(CityResources resources) {
-		int random = new Random().nextInt(PoliceStationTile.getPoliceStationNumber() +1 );
-
+		final int random = new Random().nextInt(PoliceStationTile.getPoliceStationNumber() + 2);
+		
 		if(random == 0) {
 			resources.spend(StealEvent.MONEY_LOOSE);
 			resources.increaseBadEventOccurrence();

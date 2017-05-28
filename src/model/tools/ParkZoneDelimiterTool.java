@@ -32,7 +32,7 @@ import model.tiles.Tile;
 
 public final class ParkZoneDelimiterTool extends Tool {
 	// Constant
-	private final static int CURRENCY_COST = 100;
+	private final static int CURRENCY_COST = 500;
 
 	// Status
 	/**

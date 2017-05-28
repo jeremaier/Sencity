@@ -53,7 +53,7 @@ public class CommercialTile extends BuildableTile {
 	/**
 	 * Default value of {@link #getMaxSoldProducts()}
 	 */
-	public final static int DEFAULT_MAX_SOLD_PRODUCTS = 25;
+	public final static int DEFAULT_MAX_SOLD_PRODUCTS = 32;
 
 	/**
 	 * Default value of {@link #getMaxNeededInhabitants()}
@@ -63,7 +63,7 @@ public class CommercialTile extends BuildableTile {
 	/**
 	 * Default value of {@link #getProductsPrice()}
 	 */
-	public final static int DEFAULT_PRODUCTS_PRICE = 5;
+	public final static int DEFAULT_PRODUCTS_PRICE = 7;
 
 	// Implementation
 	/**

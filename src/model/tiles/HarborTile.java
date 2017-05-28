@@ -43,12 +43,12 @@ public class HarborTile extends TransportTile {
 	/**
 	 * Default value of {@link TransportTile#getMaxSoldProducts()}
 	 */
-	public final static int DEFAULT_MAX_SOLD_PRODUCTS = 30;
+	public final static int DEFAULT_MAX_SOLD_PRODUCTS = 50;
 
     /**
      * Default value of {@link TransportTile#getMaxNeededInhabitants()}
      */
-    public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 30;
+    public final static int DEFAULT_MAX_NEEDED_INHABITANTS = 50;
 	
     /**
      * Default value of {@link TransportTile#getProductsPrice()}
