@@ -12,11 +12,13 @@ import model.tiles.StadiumTile;
 public class StadiumTileTest {
 	@Test
     public void testInit() {
+        Assert.assertEquals(StadiumTile.alreadyBuild, false);
 		StadiumTile ht = new StadiumTile();
 		Assert.assertEquals(StadiumTile.DEFAULT_MAINTENANCE_COST, ht.getMaintenanceCost());
         Assert.assertEquals(StadiumTile.DEFAULT_NEEDED_ENERGY, ht.getNeededEnergy());
         Assert.assertEquals(StadiumTile.DEFAULT_INCOME, ht.getIncome());
         Assert.assertEquals(StadiumTile.DEFAULT_SATISFACTION_VALUE, ht.getSatisfactionValue());
+        Assert.assertEquals(StadiumTile.alreadyBuild, true);
 	}
 	
 	@Test
@@ -28,7 +30,7 @@ public class StadiumTileTest {
 		final int initialCurrency = resources.getCurrency();
 		ht.update(resources);
 		final int neededEnergy = Math.max(10, ht.getNeededEnergy());
-		final long meanEarn = initialCurrency + ht.getIncome() * resources.getVat() / 100 - Math.round(ht.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff());
+		final long meanEarn = initialCurrency + ht.getIncome() * resources.getVat() / 100 * resources.getSatisfaction() / 50  - Math.round(ht.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff());
 		Assert.assertEquals(ht.isEnergyMissing(), false);
 		Assert.assertEquals(initialEnergy - neededEnergy, resources.getUnconsumedEnergy());
 		Assert.assertEquals(resources.getCurrency(), meanEarn, meanEarn * 0.5);
@@ -43,6 +45,7 @@ public class StadiumTileTest {
         resources.increaseEnergyProduction(100);
 		ht.disassemble(resources);
 		Assert.assertEquals(true, ht.isDestroyed());
+        Assert.assertEquals(StadiumTile.alreadyBuild, false);
 	}
 	
 	@Test

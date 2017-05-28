@@ -80,11 +80,13 @@ public abstract class ServiceTile extends Tile implements Destroyable {
 	 * @param satisfactionValue
 	 */
 	public ServiceTile(int satisfactionValue, int maintenanceCost, int maxNeededEnergy, int maxNeededInhabitants) {
-		super();
 		this.satisfactionValue = satisfactionValue;
 		this.maintenanceCost = maintenanceCost;
 		this.maxNeededEnergy = maxNeededEnergy;
 		this.maxNeededInhabitants = maxNeededInhabitants;
+		this.isPopulationMissing = false;
+		this.isEnergyMissing = false;
+		this.isDestroyed = false;
 	}
 
 	// Access
@@ -187,7 +189,6 @@ public abstract class ServiceTile extends Tile implements Destroyable {
 				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
 				
 				busyPercentage -= energyPercentage * workersPercentage;
-				this.isEnergyMissing = true;
 			}
 
 			res.consumeEnergy(Math.max(3, consumedEnergy));

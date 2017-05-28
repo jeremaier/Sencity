@@ -93,6 +93,7 @@ public class StadiumTile extends Tile implements Destroyable {
 		this.maintenanceCost = StadiumTile.DEFAULT_MAINTENANCE_COST;
 		StadiumTile.alreadyBuild = true;
 		this.isEnergyMissing = false;
+		this.isDestroyed = false;
 	}
 
 	// Access
@@ -151,7 +152,6 @@ public class StadiumTile extends Tile implements Destroyable {
 		result = result * 17 + this.income;
 		result = result * 17 + this.maintenanceCost;
 		result = result * 17 + this.satisfactionValue;
-		result = result * 17 + Boolean.hashCode(StadiumTile.alreadyBuild);
 		result = result * 17 + Boolean.hashCode(this.isDestroyed);
 		result = result * 17 + Boolean.hashCode(this.isEnergyMissing);
 		return result;
