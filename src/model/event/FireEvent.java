@@ -19,12 +19,6 @@ public class FireEvent extends Event {
 	public final static int PRODUCTS_LOOSE = 20;
 	
 	/**
-	 * True if the event happened
-	 */
-	
-	private boolean happened = false;
-	
-	/**
 	 * True if the fire is extinguished.
 	 */
 	private boolean extinct;
@@ -41,21 +35,18 @@ public class FireEvent extends Event {
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-		if(IndustrialTile.getIndustriesNumber() > 0){
-			int random = new Random().nextInt(FireStationTile.getFireStationNumber() +1 );
+		int random = new Random().nextInt(FireStationTile.getFireStationNumber() +1 );
 		
-			if(random == 0) {
-				resources.consumeProducts(FireEvent.PRODUCTS_LOOSE);
-				resources.increaseBadEventOccurrence();
-				extinct = false;
-			} else {
-				resources.consumeProducts(FireEvent.PRODUCTS_LOOSE / 5);
-				resources.increaseGoodEventOccurrence();
-				extinct = true;
-			}
-			happened = true;
+		if(random == 0) {
+			resources.consumeProducts(FireEvent.PRODUCTS_LOOSE);
+			resources.increaseBadEventOccurrence();
+			extinct = false;
+		} else {
+			resources.consumeProducts(FireEvent.PRODUCTS_LOOSE / 5);
+			resources.increaseGoodEventOccurrence();
+			extinct = true;
 		}
-
+		
         return new ArrayList<>(0);
     }
 
@@ -64,15 +55,10 @@ public class FireEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		if(happened){
 			if(extinct){
 				return texts.getExtinctFireEventMessage();
 			}else{
 				return texts.getFireEventMessage();
-			}
-		}else{
-			return "";
-		}
-		
+			}	
     }
 }

@@ -29,19 +29,13 @@ public class StealEvent extends Event {
 	public StealEvent() {
         super();
     }
-	
-	/**
-	 * True if the event happened
-	 */
-	
-	private boolean happened = false;
 
     /**
      * Apply effects.
      */
 	@Override
     public List<Event> applyEffects(CityResources resources) {
-		if(CommercialTile.getCommerceNumber() > 0){
+		
 			int random = new Random().nextInt(PoliceStationTile.getPoliceStationNumber() +1 );
 		
 			if(random == 0) {
@@ -53,8 +47,6 @@ public class StealEvent extends Event {
 				resources.increaseGoodEventOccurrence();
 				foil = true;
 			}
-			happened = true;
-		}
 		
         return new ArrayList<>(0);
     }
@@ -64,14 +56,11 @@ public class StealEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		if(happened){
 			if(foil){
 				return texts.getFoilStealEventMessage();
 			}else{
 			return texts.getStealEventMessage();
 			}
-		}else{
-			return "";
-		}
-    }
+	}
+	
 }

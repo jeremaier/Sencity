@@ -183,19 +183,15 @@ public class EventFactory extends Event{
 			
 		}
 		
-		/*
-		if( !world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 100 ,new IndustrialTile() , 1) ){
+		
+		if( IndustrialTile.getIndustriesNumber() == 0){
 			event_probabilities.put(eventType.INVESTMENT, 0);
 			event_probabilities.put(eventType.FIRE, 0);
 		}
 		
-		if( !world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 100 ,new CommercialTile() , 1) ){
+		if( CommercialTile.getCommerceNumber() == 0){
 			event_probabilities.put(eventType.STEAL, 0);
 		}
-		if( !world.isInTileArea( startingTile.getRow() , startingTile.getColumn() , 100 ,new StadiumTile() , 1) ){
-			event_probabilities.put(eventType.MATCH, 0);
-		}
-		*/
 		
 		
 		this.event_probabilities = event_probabilities;

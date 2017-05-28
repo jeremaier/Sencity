@@ -13,11 +13,6 @@ import model.tiles.IndustrialTile;
  */
 public class InvestmentEvent extends Event {
 	public static final int PRODUCTION_INCREASMENT = 2;
-	/**
-	 * True if the event happened
-	 */
-
-	private boolean happened = false;
 
     /**
      * Default Constructor.
@@ -30,13 +25,11 @@ public class InvestmentEvent extends Event {
      * Apply no effects.
      */
 	@Override
-    public List<Event> applyEffects(CityResources resources) {
+    public List<Event> applyEffects(CityResources resources) {		
 		
-		if(IndustrialTile.getIndustriesNumber() > 0){
-			IndustrialTile.maxProduction += InvestmentEvent.PRODUCTION_INCREASMENT;
-			happened = true;
-		}
+		IndustrialTile.maxProduction += InvestmentEvent.PRODUCTION_INCREASMENT;		
         return new ArrayList<>(0);
+        
     }
 
 	/**
@@ -44,10 +37,8 @@ public class InvestmentEvent extends Event {
      */
 	@Override
     public String getMessage(LocalizedTexts texts) {
-		if(happened){
+		
 			return texts.getInvestmentEventMessage();
-		}else{
-			return"";
-		}
     }
+	
 }
