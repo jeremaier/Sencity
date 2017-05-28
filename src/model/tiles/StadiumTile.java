@@ -34,7 +34,7 @@ public class StadiumTile extends Tile implements Destroyable {
 	/**
 	 * Default value of {@link #getMaintenanceCost()}
 	 */
-	public final static int DEFAULT_MAINTENANCE_COST = 10;
+	public final static int DEFAULT_MAINTENANCE_COST = 20;
 
 	/**
 	 * Default value of {@link #getNeededEnergy()}
@@ -189,10 +189,11 @@ public class StadiumTile extends Tile implements Destroyable {
 				this.isEnergyMissing = false;
 			else {
 				consumedEnergy = res.getUnconsumedEnergy();
-				busyPercentage -= consumedEnergy / this.neededEnergy * 100.0;
+				busyPercentage -= (1 - consumedEnergy / this.neededEnergy) * 100.0;
 				this.isEnergyMissing = true;
 			}
 
+			System.out.println(consumedEnergy);
 			res.consumeEnergy(Math.max(15, consumedEnergy));
 			res.creditWithTaxes((int)(fluctuation * busyPercentage * this.income / 100.0));
 			res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));

@@ -10,12 +10,13 @@ import model.tiles.*;
 public class FireStationTileTest {
 	@Test
 	public void testInit() {
+		final int initialFireStationNumber = FireStationTile.getFireStationNumber();
 		FireStationTile fst = new FireStationTile();
 		Assert.assertEquals(FireStationTile.DEFAULT_MAINTENANCE_COST, fst.getMaintenanceCost());
-		Assert.assertEquals(FireStationTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION, fst.getEvolutionEnergyConsumption());
+		Assert.assertEquals(FireStationTile.DEFAULT_MAX_NEEDED_INHABITANTS, fst.getMaxNeededInhabitants());
 		Assert.assertEquals(FireStationTile.DEFAULT_MAX_NEEDED_ENERGY, fst.getMaxNeededEnergy());
 		Assert.assertEquals(FireStationTile.DEFAULT_SATISFACTION_VALUE, fst.getSatisfactionValue());
-		Assert.assertEquals(5, FireStationTile.getFireStationNumber());
+		Assert.assertEquals(initialFireStationNumber + 1, FireStationTile.getFireStationNumber());
 	}
 	
 	@Test
@@ -27,9 +28,9 @@ public class FireStationTileTest {
         final int initialCurrency = resources.getCurrency();
         final int initialPopulation = resources.getUnworkingPopulation();
         final int initialEnergy = resources.getUnconsumedEnergy();
-        fst.evolve(resources);
+        fst.update(resources);
         Assert.assertEquals(initialPopulation - fst.getMaxNeededInhabitants(), resources.getUnworkingPopulation());
-        Assert.assertEquals(initialEnergy - fst.getMaxNeededEnergy() - fst.getEvolutionEnergyConsumption(), resources.getUnconsumedEnergy());
+        Assert.assertEquals(initialEnergy - fst.getMaxNeededEnergy(), resources.getUnconsumedEnergy());
         Assert.assertEquals(initialCurrency - (int)(Math.round(fst.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff())), resources.getCurrency()); 
         Assert.assertEquals(Math.max(initialSatisfaction, fst.getSatisfactionValue()), resources.getSatisfaction());
 	}
@@ -38,7 +39,8 @@ public class FireStationTileTest {
 	public void testDisassemble() {
 		FireStationTile fst = new FireStationTile();
 		CityResources resources = new CityResources(100, 100);
-		fst.evolve(resources);
+        resources.increaseEnergyProduction(100);
+		fst.update(resources);
 		final int initialSatisfaction = resources.getSatisfaction();
         final int initialPopulation = resources.getUnworkingPopulation();
         final int initialEnergy = resources.getUnconsumedEnergy();
@@ -55,10 +57,7 @@ public class FireStationTileTest {
 		FireStationTile fst = new FireStationTile();
 		CityResources resources = new CityResources(100);
         resources.increaseEnergyProduction(100);
-		fst.disassemble(resources);
-		Assert.assertEquals(false, fst.isDestroyed());
-		fst.evolve(resources);
-		fst.disassemble(resources);
+        fst.disassemble(resources);
 		Assert.assertEquals(true, fst.isDestroyed());
 	}
 	
@@ -66,6 +65,7 @@ public class FireStationTileTest {
 	public void testEqual() {
 		FireStationTile fst1 = new FireStationTile();
 		CityResources resources = new CityResources(100);
+        resources.increaseEnergyProduction(100);
 		fst1.update(resources);
 		fst1.disassemble(resources);
 		FireStationTile fst2 = new FireStationTile();

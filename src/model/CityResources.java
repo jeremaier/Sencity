@@ -296,7 +296,7 @@ public class CityResources implements Serializable {
     public void creditWithTaxes(int currencyAmount) {
         assert currencyAmount >= 0;
 
-        this.credit(currencyAmount * this.vat / 100); // Integer division
+        this.credit(currencyAmount * this.vat / 100 * this.getSatisfaction() / 50); // Integer division
     }
 
     /**

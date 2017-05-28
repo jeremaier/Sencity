@@ -28,7 +28,7 @@ import model.CityResources;
 
 public class HarborTile extends TransportTile {
 	private static final long serialVersionUID = 1L;
-	
+
     // Constants
 	/**
 	 * Default value of {@link TransportTile#getMaintenanceCost()}
@@ -73,13 +73,13 @@ public class HarborTile extends TransportTile {
         this.maxNeededInhabitants = HarborTile.DEFAULT_MAX_NEEDED_INHABITANTS;
         this.satisfactionValue = HarborTile.DEFAULT_SATISFACTION_VALUE;
         this.maintenanceCost = HarborTile.DEFAULT_MAINTENANCE_COST;
-		HarborTile.alreadyBuild = true;
+        HarborTile.alreadyBuild = true;
 	}
 	
 	@Override
 	public int hashCode() {
 		int result = super.hashCode();
-        result = result * 17 + Boolean.hashCode(StadiumTile.alreadyBuild);
+        result = result * 17 + Boolean.hashCode(HarborTile.alreadyBuild);
         return result;
 	}
     

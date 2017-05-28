@@ -205,7 +205,7 @@ public class ResidentialTile extends BuildableTile {
                                                                                      	// division
             final int neededEnergy = (int)Math.max(2, Math.ceil(busyPercentage * this.maxNeededEnergy / 100.0)); 	// Integer
                                                                                                						// division
-            
+
             if (res.getUnconsumedEnergy() >= neededEnergy) {
                 res.consumeEnergy(neededEnergy);
                 this.isEnergyMissing = false;
@@ -246,7 +246,6 @@ public class ResidentialTile extends BuildableTile {
 
         final int capacityPercentage = this.inhabitantsCapacity * 100 / res.getPopulationCapacity(); // Integer
                                                                                                      // division
-
         return res.getPopulation() * capacityPercentage / 100; // Integer
                                                                // division
     }

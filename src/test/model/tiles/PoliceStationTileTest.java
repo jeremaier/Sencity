@@ -10,12 +10,13 @@ import model.tiles.*;
 public class PoliceStationTileTest {
 	@Test
 	public void testInit() {
+		final int initialPoliceStationNumber = PoliceStationTile.getPoliceStationNumber();
 		PoliceStationTile pst = new PoliceStationTile();
 		Assert.assertEquals(PoliceStationTile.DEFAULT_MAINTENANCE_COST, pst.getMaintenanceCost());
-		Assert.assertEquals(PoliceStationTile.DEFAULT_EVOLUTION_ENERGY_CONSUMPTION, pst.getEvolutionEnergyConsumption());
+		Assert.assertEquals(PoliceStationTile.DEFAULT_MAX_NEEDED_INHABITANTS, pst.getMaxNeededInhabitants());
 		Assert.assertEquals(PoliceStationTile.DEFAULT_MAX_NEEDED_ENERGY, pst.getMaxNeededEnergy());
 		Assert.assertEquals(PoliceStationTile.DEFAULT_SATISFACTION_VALUE, pst.getSatisfactionValue());
-		Assert.assertEquals(5, PoliceStationTile.getPoliceStationNumber());
+		Assert.assertEquals(initialPoliceStationNumber + 1, PoliceStationTile.getPoliceStationNumber());
 	}
 	
 	@Test
@@ -27,9 +28,9 @@ public class PoliceStationTileTest {
         final int initialCurrency = resources.getCurrency();
         final int initialPopulation = resources.getUnworkingPopulation();
         final int initialEnergy = resources.getUnconsumedEnergy();
-        pst.evolve(resources);
+        pst.update(resources);
         Assert.assertEquals(initialPopulation - pst.getMaxNeededInhabitants(), resources.getUnworkingPopulation());
-        Assert.assertEquals(initialEnergy - pst.getMaxNeededEnergy() - pst.getEvolutionEnergyConsumption(), resources.getUnconsumedEnergy());
+        Assert.assertEquals(initialEnergy - pst.getMaxNeededEnergy(), resources.getUnconsumedEnergy());
         Assert.assertEquals(initialCurrency - (int)(Math.round(pst.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff())), resources.getCurrency()); 
         Assert.assertEquals(Math.max(initialSatisfaction, pst.getSatisfactionValue()), resources.getSatisfaction());
 	}
@@ -38,7 +39,8 @@ public class PoliceStationTileTest {
 	public void testDisassemble() {
 		PoliceStationTile pst = new PoliceStationTile();
 		CityResources resources = new CityResources(100, 100);
-		pst.evolve(resources);
+        resources.increaseEnergyProduction(100);
+		pst.update(resources);
 		final int initialSatisfaction = resources.getSatisfaction();
         final int initialPopulation = resources.getUnworkingPopulation();
         final int initialEnergy = resources.getUnconsumedEnergy();
@@ -56,9 +58,6 @@ public class PoliceStationTileTest {
 		CityResources resources = new CityResources(100);
         resources.increaseEnergyProduction(100);
 		pst.disassemble(resources);
-		Assert.assertEquals(false, pst.isDestroyed());
-		pst.evolve(resources);
-		pst.disassemble(resources);
 		Assert.assertEquals(true, pst.isDestroyed());
 	}
 	
@@ -66,6 +65,7 @@ public class PoliceStationTileTest {
 	public void testEqual() {
 		PoliceStationTile pst1 = new PoliceStationTile();
 		CityResources resources = new CityResources(100);
+        resources.increaseEnergyProduction(100);
 		pst1.update(resources);
 		pst1.disassemble(resources);
 		PoliceStationTile pst2 = new PoliceStationTile();

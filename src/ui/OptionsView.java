@@ -98,15 +98,15 @@ public class OptionsView extends JPanel {
 
 				switch(height) {
 				case 10:
-					MainFrame.setWidthHeight(15, 30);
+					MainFrame.setWidthHeight(17, 30);
 					break;
 
 				case 15:
-					MainFrame.setWidthHeight(20, 40);
+					MainFrame.setWidthHeight(22, 40);
 					break;
 
 				default:
-					MainFrame.setWidthHeight(10, 20);
+					MainFrame.setWidthHeight(12, 20);
 					break;
 				}
 

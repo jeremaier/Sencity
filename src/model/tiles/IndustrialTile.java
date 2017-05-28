@@ -48,12 +48,12 @@ public class IndustrialTile extends BuildableTile {
 	/**
 	 * Default value of {@link IndustrialTile#getProductionCapacity}
 	 */
-	public final static int DEFAULT_PRODUCTS_CAPACITY = 20;
+	public final static int DEFAULT_PRODUCTS_CAPACITY = 200;
 
 	/**
 	 * Default value of {@link IndustrialTile#getMaxProduction}
 	 */
-	public final static int DEFAULT_MAX_PRODUCTION = 5;
+	public final static int DEFAULT_MAX_PRODUCTION = 20;
 
 	/**
 	 * Default value of {@link IndustrialTile#getNeededEnergy()}
@@ -251,10 +251,10 @@ public class IndustrialTile extends BuildableTile {
 
 				productionPercentage *= energyPercentage * workersPercentage;
 			}
-						
+
 			res.consumeEnergy(consumedEnergy);
 			res.hireWorkers(workingPopulation);
-			res.storeProducts((int)(fluctuation * productionPercentage * Math.ceil(maxProduction / 100.0)));
+			res.storeProducts((int)(fluctuation * productionPercentage / 100.0 * maxProduction));
             res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
 		}
 	}

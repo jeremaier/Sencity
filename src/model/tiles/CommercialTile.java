@@ -38,7 +38,7 @@ public class CommercialTile extends BuildableTile {
 	/**
 	 * Default value of {@link #getMaintenanceCost()}
 	 */
-	public final static int DEFAULT_MAINTENANCE_COST = 4;
+	public final static int DEFAULT_MAINTENANCE_COST = 40;
 
 	/**
 	 * Default value of {@link #getEvolutionEnergyConsumption()}
@@ -53,7 +53,7 @@ public class CommercialTile extends BuildableTile {
 	/**
 	 * Default value of {@link #getMaxSoldProducts()}
 	 */
-	public final static int DEFAULT_MAX_SOLD_PRODUCTS = 15;
+	public final static int DEFAULT_MAX_SOLD_PRODUCTS = 25;
 
 	/**
 	 * Default value of {@link #getMaxNeededInhabitants()}
@@ -237,13 +237,13 @@ public class CommercialTile extends BuildableTile {
 				if(!enoughProducts)
 					soldProducts = res.getProductsCount();
 
-				final float productsPercentage = (float)soldProducts / this.maxSoldProducts;
-				final float energyPercentage = (float)consumedEnergy / this.maxNeededEnergy;
-				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
+				final float productsPercentage = 1 - (float)soldProducts / this.maxSoldProducts;
+				final float energyPercentage = 1 - (float)consumedEnergy / this.maxNeededEnergy;
+				final float workersPercentage = 1 - (float)workingPopulation / this.maxNeededInhabitants;
 
-				soldPercentage -= productsPercentage * energyPercentage * workersPercentage;
+				soldPercentage -= productsPercentage * energyPercentage * workersPercentage * 100;
 			}
-
+			
 			res.consumeEnergy(Math.max(2, consumedEnergy));
 			res.hireWorkers(workingPopulation);
 			res.creditWithTaxes((int)(fluctuation * soldPercentage / 100.0 * maxSoldProducts * productsPrice));

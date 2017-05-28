@@ -21,19 +21,15 @@ public class ResidentialTileTest {
 	
 	@Test
 	public void testUpdate() {
-        CityResources resources = new CityResources(100, 40);
+        CityResources resources = new CityResources(100, 200);
         resources.increaseEnergyProduction(100);
 		ResidentialTile rt = new ResidentialTile();
-
         final int initialEnergy = resources.getUnconsumedEnergy();
         final int initialPopulationCapacity = resources.getPopulationCapacity();
         final int initialPopulation = resources.getPopulation();
-        
 		rt.evolve(resources);
-		
-        final int busyPercentage = resources.getPopulation() * 100 / rt.getInhabitantsCapacity();
+        final int busyPercentage = rt.getInhabitants(resources) * 100 / rt.getInhabitantsCapacity();
         final int neededEnergy = (int)Math.max(2, Math.ceil(busyPercentage * rt.getMaxNeededEnergy() / 100.0));
-
 		Assert.assertEquals(rt.isEnergyMissing(), false);
 		Assert.assertEquals(initialEnergy - neededEnergy, resources.getUnconsumedEnergy());
 		Assert.assertEquals(initialPopulation + (100 - busyPercentage) * rt.getMaxJoiningInhabitants() / 100, resources.getPopulation());		
@@ -44,7 +40,7 @@ public class ResidentialTileTest {
 	public void testDisassemble() {
 		@SuppressWarnings("unused")
 		GameBoard gb = new GameBoard(10, new UKTexts());
-        CityResources resources = new CityResources(100);
+        CityResources resources = new CityResources(100, 5000);
         resources.increasePopulationCapacity(100);
         resources.increaseEnergyProduction(100);
 		ResidentialTile rt = new ResidentialTile();
@@ -52,7 +48,6 @@ public class ResidentialTileTest {
         final int initialPopulationCapacity = resources.getPopulationCapacity();
         final int initialPopulation = resources.getPopulation();
         rt.disassemble(resources);
-        System.out.println(rt.getInhabitants(resources));
         Assert.assertEquals(Math.max(0, initialPopulationCapacity - rt.getInhabitantsCapacity()), resources.getPopulationCapacity());
         Assert.assertEquals(Math.max(0, initialPopulation - rt.getInhabitants(resources)), resources.getPopulation());
 	}

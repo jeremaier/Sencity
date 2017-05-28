@@ -32,12 +32,11 @@ public class AirportTileTest {
 		final int initialCurrency = resources.getCurrency();
 		final int initialProducts = resources.getProductsCount();
 		at.update(resources);
-		final int neededEnergy = Math.max(10, at.getMaxNeededEnergy());
 		final int meanPrice = at.getMaxSoldProducts() * at.getProductsPrice();
-		final long meanEarn = initialCurrency + meanPrice * resources.getVat() / 100 - Math.round(at.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff());
+		final double meanEarn = initialCurrency + meanPrice * resources.getVat() - Math.round(at.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff());
 		Assert.assertEquals(at.isEnergyMissing(), false);
 		Assert.assertEquals(at.isPopulationMissing(), false);
-		Assert.assertEquals(initialEnergy - neededEnergy, resources.getUnconsumedEnergy());
+		Assert.assertEquals(initialEnergy - at.getMaxNeededEnergy(), resources.getUnconsumedEnergy());
 		Assert.assertEquals(resources.getCurrency(), meanEarn, meanEarn * 0.4);
 		Assert.assertEquals(initialProducts - at.getMaxSoldProducts(), resources.getProductsCount());
 	}

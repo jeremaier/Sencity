@@ -31,10 +31,9 @@ public class IndustrialTileTest {
         resources.increasePopulationCapacity(40);
         resources.increasePopulation(40);
         it.update(resources);
-		final int busyPercentage = it.getProducts(resources) * 100 / it.getProductionCapacity();
         Assert.assertEquals(it.isEnergyMissing(), false);
         Assert.assertEquals(it.isPopulationMissing(), false);
-        Assert.assertEquals(initialValue + Math.min(resources.getProductsCapacity(), resources.getProductsCount() +  IndustrialTile.getMaxProduction() * busyPercentage / 100), resources.getProductsCount());
+        Assert.assertEquals(initialValue + IndustrialTile.getMaxProduction(), resources.getProductsCount(), 1.3 * IndustrialTile.getMaxProduction());
 	}
 	
 	@Test

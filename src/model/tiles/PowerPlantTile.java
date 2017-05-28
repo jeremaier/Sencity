@@ -45,7 +45,7 @@ public class PowerPlantTile extends BuildableTile {
     /**
      * Default value of {@link #getProductionCapacity()}
      */
-    public final static int DEFAULT_PRODUCTION_CAPACITY = 100;
+    public final static int DEFAULT_PRODUCTION_CAPACITY = 80;
 
     // Implementation
     /**

@@ -48,6 +48,7 @@ import model.tiles.AirportTile;
 import model.tiles.CommercialTile;
 import model.tiles.Evolvable;
 import model.tiles.GrassTile;
+import model.tiles.HarborTile;
 import model.tiles.IndustrialTile;
 import model.tiles.ParkTile;
 import model.tiles.PowerPlantTile;
@@ -63,6 +64,7 @@ import model.tools.FireStationZoneDelimiterTool;
 import model.tools.HarborZoneDelimiterTool;
 import model.tools.HospitalZoneDelimiterTool;
 import model.tools.IndustrialZoneDelimiterTool;
+import model.tools.ParkZoneDelimiterTool;
 import model.tools.PoliceStationZoneDelimiterTool;
 import model.tools.PowerPlantConstructionTool;
 import model.tools.ResidentialZoneDelimiterTool;
@@ -171,6 +173,7 @@ public class GameBoard extends Observable implements Serializable {
 		this.tools.add(new FireStationZoneDelimiterTool());
 		this.tools.add(new PoliceStationZoneDelimiterTool());
 		this.tools.add(new HospitalZoneDelimiterTool());
+		this.tools.add(new ParkZoneDelimiterTool());
 		
 		this.selectedTool = this.tools.get(GameBoard.DEFAULT_SELECTED_TOOL);
 
@@ -583,8 +586,8 @@ public class GameBoard extends Observable implements Serializable {
 			for(int column = 0; column < tiles[0].length; column++) {
 				Tile tile = tiles[row][column];
 
-				if(tile instanceof IndustrialTile || tile instanceof AirportTile || tile instanceof PowerPlantTile)
-					this.getResources().increasePollution(2 * this.cleanBuildingsNumber(row, column, 3));
+				if(tile instanceof IndustrialTile || tile instanceof AirportTile || tile instanceof HarborTile || tile instanceof PowerPlantTile)
+					this.getResources().increasePollution(5 * this.cleanBuildingsNumber(row, column, 3));
 			}
 		}
 	}
@@ -595,7 +598,7 @@ public class GameBoard extends Observable implements Serializable {
 	private void updateSatisfaction() {
 		CityResources resources = this.getResources();
 		this.updateEventEffects(resources);
-		resources.decreaseSatisfaction((resources.getVat() - 10) / 3);
+		resources.decreaseSatisfaction((int)((resources.getVat() - 10) / 2.5));
 	}
 	
 	/**
