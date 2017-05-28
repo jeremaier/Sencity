@@ -34,7 +34,7 @@ public class CommercialTileTest {
 		ct.evolve(resources);
 		final int neededEnergy = Math.max(2, ct.getMaxNeededEnergy());
 		final int meanPrice = ct.getMaxSoldProducts() * ct.getProductsPrice();
-		final long meanEarn = initialCurrency + meanPrice * resources.getVat() / 100 - Math.round(ct.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff());
+		final long meanEarn = initialCurrency + meanPrice * resources.getVat() / 100 * resources.getSatisfaction() / 50  - Math.round(ct.getMaintenanceCost() * GameBoard.getDifficulty().getCoeff());
 		Assert.assertEquals(ct.isEnergyMissing(), false);
 		Assert.assertEquals(ct.isPopulationMissing(), false);
 		Assert.assertEquals(initialEnergy - neededEnergy, resources.getUnconsumedEnergy());

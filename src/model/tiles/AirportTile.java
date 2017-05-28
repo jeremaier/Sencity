@@ -75,13 +75,6 @@ public class AirportTile extends TransportTile {
         this.maintenanceCost = AirportTile.DEFAULT_MAINTENANCE_COST;
         AirportTile.alreadyBuild = true;
 	}
-	
-	@Override
-	public int hashCode() {
-		int result = super.hashCode();
-        result = result * 17 + Boolean.hashCode(AirportTile.alreadyBuild);
-        return result;
-	}
     
     @Override
     public boolean equals(Object o) {

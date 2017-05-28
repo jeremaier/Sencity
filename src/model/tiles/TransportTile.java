@@ -226,18 +226,18 @@ public abstract class TransportTile extends Tile implements Destroyable {
 				if(!enoughProducts)
 					soldProducts = res.getProductsCount();
 
-				final float productsPercentage = 1 - (float)soldProducts / this.maxSoldProducts;
-				final float energyPercentage = 1 - (float)consumedEnergy / this.maxNeededEnergy;
-				final float workersPercentage = 1 - (float)workingPopulation / this.maxNeededInhabitants;
+				final float productsPercentage = (float)soldProducts / this.maxSoldProducts;
+				final float energyPercentage = (float)consumedEnergy / this.maxNeededEnergy;
+				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
 
-				soldPercentage -= productsPercentage * energyPercentage * workersPercentage * 100;
+				soldPercentage *= productsPercentage * energyPercentage * workersPercentage;
 			}
 
 			res.consumeEnergy(Math.max(10, consumedEnergy));
 			res.hireWorkers(workingPopulation);
-			res.creditWithTaxes((int)(fluctuation * soldPercentage / 100.0 * maxSoldProducts * productsPrice));
+			res.creditWithTaxes((int)(fluctuation * soldPercentage / 100.0 * soldProducts * productsPrice));
 			res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
-			res.consumeProducts((int)(soldPercentage / 100.0 * maxSoldProducts));
+			res.consumeProducts((int)(soldPercentage / 100.0 * soldProducts));
 			this.updateSatisfaction(res, soldPercentage);
 		}
 	}

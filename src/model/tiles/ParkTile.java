@@ -81,10 +81,11 @@ public class ParkTile extends Tile implements Destroyable {
      * Create with default settings.
      */
 	public ParkTile() {
-		super();
 		this.maxNeededInhabitants = ParkTile.DEFAULT_MAX_NEEDED_INHABITANTS;
 		this.maintenanceCost = ParkTile.DEFAULT_MAINTENANCE_COST;
 		this.satisfactionValue = ParkTile.DEFAULT_SATISFACTION_VALUE;
+		this.isPopulationMissing = false;
+		this.isDestroyed = false;
 	}
 
 	// Access
@@ -156,20 +157,20 @@ public class ParkTile extends Tile implements Destroyable {
 	@Override
 	public void update(CityResources res) {
         if(!this.isDestroyed) {
-            int busyPercentage = 100;
+            int efficacityPercentage = 100;
             int InhabitantsAvailable = this.maxNeededInhabitants;
             
             if(res.getUnworkingPopulation() > InhabitantsAvailable)
                 this.isPopulationMissing = false;
             else {
-            	InhabitantsAvailable = res.getUnconsumedEnergy();
-            	busyPercentage -= InhabitantsAvailable / this.maxNeededInhabitants * 100;
+            	InhabitantsAvailable = res.getUnworkingPopulation();
+            	efficacityPercentage *= InhabitantsAvailable / this.maxNeededInhabitants;
             	this.isPopulationMissing = true;
             }
             
             res.hireWorkers(InhabitantsAvailable);
             res.spend((int)(Math.round(this.maintenanceCost * GameBoard.getDifficulty().getCoeff())));
-            this.updateSatisfaction(res, busyPercentage);
+            this.updateSatisfaction(res, efficacityPercentage);
         }
 	}
 	

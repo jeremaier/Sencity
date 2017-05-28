@@ -223,11 +223,11 @@ public class CommercialTile extends BuildableTile {
 				if(!enoughProducts)
 					soldProducts = res.getProductsCount();
 
-				final float productsPercentage = 1 - (float)soldProducts / this.maxSoldProducts;
-				final float energyPercentage = 1 - (float)consumedEnergy / this.maxNeededEnergy;
-				final float workersPercentage = 1 - (float)workingPopulation / this.maxNeededInhabitants;
+				final float productsPercentage = (float)soldProducts / this.maxSoldProducts;
+				final float energyPercentage = (float)consumedEnergy / this.maxNeededEnergy;
+				final float workersPercentage = (float)workingPopulation / this.maxNeededInhabitants;
 
-				soldPercentage -= productsPercentage * energyPercentage * workersPercentage * 100;
+				soldPercentage *= productsPercentage * energyPercentage * workersPercentage;
 			}
 			
 			res.consumeEnergy(Math.max(2, consumedEnergy));
