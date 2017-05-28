@@ -88,7 +88,7 @@ public class IndustrialTile extends BuildableTile {
 	/**
 	 * Default value of {@link #getIndustriesNumber()}
 	 */
-	private static int IndustriesNumber = 0;
+	public static int IndustriesNumber = 0;
 
 	// Creation
 	/**

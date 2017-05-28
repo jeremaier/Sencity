@@ -58,7 +58,7 @@ public class HospitalTile extends ServiceTile {
 	/**
 	 * Default value of {@link #getHospitalNumber()}
 	 */
-	private static int hospitalStationNumber = 0;
+	public static int hospitalStationNumber = 0;
 
 	// Creation
 

@@ -69,7 +69,7 @@ public class CommercialTile extends BuildableTile {
 	/**
 	 * Default value of {@link #getCommerceNumber()}
 	 */
-	private static int CommerceNumber = 0;
+	public static int CommerceNumber = 0;
 	
 	/**
 	 * {@link #getMaxWorkingInhabitants()}

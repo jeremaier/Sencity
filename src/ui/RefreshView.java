@@ -39,6 +39,14 @@ import javax.swing.event.ChangeListener;
 import launcher.SimCityUI;
 import model.CityResources;
 import model.GameBoard;
+import model.tiles.AirportTile;
+import model.tiles.CommercialTile;
+import model.tiles.FireStationTile;
+import model.tiles.HarborTile;
+import model.tiles.HospitalTile;
+import model.tiles.IndustrialTile;
+import model.tiles.PoliceStationTile;
+import model.tiles.StadiumTile;
 
 public class RefreshView extends JPanel {
 
@@ -105,6 +113,15 @@ public class RefreshView extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				SwingUtilities.invokeLater(() -> new SimCityUI(new GameBoard(MainFrame.getGameHeight(), MainFrame.getGameWidth(), MainFrame.getDifficulty().getLevel(), MainFrame.getTexts()), MainFrame.getTexts()));
 				frame.dispose();
+				
+				AirportTile.alreadyBuild = false;
+				CommercialTile.CommerceNumber = 0;
+				IndustrialTile.IndustriesNumber = 0;
+				HarborTile.alreadyBuild = false;
+				StadiumTile.alreadyBuild = false;
+				PoliceStationTile.policeStationNumber = 0;
+				FireStationTile.fireStationNumber = 0;
+				HospitalTile.hospitalStationNumber = 0;
 			}
 		});
 

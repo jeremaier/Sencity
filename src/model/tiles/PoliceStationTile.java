@@ -58,7 +58,7 @@ public class PoliceStationTile extends ServiceTile {
 	/**
 	 * Default value of {@link #getPoliceStationNumber()}
 	 */
-	private static int policeStationNumber = 0;
+	public static int policeStationNumber = 0;
 
 	// Creation
 	/**

@@ -58,7 +58,7 @@ public class FireStationTile extends ServiceTile {
 	/**
 	 * Default value of {@link ServiceTile#getFireStationNumber()}
 	 */
-	private static int fireStationNumber = 0;
+	public static int fireStationNumber = 0;
 
 	// Creation
 
